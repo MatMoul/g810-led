@@ -7,7 +7,7 @@ Linux led controller for the Logitech G810 Keyboard
 Install and use :</br>
 - look on the wiki : https://github.com/MatMoul/g810-led/wiki
 
-Samples :
+Samples :</br>
 `sudo g810-led -k logo ff0000`</br>
 `sudo g810-led -a 00ff00`</br>
 `sudo g810-led -g fkeys ff00ff`</br>
