@@ -4,6 +4,8 @@ Linux led controller for the Logitech G810 Keyboard
 
 (The old python project have moded to https://github.com/MatMoul/g810-led-python/)
 
+![jj](http://www.wiselyguide.com/wp-content/uploads/2016/02/logitech_g810-2.jpg)
+
 Install and use :</br>
 - look on the wiki : https://github.com/MatMoul/g810-led/wiki
 
