@@ -1,0 +1,129 @@
+# Sample profile vertical gradiant with vars and keys
+
+# Vars :
+var raw0 00ffff
+var raw1 960096
+var raw2 600096
+var raw3 300096
+var raw4 000096
+var raw5 003096
+var raw6 006096
+
+
+# Raw 0 :
+g logo $raw0
+g indicators $raw0
+k mute $raw0
+
+# Raw 1 :
+k esc $raw1
+g fkeys $raw1
+k printscreen $raw1
+k scrolllock $raw1
+k pausebreak $raw1
+k play $raw1
+k stop $raw1
+k prev $raw1
+k next $raw1
+
+# Raw 2 :
+k ° $raw2
+k 1 $raw2
+k 2 $raw2
+k 3 $raw2
+k 4 $raw2
+k 5 $raw2
+k 6 $raw2
+k 7 $raw2
+k 8 $raw2
+k 9 $raw2
+k 0 $raw2
+k ? $raw2
+k tidle $raw2
+k backspace $raw2
+k insert $raw2
+k home $raw2
+k pageup $raw2
+k numlock $raw2
+k numslash $raw2
+k numasterisk $raw2
+k numminus $raw2
+
+# Raw 3 :
+k tab $raw3
+k q $raw3
+k w $raw3
+k e $raw3
+k r $raw3
+k t $raw3
+k z $raw3
+k u $raw3
+k i $raw3
+k o $raw3
+k p $raw3
+k è $raw3
+k ¨ $raw3
+k delete $raw3
+k end $raw3
+k pagedown $raw3
+k num7 $raw3
+k num8 $raw3
+k num9 $raw3
+
+# Raw 4 :
+k capslock $raw4
+k a $raw4
+k s $raw4
+k d $raw4
+k f $raw4
+k g $raw4
+k h $raw4
+k j $raw4
+k k $raw4
+k l $raw4
+k é $raw4
+k à $raw4
+k $ $raw4
+k enter $raw4
+k num4 $raw4
+k num5 $raw4
+k num6 $raw4
+k num+ $raw4
+
+# Raw 5 :
+k shiftl $raw5
+k < $raw5
+k y $raw5
+k x $raw5
+k c $raw5
+k v $raw5
+k b $raw5
+k n $raw5
+k m $raw5
+k , $raw5
+k . $raw5
+k - $raw5
+k shiftr $raw5
+k top $raw5
+k num1 $raw5
+k num2 $raw5
+k num3 $raw5
+
+# Raw 6 :
+k ctrll $raw6
+k winl $raw6
+k altl $raw6
+k space $raw6
+k altr $raw6
+k winr $raw6
+k menu $raw6
+k ctrlr $raw6
+k left $raw6
+k bottom $raw6
+k right $raw6
+k num0 $raw6
+k num. $raw6
+k numenter $raw6
+
+# Commit
+c

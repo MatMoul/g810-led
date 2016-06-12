@@ -1,0 +1,13 @@
+# Sample profile by groups keys
+
+g logo 000096
+g indicators 00ffff
+g multimedia 009600
+g fkeys ff00ff
+g modifiers ff0000
+g arrows ffff00
+g numeric 00ffff
+g functions ffffff
+g keys 009696
+
+c # Commit changes
