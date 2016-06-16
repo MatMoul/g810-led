@@ -1,18 +1,17 @@
 CC=g++
-CFLAGS=
-LDFLAGS=-std=gnu++11 -lusb-1.0
+CFLAGS=-Wall -O2 -std=gnu++11
+LDFLAGS=-lusb-1.0
+PROGN=g810-led
 
-all: make bin/g810-led
+.PHONY: all clean
 
-make:
-	rm -rf bin
-	mkdir bin
+all: bin/$(PROGN)
 
-bin/g810-led: src/main.cpp src/classes/*
-	$(CC) -o $@ $^ $(LDFLAGS)
+
+bin/$(PROGN): src/main.cpp src/classes/*.cpp
+	@mkdir -p bin
+	$(CC) -o $@ $(CFLAGS) $^ $(LDFLAGS)
 
 clean:
-	rm -rf *.o
+	rm -rf bin
 
-mrproper: clean
-	rm -rf $(EXEC)
