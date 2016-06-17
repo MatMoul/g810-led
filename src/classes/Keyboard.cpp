@@ -665,4 +665,5 @@ bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
       setKeys(keyValues, keyValuesCount);
       break;
   }
+  return true;
 }

@@ -127,7 +127,7 @@ int loadProfile(string profileFile) {
     string line;
     int lineCount = 1;
     int ind;
-    bool commit;
+    //bool commit;
     
     Keyboard g810;
     Keyboard::KeyGroup keyGroup;
