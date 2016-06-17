@@ -1,0 +1,14 @@
+[Unit]
+Description=Set G810 profile on shutdown
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+
+
+[Service]
+ExecStart=/usr/bin/g810-led -p /etc/g810-led/reboot
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=shutdown.target
+
