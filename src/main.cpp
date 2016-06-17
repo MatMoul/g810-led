@@ -64,7 +64,7 @@ int setStartupEffect(string effect) {
     //free(powerOnEffect);
     return 0;
   }
-  delete[] g810;
+  //delete[] g810;
   //delete powerOnEffect;
   return 1;
 }
