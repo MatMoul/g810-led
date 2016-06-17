@@ -1,5 +1,6 @@
 CC=g++
-CFLAGS=-Wall -O2 -std=gnu++11
+# CFLAGS=-Wall -O2 -std=gnu++11 (Problem with this line)
+CFLAGS=-std=gnu++11
 LDFLAGS=-lusb-1.0
 PROGN=g810-led
 
