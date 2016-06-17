@@ -215,6 +215,7 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::shift_right: keyAddress.id = 0xe5; break;
         case Key::alt_right: keyAddress.id = 0xe6; break;
         case Key::win_right: keyAddress.id = 0xe7; break;
+        default: break;
       }
       break;
   }
