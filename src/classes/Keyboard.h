@@ -26,7 +26,7 @@ class Keyboard {
       unknown, egrave, eaigu, agrave, dollar, apostrophe, degree, backslash, // Need best names
       comma, dot, minus, open_bracket, close_bracket, tidle
     };
-    enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys, raw0, raw1, raw2, raw3, raw4, raw5, raw6 };
+    enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys};
     
     struct KeyColors { char red; char green; char blue; };
     struct KeyAddress { KeyAddressGroup addressGroup; char id; };

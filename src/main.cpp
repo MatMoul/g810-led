@@ -35,7 +35,6 @@ void usage() {
   cout<<"effect values :\t\trainbow, color\n";
   cout<<"key values :\t\tabc... 123... and other\n";
   cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys\n";
-  //cout<<"\t\t\traw0, raw1, raw2, raw3, raw4, raw5, raw6\n"; // need map with keyboard layout
   cout<<"\n";
   cout<<"sample :\n";
   cout<<"g810-led -k logo ff0000\n";
@@ -49,6 +48,7 @@ int commit() {
   g810.attach();
   g810.commit();
   g810.detach();
+  
   return 0;
 }
 
@@ -60,8 +60,12 @@ int setStartupEffect(string effect) {
     g810.setPowerOnEffect(powerOnEffect);
     g810.commit();
     g810.detach();
+    //free(g810);
+    //free(powerOnEffect);
     return 0;
   }
+  delete[] g810;
+  //delete powerOnEffect;
   return 1;
 }
 
