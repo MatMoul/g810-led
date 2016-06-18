@@ -52,12 +52,15 @@ bool Keyboard::detach() {
 
 bool Keyboard::commit() {
   if (m_isAttached == false) return false;
+  bool retval = false;
   unsigned char *data = new unsigned char[20-1];
   data[0] = 0x11;
   data[1] = 0xff;
   data[2] = 0x0c;
   data[3] = 0x5a;
-  return sendDataInternal(data, 20);
+  retval = sendDataInternal(data, 20);
+  delete data;
+  return retval;
 }
 
 bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
@@ -377,13 +380,10 @@ bool Keyboard::parseColor(std::string color, KeyColors &colors) {
   return true;
 }
 
-// TODO: Need work arround sleep and/or updatekeys ????
 bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
   if (m_isAttached == false) return false;
   int r;
   r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0211, 1, data, data_size, 0);
-  //sleep(0.01);
-  //sleep(0.5);
   if (r < 0) return false;
   return true;
 }
@@ -437,8 +437,8 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
   return true;
 }
 
-// TODO: Possible Bug
 bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], int keyValueCount) {
+  bool retval = false;
   unsigned char *data;
   int data_size;
   if (addressGroup == KeyAddressGroup::logo) {
@@ -470,10 +470,13 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
       }
     }
   }
-  return sendDataInternal(data, data_size);
+  retval = sendDataInternal(data, data_size);
+  delete data;
+  return retval;
 }
 
 bool Keyboard::setPowerOnEffect(PowerOnEffect powerOnEffect) {
+  bool retval = false;
   int data_size = 20;
   unsigned char *data = new unsigned char[data_size - 1];
   data[0] = 0x11;  // Base address
@@ -491,10 +494,13 @@ bool Keyboard::setPowerOnEffect(PowerOnEffect powerOnEffect) {
       break;
   }
   for(int i = 7; i < data_size; i++) data[i] = 0x00;
-  return sendDataInternal(data, data_size);
+  retval = sendDataInternal(data, data_size);
+  delete data;
+  return retval;
 }
 
 bool Keyboard::setKey(KeyValue keyValue) {
+  bool retval = false;
   unsigned char *data;
   int data_size;
   if (keyValue.key.addressGroup == KeyAddressGroup::logo) {
@@ -511,7 +517,9 @@ bool Keyboard::setKey(KeyValue keyValue) {
   data[10] = keyValue.colors.green;
   data[11] = keyValue.colors.blue;
   for(int i = 12; i < data_size; i++) data[i] = 0x00;
-  return sendDataInternal(data, data_size);
+  retval = sendDataInternal(data, data_size);
+  delete data;
+  return retval;
 }
 
 bool Keyboard::setKey(Key key, KeyColors colors) {
@@ -521,7 +529,6 @@ bool Keyboard::setKey(Key key, KeyColors colors) {
   return setKey(keyValue);
 }
 
-// TODO: maxKeyValueCount = 12 or 13, Why ?
 bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   KeyValue logo[5];
   int logoCount = 0;
@@ -549,27 +556,24 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   }
   
   if (logoCount > 0) setKey(logo[logoCount - 1]);
+  
   if (indicatorsCount > 0) {
     for (int i = 0; i < indicatorsCount; i++) {
       setKeysInternal(KeyAddressGroup::indicators, indicators, indicatorsCount);
       commit();
     }
   }
+  
   if (multimediaCount > 0) {
     for (int i = 0; i < multimediaCount; i++) {
       setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
       commit();
     }
   }
+  
   if (keysCount > 0) {
-    int maxKeyValueCount = 2;
-    //int maxKeyValueCount = 4;
-    //int maxKeyValueCount = 10;
-    //int maxKeyValueCount = 12;
-    //int maxKeyValueCount = 13;
-    //int maxKeyValueCount = 14; Don't work
-    //int maxKeyValueCount = 20;
-    for (int i = 0; i < keysCount; i = i + maxKeyValueCount - 1) {
+    int maxKeyValueCount = 12; // Normally max 20 or 25 but dont work
+    for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
       for (int j = 0; j < maxKeyValueCount; j++) {

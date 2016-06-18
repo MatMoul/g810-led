@@ -1,4 +1,3 @@
-//#include <stdlib.h>
 #include <iostream>
 #include <map>
 #include <string>
@@ -60,12 +59,8 @@ int setStartupEffect(string effect) {
     g810.setPowerOnEffect(powerOnEffect);
     g810.commit();
     g810.detach();
-    //free(g810);
-    //free(powerOnEffect);
     return 0;
   }
-  //delete[] g810;
-  //delete powerOnEffect;
   return 1;
 }
 
@@ -111,7 +106,6 @@ int setGroupKeys(string groupKeys, string color, bool commit) {
       g810.setGroupKeys(keyGroup, colors);
       if (commit == true) g810.commit();
       g810.detach();
-      //delete [] g810;
       return 0;
     }
   }
@@ -127,7 +121,6 @@ int loadProfile(string profileFile) {
     string line;
     int lineCount = 1;
     int ind;
-    //bool commit;
     
     Keyboard g810;
     Keyboard::KeyGroup keyGroup;
