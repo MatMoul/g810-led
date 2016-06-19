@@ -53,7 +53,7 @@ bool Keyboard::detach() {
 bool Keyboard::commit() {
   if (m_isAttached == false) return false;
   bool retval = false;
-  unsigned char *data = new unsigned char[20-1];
+  unsigned char *data = new unsigned char[20];
   data[0] = 0x11;
   data[1] = 0xff;
   data[2] = 0x0c;
@@ -443,7 +443,7 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
   int data_size;
   if (addressGroup == KeyAddressGroup::logo) {
     data_size = 20;
-    data = new unsigned char[data_size - 1];
+    data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
     data[8] = keyValues[0].key.id;
     data[9] = keyValues[0].colors.red;
@@ -452,7 +452,7 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
     for(int i = 12; i < data_size; i++) data[i] = 0x00;
   } else {
     data_size = 108;
-    data = new unsigned char[data_size - 1];
+    data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
     int maxKeyValueCount = (data_size - 8) / 4;
     if (keyValueCount > maxKeyValueCount) keyValueCount = maxKeyValueCount;
@@ -478,7 +478,7 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
 bool Keyboard::setPowerOnEffect(PowerOnEffect powerOnEffect) {
   bool retval = false;
   int data_size = 20;
-  unsigned char *data = new unsigned char[data_size - 1];
+  unsigned char *data = new unsigned char[data_size];
   data[0] = 0x11;  // Base address
   data[1] = 0xff;  // Base address
   data[2] = 0x0d;  // Base address
@@ -505,11 +505,11 @@ bool Keyboard::setKey(KeyValue keyValue) {
   int data_size;
   if (keyValue.key.addressGroup == KeyAddressGroup::logo) {
     data_size = 20;
-    data = new unsigned char[data_size - 1];
+    data = new unsigned char[data_size];
     populateAddressGroupInternal(keyValue.key.addressGroup, data);
   } else {
     data_size = 108;
-    data = new unsigned char[data_size - 1];
+    data = new unsigned char[data_size];
     populateAddressGroupInternal(keyValue.key.addressGroup, data);
   }
   data[8] = keyValue.key.id;
