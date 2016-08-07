@@ -9,11 +9,12 @@
 
 using namespace std;
 
-int lg_pid = 0xc331;
+int lg_pid = 0xc331; // g810 by default
 
 void usage() {
-  if (lg_pid == 0xc330) cout << "g410-led Usages :\n";
-  else cout<<"g810-led Usages :\n";
+  string appname = "g810-led";
+  if (lg_pid == 0xc330) appname = "g410-led";
+  cout<<appname<<" Usages :\n";
   cout<<"-----------------\n";
   cout<<"\n";
   cout<<"  -s  effect :\t\tSet keyboard startup effect\n";
@@ -39,47 +40,47 @@ void usage() {
   cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys\n";
   cout<<"\n";
   cout<<"sample :\n";
-  cout<<"g810-led -k logo ff0000\n";
-  cout<<"g810-led -a 00ff00\n";
-  cout<<"g810-led -g fkeys ff00ff\n";
-  cout<<"g810-led -s color\n";
+  cout<<appname<<" -k logo ff0000\n";
+  cout<<appname<<" -a 00ff00\n";
+  cout<<appname<<" -g fkeys ff00ff\n";
+  cout<<appname<<" -s color\n";
 }
 
 int commit() {
-  Keyboard g810;
-  g810.attach(lg_pid);
-  g810.commit();
-  g810.detach();
+  Keyboard lg_kbd;
+  lg_kbd.attach(lg_pid);
+  lg_kbd.commit();
+  lg_kbd.detach();
   
   return 0;
 }
 
 int setStartupEffect(string effect) {
-  Keyboard g810;
+  Keyboard lg_kbd;
   Keyboard::PowerOnEffect powerOnEffect;
-  if (g810.parsePowerOnEffect(effect, powerOnEffect) == true) {
-    g810.attach(lg_pid);
-    g810.setPowerOnEffect(powerOnEffect);
-    g810.commit();
-    g810.detach();
+  if (lg_kbd.parsePowerOnEffect(effect, powerOnEffect) == true) {
+    lg_kbd.attach(lg_pid);
+    lg_kbd.setPowerOnEffect(powerOnEffect);
+    lg_kbd.commit();
+    lg_kbd.detach();
     return 0;
   }
   return 1;
 }
 
 int setKey(string key, string color, bool commit) {
-  Keyboard g810;
+  Keyboard lg_kbd;
   Keyboard::KeyAddress keyAddress;
-  if (g810.parseKey(key, keyAddress) == true) {
+  if (lg_kbd.parseKey(key, keyAddress) == true) {
     Keyboard::KeyColors colors;
-    if (g810.parseColor(color, colors) == true) {
+    if (lg_kbd.parseColor(color, colors) == true) {
       Keyboard::KeyValue keyValue;
       keyValue.key = keyAddress;
       keyValue.colors = colors;
-      g810.attach(lg_pid);
-      g810.setKey(keyValue);
-      if (commit == true) g810.commit();
-      g810.detach();
+      lg_kbd.attach(lg_pid);
+      lg_kbd.setKey(keyValue);
+      if (commit == true) lg_kbd.commit();
+      lg_kbd.detach();
       return 0;
     }
   }
@@ -87,28 +88,28 @@ int setKey(string key, string color, bool commit) {
 }
 
 int setAllKeys(string color, bool commit) {
-  Keyboard g810;
+  Keyboard lg_kbd;
   Keyboard::KeyColors colors;
-  if (g810.parseColor(color, colors) == true) {
-    g810.attach(lg_pid);
-    g810.setAllKeys(colors);
-    if (commit == true) g810.commit();
-    g810.detach();
+  if (lg_kbd.parseColor(color, colors) == true) {
+    lg_kbd.attach(lg_pid);
+    lg_kbd.setAllKeys(colors);
+    if (commit == true) lg_kbd.commit();
+    lg_kbd.detach();
     return 0;
   }
   return 1;
 }
 
 int setGroupKeys(string groupKeys, string color, bool commit) {
-  Keyboard g810;
+  Keyboard lg_kbd;
   Keyboard::KeyGroup keyGroup;
-  if (g810.parseKeyGroup(groupKeys, keyGroup) == true) {
+  if (lg_kbd.parseKeyGroup(groupKeys, keyGroup) == true) {
     Keyboard::KeyColors colors;
-    if (g810.parseColor(color, colors) == true) {
-      g810.attach(lg_pid);
-      g810.setGroupKeys(keyGroup, colors);
-      if (commit == true) g810.commit();
-      g810.detach();
+    if (lg_kbd.parseColor(color, colors) == true) {
+      lg_kbd.attach(lg_pid);
+      lg_kbd.setGroupKeys(keyGroup, colors);
+      if (commit == true) lg_kbd.commit();
+      lg_kbd.detach();
       return 0;
     }
   }
@@ -125,7 +126,7 @@ int loadProfile(string profileFile) {
     int lineCount = 1;
     int ind;
     
-    Keyboard g810;
+    Keyboard lg_kbd;
     Keyboard::KeyGroup keyGroup;
     Keyboard::KeyAddress keyAddress;
     Keyboard::KeyValue keyValue;
@@ -134,7 +135,7 @@ int loadProfile(string profileFile) {
     map<string, string> var;
     vector<Keyboard::KeyValue> keys;
     
-    g810.attach(lg_pid);
+    lg_kbd.attach(lg_pid);
     
     while (!file.eof()) {
       getline(file, line);
@@ -149,43 +150,43 @@ int loadProfile(string profileFile) {
           ind = line.find(" ");
           line = var[line.substr(1, ind - 1)];
         } else line = line.substr(0, 6);
-        if (g810.parseColor(line, colors) == true) {
+        if (lg_kbd.parseColor(line, colors) == true) {
           keys.clear();
-          g810.setAllKeys(colors);
+          lg_kbd.setAllKeys(colors);
         } else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
       } else if (line.substr(0,1) == "g") {
         line = line.substr(2);
         ind = line.find(" ");
-        if (g810.parseKeyGroup(line.substr(0, ind), keyGroup) == true) {
+        if (lg_kbd.parseKeyGroup(line.substr(0, ind), keyGroup) == true) {
           line = line.substr(ind + 1);
           if (line.substr(0, 1) == "$") {
             ind = line.find(" ");
             line = var[line.substr(1, ind - 1)];
           };
-          if (g810.parseColor(line.substr(0, 6), colors) == true) {
-            g810.setGroupKeys(keyGroup, colors);
+          if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
+            lg_kbd.setGroupKeys(keyGroup, colors);
           } else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
         } else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
       } else if (line.substr(0,1) == "k") {
         line = line.substr(2);
         ind = line.find(" ");
-        if (g810.parseKey(line.substr(0, ind), keyAddress) == true) {
+        if (lg_kbd.parseKey(line.substr(0, ind), keyAddress) == true) {
           line = line.substr(ind + 1);
           if (line.substr(0, 1) == "$") {
             ind = line.find(" ");
             line = var[line.substr(1, ind - 1)];
           }
-          if (g810.parseColor(line.substr(0, 6), colors) == true) {
+          if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
             keyValue.key = keyAddress;
             keyValue.colors = colors;
             keys.push_back(keyValue);
           } else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
         } else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
       } else if (line.substr(0,1) == "c") {
-        g810.commit();
-        g810.setKeys(&keys[0], keys.size());
+        lg_kbd.commit();
+        lg_kbd.setKeys(&keys[0], keys.size());
         keys.clear();
-        g810.commit();
+        lg_kbd.commit();
       } else if ((line.substr(0, 1) != "#") && (line.substr(0, 1) != "")) {
         cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
       }
@@ -193,7 +194,7 @@ int loadProfile(string profileFile) {
       lineCount++;
     }
     
-    g810.detach();
+    lg_kbd.detach();
     
     file.close();
     
