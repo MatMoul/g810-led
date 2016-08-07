@@ -2,7 +2,7 @@
 
 Linux led controller for the Logitech G810 Keyboard
 
-Compatible with the Logitach G410 Keyboard (look at the wiki)
+Compatible with the Logitech G410 Keyboard (look at the wiki)
 
 (The old python project have moded to https://github.com/MatMoul/g810-led-python/)
 
