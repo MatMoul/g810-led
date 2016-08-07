@@ -33,7 +33,7 @@ class Keyboard {
     struct KeyValue { KeyAddress key; KeyColors colors; };
     
     bool isAttached();
-    bool attach();
+    bool attach(int lg_pid);
     bool detach();
     bool commit();
     bool getKeyAddress(Key key, KeyAddress &keyAddress);

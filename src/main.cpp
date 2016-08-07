@@ -4,13 +4,16 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <string>
 #include "classes/Keyboard.h"
 
 using namespace std;
 
+int lg_pid = 0xc331;
 
 void usage() {
-  cout<<"g810-led Usages :\n";
+  if (lg_pid == 0xc330) cout << "g410-led Usages :\n";
+  else cout<<"g810-led Usages :\n";
   cout<<"-----------------\n";
   cout<<"\n";
   cout<<"  -s  effect :\t\tSet keyboard startup effect\n";
@@ -44,7 +47,7 @@ void usage() {
 
 int commit() {
   Keyboard g810;
-  g810.attach();
+  g810.attach(lg_pid);
   g810.commit();
   g810.detach();
   
@@ -55,7 +58,7 @@ int setStartupEffect(string effect) {
   Keyboard g810;
   Keyboard::PowerOnEffect powerOnEffect;
   if (g810.parsePowerOnEffect(effect, powerOnEffect) == true) {
-    g810.attach();
+    g810.attach(lg_pid);
     g810.setPowerOnEffect(powerOnEffect);
     g810.commit();
     g810.detach();
@@ -73,7 +76,7 @@ int setKey(string key, string color, bool commit) {
       Keyboard::KeyValue keyValue;
       keyValue.key = keyAddress;
       keyValue.colors = colors;
-      g810.attach();
+      g810.attach(lg_pid);
       g810.setKey(keyValue);
       if (commit == true) g810.commit();
       g810.detach();
@@ -87,7 +90,7 @@ int setAllKeys(string color, bool commit) {
   Keyboard g810;
   Keyboard::KeyColors colors;
   if (g810.parseColor(color, colors) == true) {
-    g810.attach();
+    g810.attach(lg_pid);
     g810.setAllKeys(colors);
     if (commit == true) g810.commit();
     g810.detach();
@@ -102,7 +105,7 @@ int setGroupKeys(string groupKeys, string color, bool commit) {
   if (g810.parseKeyGroup(groupKeys, keyGroup) == true) {
     Keyboard::KeyColors colors;
     if (g810.parseColor(color, colors) == true) {
-      g810.attach();
+      g810.attach(lg_pid);
       g810.setGroupKeys(keyGroup, colors);
       if (commit == true) g810.commit();
       g810.detach();
@@ -131,7 +134,7 @@ int loadProfile(string profileFile) {
     map<string, string> var;
     vector<Keyboard::KeyValue> keys;
     
-    g810.attach();
+    g810.attach(lg_pid);
     
     while (!file.eof()) {
       getline(file, line);
@@ -204,6 +207,10 @@ int loadProfile(string profileFile) {
 
 
 int main(int argc, char *argv[]) {
+  string str = argv[0];
+  size_t split = str.find_last_of("/\\");
+  str = str.substr(split + 1);
+  if (str == "g410-led") lg_pid = 0xc330;
   if (argc > 1) {
     string argCmd = argv[1];
     if (argCmd == "-h" || argCmd == "--help")       { usage(); return 0; }

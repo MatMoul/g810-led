@@ -12,12 +12,12 @@ bool Keyboard::isAttached() {
   return m_isAttached;
 }
 
-bool Keyboard::attach() {
+bool Keyboard::attach(int lg_pid) {
   if (m_isAttached == true) return false;
   int r;
   r = libusb_init(&ctx);
   if (r < 0) return false;
-  dev_handle = libusb_open_device_with_vid_pid(ctx, 0x046d, 0xc331);
+  dev_handle = libusb_open_device_with_vid_pid(ctx, 0x046d, lg_pid);
   if (dev_handle == NULL) {
     libusb_exit(ctx);
     ctx = NULL;
