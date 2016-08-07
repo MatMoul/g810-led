@@ -58,6 +58,7 @@ bool Keyboard::commit() {
   data[1] = 0xff;
   data[2] = 0x0c;
   data[3] = 0x5a;
+  for(int i = 4; i < 20; i++) data[i] = 0x00;
   retval = sendDataInternal(data, 20);
   delete data;
   return retval;
@@ -383,7 +384,8 @@ bool Keyboard::parseColor(std::string color, KeyColors &colors) {
 bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
   if (m_isAttached == false) return false;
   int r;
-  r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0211, 1, data, data_size, 0);
+  if (data_size > 20) r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0212, 1, data, data_size, 2000);
+  else r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0211, 1, data, data_size, 2000);
   if (r < 0) return false;
   return true;
 }
@@ -451,10 +453,10 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
     data[11] = keyValues[0].colors.blue;
     for(int i = 12; i < data_size; i++) data[i] = 0x00;
   } else {
-    data_size = 108;
+    data_size = 64;
     data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
-    int maxKeyValueCount = (data_size - 8) / 4;
+    int maxKeyValueCount = data_size / 4;
     if (keyValueCount > maxKeyValueCount) keyValueCount = maxKeyValueCount;
     for(int i = 0; i < maxKeyValueCount; i++) {
       if (i < keyValueCount) {
@@ -508,7 +510,7 @@ bool Keyboard::setKey(KeyValue keyValue) {
     data = new unsigned char[data_size];
     populateAddressGroupInternal(keyValue.key.addressGroup, data);
   } else {
-    data_size = 108;
+    data_size = 64;
     data = new unsigned char[data_size];
     populateAddressGroupInternal(keyValue.key.addressGroup, data);
   }
@@ -572,7 +574,7 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   }
   
   if (keysCount > 0) {
-    int maxKeyValueCount = 12; // Normally max 20 or 25 but dont work
+    int maxKeyValueCount = 1; // Normally max 16 but dont work
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
