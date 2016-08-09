@@ -22,13 +22,13 @@ void usage() {
   cout<<"  -a  color :\t\tSet all keys\n";
   cout<<"  -g  group, color :\tSet a group of keys\n";
   cout<<"  -k  key, color :\tSet a key\n";
-  cout<<"\n";
-  cout<<"  -an color :\t\tSet all keys without commit\n";
-  cout<<"  -gn group, color :\tSet a group of keys without commit\n";
-  cout<<"  -kn key, color :\tSet a key without commit\n";
-  cout<<"\n";
-  cout<<"  -c :\t\t\tCommit changes\n";
-  cout<<"\n";
+  //cout<<"\n";
+  //cout<<"  -an color :\t\tSet all keys without commit\n";
+  //cout<<"  -gn group, color :\tSet a group of keys without commit\n";
+  //cout<<"  -kn key, color :\tSet a key without commit\n";
+  //cout<<"\n";
+  //cout<<"  -c :\t\t\tCommit changes\n";
+  //cout<<"\n";
   cout<<"  -p  porfilefile :\tLoad a profile\n";
   cout<<"\n";
   cout<<"  -h | --help :\t\tthis help message\n";
@@ -217,11 +217,14 @@ int main(int argc, char *argv[]) {
     if (argCmd == "-h" || argCmd == "--help")       { usage(); return 0; }
     else if (argCmd == "-s" && argc == 3)           return setStartupEffect(argv[2]);
     else if (argCmd == "-a" && argc == 3)           return setAllKeys(argv[2], true);
-    else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], false);
+    //else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], false);
+    else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], true);
     else if (argCmd == "-g" && argc == 4)           return setGroupKeys(argv[2], argv[3], true);
-    else if (argCmd == "-gn" && argc == 4)          return setGroupKeys(argv[2], argv[3], false);
+    //else if (argCmd == "-gn" && argc == 4)          return setGroupKeys(argv[2], argv[3], false);
+    else if (argCmd == "-gn" && argc == 4)          return setGroupKeys(argv[2], argv[3], true);
     else if (argCmd == "-k" && argc == 4)           return setKey(argv[2], argv[3], true);
-    else if (argCmd == "-kn" && argc == 4)          return setKey(argv[2], argv[3], false);
+    //else if (argCmd == "-kn" && argc == 4)          return setKey(argv[2], argv[3], false);
+    else if (argCmd == "-kn" && argc == 4)          return setKey(argv[2], argv[3], true);
     else if (argCmd == "-c" && argc == 2)           return commit();
     else if (argCmd == "-p" && argc == 3)           return loadProfile(argv[2]);
   }
