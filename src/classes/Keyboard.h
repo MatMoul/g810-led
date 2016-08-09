@@ -23,7 +23,7 @@ class Keyboard {
       n1, n2, n3, n4, n5, n6, n7, n8, n9, n0,
       tab, caps_lock, space, backspace, enter,
       a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z,
-      unknown, egrave, eaigu, agrave, dollar, apostrophe, degree, backslash, // Need best names
+      unknown, egrave, eaigu, semicolon, agrave, dollar, apostrophe, degree, backslash, // Need best names
       comma, dot, minus, open_bracket, close_bracket, tidle
     };
     enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys};

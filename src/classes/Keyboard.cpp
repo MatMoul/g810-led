@@ -161,6 +161,7 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::unknown: keyAddress.id = 0x31; break;  // *
         case Key::dollar: keyAddress.id = 0x32; break;  // *
         case Key::eaigu: keyAddress.id = 0x33; break;  // *
+        case Key::semicolon: keyAddress.id = 0x33; break;  // *
         case Key::agrave: keyAddress.id = 0x34; break;  // *
         case Key::degree: keyAddress.id = 0x35; break;  // *
         case Key::comma: keyAddress.id = 0x36; break;
@@ -294,7 +295,7 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "close_bracket" || key == "closebracket" || key == "¨" || key == "!") parsedKey = Key::close_bracket;
   else if (key == "unknown") parsedKey = Key::unknown; // Not on my keyboard
   else if (key == "$" || key == "dollar") parsedKey = Key::dollar;
-  else if (key == "é" || key == "ö") parsedKey = Key::eaigu;
+  else if (key == ";" || key == "semicolon" || key == "é" || key == "ö") parsedKey = Key::semicolon;
   else if (key == "à" || key == "ä") parsedKey = Key::agrave;
   else if (key == "§" || key == "°") parsedKey = Key::degree;
   else if (key == "," || key == "comma") parsedKey = Key::comma;
