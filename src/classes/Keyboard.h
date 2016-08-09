@@ -10,7 +10,7 @@ class Keyboard {
     
     enum class PowerOnEffect { rainbow, color };
     enum class KeyAddressGroup { logo, indicators, multimedia, keys };
-    enum class Key { // 118 items
+    enum class Key { // 119 items
       logo,
       caps, num, scroll, game, backlight,
       mute, play, stop, prev, next,
