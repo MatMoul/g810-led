@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <algorithm>
+#include <unistd.h>
 #include "/usr/include/libusb-1.0/libusb.h"
 
 using namespace std;
@@ -387,6 +388,7 @@ bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
   int r;
   if (data_size > 20) r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0212, 1, data, data_size, 2000);
   else r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0211, 1, data, data_size, 2000);
+  usleep(1000);
   if (r < 0) return false;
   return true;
 }
@@ -544,8 +546,8 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   
   for (int i = 0; i < keyValueCount; i++) {
     if(keyValue[i].key.addressGroup == KeyAddressGroup::logo) {
-      logo[logoCount] = keyValue[i];
-      logoCount++;
+      logo[0] = keyValue[i];
+      logoCount = 1;
     } else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators) {
       indicators[indicatorsCount] = keyValue[i];
       indicatorsCount++;
@@ -560,22 +562,12 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   
   if (logoCount > 0) setKey(logo[logoCount - 1]);
   
-  if (indicatorsCount > 0) {
-    for (int i = 0; i < indicatorsCount; i++) {
-      setKeysInternal(KeyAddressGroup::indicators, indicators, indicatorsCount);
-      commit();
-    }
-  }
+  if (indicatorsCount > 0) setKeysInternal(KeyAddressGroup::indicators, indicators, indicatorsCount);
   
-  if (multimediaCount > 0) {
-    for (int i = 0; i < multimediaCount; i++) {
-      setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
-      commit();
-    }
-  }
+  if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
   
   if (keysCount > 0) {
-    int maxKeyValueCount = 1; // Normally max 16 but dont work
+    int maxKeyValueCount = 12; // Normally max 16 but dont work
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
@@ -584,7 +576,6 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
         keysBlockCount++;
       }
       setKeysInternal(KeyAddressGroup::keys, keysBlock, keysBlockCount);
-      commit();
     }
   }
   
