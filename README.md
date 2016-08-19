@@ -17,6 +17,7 @@ Samples :</br>
 `g810-led -s color # Set keyboard power on effect`</br>
 
 Samples with no commit :</br>
+`g810-led -an w 000000 # Set color of all key with no action`</br>
 `g810-led -gn modifiers ff0000 # Set color of a group with no action`</br>
 `g810-led -kn w ff0000 # Set color of a key with no action`</br>
 `g810-led -kn a ff0000 # Set color of a key with no action`</br>
