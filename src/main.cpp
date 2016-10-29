@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <map>
 #include <string>
 #include <vector>
@@ -10,7 +11,7 @@
 
 using namespace std;
 
-int lg_pid = 0xc331; // g810 by default
+int lg_pid; // = 0xc331; // g810 by default
 
 void usage() {
   string appname = "g810-led";
@@ -45,33 +46,6 @@ void usage() {
   cout<<appname<<" -a 00ff00\n";
   cout<<appname<<" -g fkeys ff00ff\n";
   cout<<appname<<" -s color\n";
-}
-
-void listKeyboards() {
-  libusb_device **devs;
-  libusb_context *ctx = NULL;
-  int r;
-  int rc;
-  ssize_t cnt;
-  r = libusb_init(&ctx);
-  if(r < 0) return;
-  cnt = libusb_get_device_list(ctx, &devs);
-  if(cnt < 0) return;
-  cout<<cnt<<" Devices in list.\n";
-  
-  ssize_t i;
-  for(i = 0; i < cnt; i++) {
-    libusb_device *device = devs[i];
-    libusb_device_descriptor desc = {0};
-    rc = libusb_get_device_descriptor(device, &desc);
-    //printdev(devs[i]);
-    cout<<desc.idVendor<<"\n";
-    cout<<desc.idProduct<<"\n";
-    cout<<desc.product<<"\n";
-    cout<<"\n";
-  }
-  libusb_free_device_list(devs, 1); 
-  libusb_exit(ctx);
 }
 
 int commit() {
@@ -232,6 +206,50 @@ int loadProfile(string profileFile) {
 }
 
 
+void findG810() {
+  libusb_device **devs;
+  libusb_context *ctx = NULL;
+  int r;
+  ssize_t cnt;
+  r = libusb_init(&ctx);
+  if(r < 0) return;
+  cnt = libusb_get_device_list(ctx, &devs);
+  if(cnt < 0) return;
+  ssize_t i;
+  for(i = 0; i < cnt; i++) {
+    libusb_device *device = devs[i];
+    libusb_device_descriptor desc = {0};
+    libusb_get_device_descriptor(device, &desc);
+    if (desc.idVendor == 0x046d) {
+      if (desc.idProduct == 0xc331) lg_pid=0xc331;
+      if (desc.idProduct == 0xc337) lg_pid=0xc337;
+    }
+  }
+  libusb_free_device_list(devs, 1); 
+  libusb_exit(ctx);
+}
+
+void findG410() {
+  libusb_device **devs;
+  libusb_context *ctx = NULL;
+  int r;
+  ssize_t cnt;
+  r = libusb_init(&ctx);
+  if(r < 0) return;
+  cnt = libusb_get_device_list(ctx, &devs);
+  if(cnt < 0) return;
+  ssize_t i;
+  for(i = 0; i < cnt; i++) {
+    libusb_device *device = devs[i];
+    libusb_device_descriptor desc = {0};
+    libusb_get_device_descriptor(device, &desc);
+    if (desc.idVendor == 0x046d) {
+      if (desc.idProduct == 0xc330) lg_pid=0xc330;
+    }
+  }
+  libusb_free_device_list(devs, 1); 
+  libusb_exit(ctx);
+}
 
 
 
@@ -239,11 +257,13 @@ int main(int argc, char *argv[]) {
   string str = argv[0];
   size_t split = str.find_last_of("/\\");
   str = str.substr(split + 1);
-  if (str == "g410-led") lg_pid = 0xc330;
+  
+  if (str == "g410-led") findG410();
+  else findG810();
+  
   if (argc > 1) {
     string argCmd = argv[1];
     if (argCmd == "-h" || argCmd == "--help")       { usage(); return 0; }
-    else if (argCmd == "list")                      { listKeyboards(); return 0; }
     else if (argCmd == "-s" && argc == 3)           return setStartupEffect(argv[2]);
     else if (argCmd == "-a" && argc == 3)           return setAllKeys(argv[2], true);
     else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], false);
