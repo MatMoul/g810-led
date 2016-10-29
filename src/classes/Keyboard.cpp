@@ -325,18 +325,18 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "-" || key == "minus") parsedKey = Key::minus;
   */
   
-  else if (key == "tilde") parsedKey = Key::tilde;
-  else if (key == "minus") parsedKey = Key::minus;
-  else if (key == "equal") parsedKey = Key::equal;
-  else if (key == "open_bracket") parsedKey = Key::open_bracket;
-  else if (key == "close_bracket") parsedKey = Key::close_bracket;
-  else if (key == "backslash") parsedKey = Key::backslash;
-  else if (key == "semicolon") parsedKey = Key::semicolon;
-  else if (key == "quote") parsedKey = Key::quote;
-  else if (key == "dollar") parsedKey = Key::dollar;
-  else if (key == "comma") parsedKey = Key::comma;
-  else if (key == "period") parsedKey = Key::period;
-  else if (key == "slash") parsedKey = Key::slash;
+  else if (key == "tilde" || key == "~") parsedKey = Key::tilde;
+  else if (key == "minus" || key == "-") parsedKey = Key::minus;
+  else if (key == "equal" || key == "=") parsedKey = Key::equal;
+  else if (key == "open_bracket" || key == "[") parsedKey = Key::open_bracket;
+  else if (key == "close_bracket" || key == "]") parsedKey = Key::close_bracket;
+  else if (key == "backslash" || key == "\\") parsedKey = Key::backslash;
+  else if (key == "semicolon" || key == ";") parsedKey = Key::semicolon;
+  else if (key == "quote" || key == "\"") parsedKey = Key::quote;
+  else if (key == "dollar" || key == "$") parsedKey = Key::dollar;
+  else if (key == "comma" || key == ",") parsedKey = Key::comma;
+  else if (key == "period" || key == ".") parsedKey = Key::period;
+  else if (key == "slash" || key == "/") parsedKey = Key::slash;
   
   
   else if (key == "caps_lock" || key == "capslock") parsedKey = Key::caps_lock;
@@ -384,7 +384,7 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "num." || key == "num_period" || key == "numperiod") parsedKey = Key::num_dot;
   
   //else if (key == "<" || key == ">" || key == "\\" || key == "backslash") parsedKey = Key::backslash;
-  else if (key == "intl_backslash") parsedKey = Key::intl_backslash;
+  else if (key == "intl_backslash" || key == "<") parsedKey = Key::intl_backslash;
   
   else if (key == "menu") parsedKey = Key::menu;
   else if (key == "ctrl_left" || key == "ctrlleft" || key == "ctrll") parsedKey = Key::ctrl_left;
