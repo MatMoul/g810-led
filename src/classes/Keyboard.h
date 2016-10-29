@@ -27,10 +27,6 @@ class Keyboard {
       open_bracket, close_bracket, backslash, 
       semicolon, quote, dollar,
       intl_backslash, comma, period, slash
-      /*
-      unknown, egrave, eaigu, semicolon, agrave, dollar, apostrophe, degree, backslash, // Need best names
-      comma, dot, minus, open_bracket, close_bracket, tilde
-      */
     };
     enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys};
     

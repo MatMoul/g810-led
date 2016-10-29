@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int lg_pid; // = 0xc331; // g810 by default
+int lg_pid;
 
 void usage() {
   string appname = "g810-led";
@@ -135,23 +135,6 @@ void listkeys() {
   cout<<" comma\n";
   cout<<" period\n";
   cout<<" slash\n";
-  /*
-  cout<<" \n";
-  cout<<" Keys  EN-US   FR-CH\n";
-  cout<<" k1  : tilde    §\n";
-  cout<<" k2  : minus    '\n";
-  cout<<" k3  : = plus   ^\n";
-  cout<<" k4  : [        è\n";
-  cout<<" k5  : ]        !\n";
-  cout<<" k6  : \\        unknown\n";
-  cout<<" k7  : ;        é\n";
-  cout<<" k8  : '        à\n";
-  cout<<" k9  : unknown  $\n";
-  cout<<" k10 : unknown  <\n";
-  cout<<" k11 : ,        ,\n";
-  cout<<" k12 : .        .\n";
-  cout<<" k13 : /        -\n";
-  */
 }
 
 int commit() {
