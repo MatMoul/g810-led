@@ -39,7 +39,7 @@ k 8 $raw2
 k 9 $raw2
 k 0 $raw2
 k ? $raw2
-k tidle $raw2
+k tilde $raw2
 k backspace $raw2
 k insert $raw2
 k home $raw2
