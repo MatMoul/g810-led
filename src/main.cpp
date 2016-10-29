@@ -34,6 +34,7 @@ void usage() {
   cout<<"  -p  porfilefile :\tLoad a profile\n";
   cout<<"\n";
   cout<<"  -h | --help :\t\tthis help message\n";
+  cout<<"  -lk | --list-keys :\tList keys in groups\n";
   cout<<"\n";
   cout<<"color formats :\t\tRRGGBB (hex value for red, green and blue)\n";
   cout<<"\n";
@@ -46,6 +47,111 @@ void usage() {
   cout<<appname<<" -a 00ff00\n";
   cout<<appname<<" -g fkeys ff00ff\n";
   cout<<appname<<" -s color\n";
+}
+
+void listkeys() {
+  string appname = "g810-led";
+  if (lg_pid == 0xc330) appname = "g410-led";
+  cout<<appname<<" Keys in groups :\n";
+  cout<<"-------------------------\n";
+  cout<<"\n";
+  cout<<"Group logo :\n";
+  cout<<" Logo\n";
+  cout<<"\n";
+  cout<<"Group indicators :\n";
+  cout<<" num_indicator, numindicator, num\n";
+  cout<<" caps_indicator, capsindicator, caps\n";
+  cout<<" scroll_indicator, scrollindicator, scroll\n";
+  cout<<" game_mode, gamemode, game\n";
+  cout<<" back_light, backlight, light\n";
+  cout<<"\n";
+  cout<<"Group fkeys :\n";
+  cout<<" f1 - f12\n";
+  cout<<"\n";
+  cout<<"Group modifiers :\n";
+  cout<<" shift_left, shiftleft, shiftl\n";
+  cout<<" ctrl_left, ctrlleft, ctrll\n";
+  cout<<" win_left, winleft, win_left\n";
+  cout<<" alt_left, altleft, altl\n";
+  cout<<" alt_right, altright, altr, altgr\n";
+  cout<<" win_right, winright, winr\n";
+  cout<<" menu\n";
+  cout<<" ctrl_right, ctrlright, ctrlr\n";
+  cout<<" shift_right, shiftright, shiftr\n";
+  cout<<"\n";
+  cout<<"Group multimedia :\n";
+  cout<<" mute\n";
+  cout<<" play_pause, playpause, play\n";
+  cout<<" stop\n";
+  cout<<" previous, prev\n";
+  cout<<" next\n";
+  cout<<"\n";
+  cout<<"Group arrows :\n";
+  cout<<" arrow_top, arrowtop, top\n";
+  cout<<" arrow_left, arrowleft, left\n";
+  cout<<" arrow_bottom, arrowbottom, bottom\n";
+  cout<<" arrow_right, arrowright, right\n";
+  cout<<"\n";
+  cout<<"Group numeric :\n";
+  cout<<" num_lock, numlock\n";
+  cout<<" num_slash, numslash, num/\n";
+  cout<<" num_asterisk, numasterisk, num*\n";
+  cout<<" num_minus, numminus, num-\n";
+  cout<<" num_plus, numplus, num+\n";
+  cout<<" numenter\n";
+  cout<<" num0 - num9\n";
+  cout<<" num_dot, numdot, num.\n";
+  cout<<"\n";
+  cout<<"Group functions :\n";
+  cout<<" escape, esc\n";
+  cout<<" print_screen, printscreen, printscr\n";
+  cout<<" scroll_lock, scrolllock\n";
+  cout<<" pause_break, pausebreak\n";
+  cout<<" insert, ins\n";
+  cout<<" home\n";
+  cout<<" page_up, pageup\n";
+  cout<<" delete, del\n";
+  cout<<" end\n";
+  cout<<" page_down, pagedown\n";
+  cout<<"\n";
+  cout<<"Group keys :\n";
+  cout<<" 0 - 9\n";
+  cout<<" a - z\n";
+  cout<<" tab\n";
+  cout<<" caps_lock, capslock\n";
+  cout<<" space\n";
+  cout<<" backspace, back\n";
+  cout<<" enter\n";
+  cout<<" tilde\n";
+  cout<<" minus\n";
+  cout<<" equal\n";
+  cout<<" open_bracket\n";
+  cout<<" close_bracket\n";
+  cout<<" backslash\n";
+  cout<<" semicolon\n";
+  cout<<" dollar\n";
+  cout<<" quote\n";
+  cout<<" intl_backslash\n";
+  cout<<" comma\n";
+  cout<<" period\n";
+  cout<<" slash\n";
+  /*
+  cout<<" \n";
+  cout<<" Keys  EN-US   FR-CH\n";
+  cout<<" k1  : tilde    §\n";
+  cout<<" k2  : minus    '\n";
+  cout<<" k3  : = plus   ^\n";
+  cout<<" k4  : [        è\n";
+  cout<<" k5  : ]        !\n";
+  cout<<" k6  : \\        unknown\n";
+  cout<<" k7  : ;        é\n";
+  cout<<" k8  : '        à\n";
+  cout<<" k9  : unknown  $\n";
+  cout<<" k10 : unknown  <\n";
+  cout<<" k11 : ,        ,\n";
+  cout<<" k12 : .        .\n";
+  cout<<" k13 : /        -\n";
+  */
 }
 
 int commit() {
@@ -241,16 +347,17 @@ int main(int argc, char *argv[]) {
   
   if (argc > 1) {
     string argCmd = argv[1];
-    if (argCmd == "-h" || argCmd == "--help")       { usage(); return 0; }
-    else if (argCmd == "-s" && argc == 3)           return setStartupEffect(argv[2]);
-    else if (argCmd == "-a" && argc == 3)           return setAllKeys(argv[2], true);
-    else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], false);
-    else if (argCmd == "-g" && argc == 4)           return setGroupKeys(argv[2], argv[3], true);
-    else if (argCmd == "-gn" && argc == 4)          return setGroupKeys(argv[2], argv[3], false);
-    else if (argCmd == "-k" && argc == 4)           return setKey(argv[2], argv[3], true);
-    else if (argCmd == "-kn" && argc == 4)          return setKey(argv[2], argv[3], false);
-    else if (argCmd == "-c" && argc == 2)           return commit();
-    else if (argCmd == "-p" && argc == 3)           return loadProfile(argv[2]);
+    if (argCmd == "-h" || argCmd == "--help")             { usage(); return 0; }
+    else if (argCmd == "-lk" || argCmd == "--list-keys")  { listkeys(); return 0; }
+    else if (argCmd == "-s" && argc == 3)                 return setStartupEffect(argv[2]);
+    else if (argCmd == "-a" && argc == 3)                 return setAllKeys(argv[2], true);
+    else if (argCmd == "-an" && argc == 3)                return setAllKeys(argv[2], false);
+    else if (argCmd == "-g" && argc == 4)                 return setGroupKeys(argv[2], argv[3], true);
+    else if (argCmd == "-gn" && argc == 4)                return setGroupKeys(argv[2], argv[3], false);
+    else if (argCmd == "-k" && argc == 4)                 return setKey(argv[2], argv[3], true);
+    else if (argCmd == "-kn" && argc == 4)                return setKey(argv[2], argv[3], false);
+    else if (argCmd == "-c" && argc == 2)                 return commit();
+    else if (argCmd == "-p" && argc == 3)                 return loadProfile(argv[2]);
   }
   usage();
   return 1;
