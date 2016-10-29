@@ -123,7 +123,7 @@ k left $raw6
 k bottom $raw6
 k right $raw6
 k num0 $raw6
-k num. $raw6
+k num_period $raw6
 k numenter $raw6
 
 # Commit

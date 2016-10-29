@@ -381,7 +381,7 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "num8") parsedKey = Key::num_8;
   else if (key == "num9") parsedKey = Key::num_9;
   else if (key == "num0") parsedKey = Key::num_0;
-  else if (key == "num." || key == "num_dot" || key == "numdot") parsedKey = Key::num_dot;
+  else if (key == "num." || key == "num_period" || key == "numperiod") parsedKey = Key::num_dot;
   
   //else if (key == "<" || key == ">" || key == "\\" || key == "backslash") parsedKey = Key::backslash;
   else if (key == "intl_backslash") parsedKey = Key::intl_backslash;
