@@ -155,6 +155,8 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::backspace: keyAddress.id = 0x2a; break;
         case Key::tab: keyAddress.id = 0x2b; break;
         case Key::space: keyAddress.id = 0x2c; break;
+        
+        /*
         case Key::apostrophe: keyAddress.id = 0x2d; break;  // *
         case Key::tilde: keyAddress.id = 0x2e; break;
         case Key::open_bracket: keyAddress.id = 0x2f; break;
@@ -168,6 +170,21 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::comma: keyAddress.id = 0x36; break;
         case Key::dot: keyAddress.id = 0x37; break;
         case Key::minus: keyAddress.id = 0x38; break;
+        */
+        
+        case Key::minus: keyAddress.id = 0x2d; break;  // *
+        case Key::equal: keyAddress.id = 0x2e; break;
+        case Key::open_bracket: keyAddress.id = 0x2f; break;
+        case Key::close_bracket: keyAddress.id = 0x30; break;
+        case Key::backslash: keyAddress.id = 0x31; break;  // *
+        case Key::dollar: keyAddress.id = 0x32; break;  // *
+        case Key::semicolon: keyAddress.id = 0x33; break;  // *
+        case Key::quote: keyAddress.id = 0x34; break;  // *
+        case Key::tilde: keyAddress.id = 0x35; break;  // *
+        case Key::comma: keyAddress.id = 0x36; break;
+        case Key::period: keyAddress.id = 0x37; break;
+        case Key::slash: keyAddress.id = 0x38; break;
+        
         case Key::caps_lock: keyAddress.id = 0x39; break;
         case Key::f1: keyAddress.id = 0x3a; break;
         case Key::f2: keyAddress.id = 0x3b; break;
@@ -211,7 +228,9 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::num_9: keyAddress.id = 0x61; break;
         case Key::num_0: keyAddress.id = 0x62; break;
         case Key::num_dot: keyAddress.id = 0x63; break;
-        case Key::backslash: keyAddress.id = 0x64; break;
+        
+        case Key::intl_backslash: keyAddress.id = 0x64; break;
+        
         case Key::menu: keyAddress.id = 0x65; break;
         case Key::ctrl_left: keyAddress.id = 0xe0; break;
         case Key::shift_left: keyAddress.id = 0xe1; break;
@@ -290,6 +309,8 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "back" || key == "backspace") parsedKey = Key::backspace;
   else if (key == "tab") parsedKey = Key::tab;
   else if (key == "space") parsedKey = Key::space;
+  
+  /*
   else if (key == "'" || key == "?") parsedKey = Key::apostrophe;
   else if (key == "tilde" || key == "^" || key == "~") parsedKey = Key::tilde;
   else if (key == "open_bracket" || key == "openbracket" || key == "è" || key == "ü") parsedKey = Key::open_bracket;
@@ -302,6 +323,22 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "," || key == "comma") parsedKey = Key::comma;
   else if (key == "." || key == "dot") parsedKey = Key::dot;
   else if (key == "-" || key == "minus") parsedKey = Key::minus;
+  */
+  
+  else if (key == "tilde") parsedKey = Key::tilde;
+  else if (key == "minus") parsedKey = Key::minus;
+  else if (key == "equal") parsedKey = Key::equal;
+  else if (key == "open_bracket") parsedKey = Key::open_bracket;
+  else if (key == "close_bracket") parsedKey = Key::close_bracket;
+  else if (key == "backslash") parsedKey = Key::backslash;
+  else if (key == "semicolon") parsedKey = Key::semicolon;
+  else if (key == "quote") parsedKey = Key::quote;
+  else if (key == "dollar") parsedKey = Key::dollar;
+  else if (key == "comma") parsedKey = Key::comma;
+  else if (key == "period") parsedKey = Key::period;
+  else if (key == "slash") parsedKey = Key::slash;
+  
+  
   else if (key == "caps_lock" || key == "capslock") parsedKey = Key::caps_lock;
   else if (key == "f1") parsedKey = Key::f1;
   else if (key == "f2") parsedKey = Key::f2;
@@ -345,7 +382,10 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "num9") parsedKey = Key::num_9;
   else if (key == "num0") parsedKey = Key::num_0;
   else if (key == "num." || key == "num_dot" || key == "numdot") parsedKey = Key::num_dot;
-  else if (key == "<" || key == ">" || key == "\\" || key == "backslash") parsedKey = Key::backslash;
+  
+  //else if (key == "<" || key == ">" || key == "\\" || key == "backslash") parsedKey = Key::backslash;
+  else if (key == "intl_backslash") parsedKey = Key::intl_backslash;
+  
   else if (key == "menu") parsedKey = Key::menu;
   else if (key == "ctrl_left" || key == "ctrlleft" || key == "ctrll") parsedKey = Key::ctrl_left;
   else if (key == "shift_left" || key == "shiftleft" || key == "shiftl") parsedKey = Key::shift_left;
@@ -583,12 +623,12 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
 }
 
 bool Keyboard::setAllKeys(KeyColors colors) {
-  KeyValue keyValues[119];
-  for (int i = 0; i < 119; i++) {
+  KeyValue keyValues[117];
+  for (int i = 0; i < 117; i++) {
     getKeyAddress((Key)i, keyValues[i].key);
     keyValues[i].colors = colors;
   }
-  setKeys(keyValues, 119);
+  setKeys(keyValues, 117);
   return true;
 }
 

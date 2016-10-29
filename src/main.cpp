@@ -120,6 +120,20 @@ void listkeys() {
   cout<<" space\n";
   cout<<" backspace, back\n";
   cout<<" enter\n";
+  cout<<" tilde\n";
+  cout<<" minus\n";
+  cout<<" equal\n";
+  cout<<" open_bracket\n";
+  cout<<" close_bracket\n";
+  cout<<" backslash\n";
+  cout<<" semicolon\n";
+  cout<<" dollar\n";
+  cout<<" quote\n";
+  cout<<" intl_backslash\n";
+  cout<<" comma\n";
+  cout<<" period\n";
+  cout<<" slash\n";
+  /*
   cout<<" \n";
   cout<<" Keys  EN-US   FR-CH\n";
   cout<<" k1  : tilde    §\n";
@@ -135,6 +149,7 @@ void listkeys() {
   cout<<" k11 : ,        ,\n";
   cout<<" k12 : .        .\n";
   cout<<" k13 : /        -\n";
+  */
 }
 
 int commit() {
