@@ -156,7 +156,7 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
         case Key::tab: keyAddress.id = 0x2b; break;
         case Key::space: keyAddress.id = 0x2c; break;
         case Key::apostrophe: keyAddress.id = 0x2d; break;  // *
-        case Key::tidle: keyAddress.id = 0x2e; break;
+        case Key::tilde: keyAddress.id = 0x2e; break;
         case Key::open_bracket: keyAddress.id = 0x2f; break;
         case Key::close_bracket: keyAddress.id = 0x30; break;
         case Key::unknown: keyAddress.id = 0x31; break;  // *
@@ -291,7 +291,7 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "tab") parsedKey = Key::tab;
   else if (key == "space") parsedKey = Key::space;
   else if (key == "'" || key == "?") parsedKey = Key::apostrophe;
-  else if (key == "tidle" || key == "^" || key == "~") parsedKey = Key::tidle;
+  else if (key == "tilde" || key == "^" || key == "~") parsedKey = Key::tilde;
   else if (key == "open_bracket" || key == "openbracket" || key == "è" || key == "ü") parsedKey = Key::open_bracket;
   else if (key == "close_bracket" || key == "closebracket" || key == "¨" || key == "!") parsedKey = Key::close_bracket;
   else if (key == "unknown") parsedKey = Key::unknown; // Not on my keyboard
