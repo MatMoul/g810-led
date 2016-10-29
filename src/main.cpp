@@ -32,7 +32,7 @@ void usage() {
   cout<<"  -p  porfilefile :\tLoad a profile\n";
   cout<<"\n";
   cout<<"  -h | --help :\t\tthis help message\n";
-  cout<<"  -lk | --list-keys :\t\tList keys in groups\n";
+  cout<<"  -lk | --list-keys :\tList keys in groups\n";
   cout<<"\n";
   cout<<"color formats :\t\tRRGGBB (hex value for red, green and blue)\n";
   cout<<"\n";
