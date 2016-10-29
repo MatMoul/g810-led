@@ -16,18 +16,18 @@ g indicators $raw0
 k mute $raw0
 
 # Raw 1 :
-k esc $raw1
+k escape $raw1
 g fkeys $raw1
-k printscreen $raw1
-k scrolllock $raw1
-k pausebreak $raw1
-k play $raw1
+k print_screen $raw1
+k scroll_lock $raw1
+k pause_break $raw1
+k play_pause $raw1
 k stop $raw1
 k prev $raw1
 k next $raw1
 
 # Raw 2 :
-k ° $raw2
+k tilde $raw2
 k 1 $raw2
 k 2 $raw2
 k 3 $raw2
@@ -38,16 +38,16 @@ k 7 $raw2
 k 8 $raw2
 k 9 $raw2
 k 0 $raw2
-k ? $raw2
-k tilde $raw2
+k minus $raw2
+k equal $raw2
 k backspace $raw2
 k insert $raw2
 k home $raw2
-k pageup $raw2
-k numlock $raw2
-k numslash $raw2
-k numasterisk $raw2
-k numminus $raw2
+k page_up $raw2
+k num_lock $raw2
+k num_slash $raw2
+k num_asterisk $raw2
+k num_minus $raw2
 
 # Raw 3 :
 k tab $raw3
@@ -61,17 +61,18 @@ k u $raw3
 k i $raw3
 k o $raw3
 k p $raw3
-k è $raw3
-k ¨ $raw3
+k open_bracket $raw3
+k close_bracket $raw3
+# k backslash $raw3
 k delete $raw3
 k end $raw3
-k pagedown $raw3
+k page_down $raw3
 k num7 $raw3
 k num8 $raw3
 k num9 $raw3
 
 # Raw 4 :
-k capslock $raw4
+k caps_lock $raw4
 k a $raw4
 k s $raw4
 k d $raw4
@@ -81,18 +82,18 @@ k h $raw4
 k j $raw4
 k k $raw4
 k l $raw4
-k é $raw4
-k à $raw4
-k $ $raw4
+k semicolon $raw4
+k quote $raw4
+k dollar $raw4
 k enter $raw4
 k num4 $raw4
 k num5 $raw4
 k num6 $raw4
-k num+ $raw4
+k num_plus $raw4
 
 # Raw 5 :
-k shiftl $raw5
-k < $raw5
+k shift_left $raw5
+k intl_backslash $raw5
 k y $raw5
 k x $raw5
 k c $raw5
@@ -100,24 +101,24 @@ k v $raw5
 k b $raw5
 k n $raw5
 k m $raw5
-k , $raw5
-k . $raw5
-k - $raw5
-k shiftr $raw5
+k comma $raw5
+k period $raw5
+k slash $raw5
+k shift_right $raw5
 k top $raw5
 k num1 $raw5
 k num2 $raw5
 k num3 $raw5
 
 # Raw 6 :
-k ctrll $raw6
-k winl $raw6
-k altl $raw6
+k ctrl_left $raw6
+k win_left $raw6
+k alt_left $raw6
 k space $raw6
-k altr $raw6
-k winr $raw6
+k alt_right $raw6
+k win_right $raw6
 k menu $raw6
-k ctrlr $raw6
+k ctrl_right $raw6
 k left $raw6
 k bottom $raw6
 k right $raw6
