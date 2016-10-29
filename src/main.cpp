@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include "/usr/include/libusb-1.0/libusb.h"
 #include "classes/Keyboard.h"
 
 using namespace std;
@@ -44,6 +45,33 @@ void usage() {
   cout<<appname<<" -a 00ff00\n";
   cout<<appname<<" -g fkeys ff00ff\n";
   cout<<appname<<" -s color\n";
+}
+
+void listKeyboards() {
+  libusb_device **devs;
+  libusb_context *ctx = NULL;
+  int r;
+  int rc;
+  ssize_t cnt;
+  r = libusb_init(&ctx);
+  if(r < 0) return;
+  cnt = libusb_get_device_list(ctx, &devs);
+  if(cnt < 0) return;
+  cout<<cnt<<" Devices in list.\n";
+  
+  ssize_t i;
+  for(i = 0; i < cnt; i++) {
+    libusb_device *device = devs[i];
+    libusb_device_descriptor desc = {0};
+    rc = libusb_get_device_descriptor(device, &desc);
+    //printdev(devs[i]);
+    cout<<desc.idVendor<<"\n";
+    cout<<desc.idProduct<<"\n";
+    cout<<desc.product<<"\n";
+    cout<<"\n";
+  }
+  libusb_free_device_list(devs, 1); 
+  libusb_exit(ctx);
 }
 
 int commit() {
@@ -215,6 +243,7 @@ int main(int argc, char *argv[]) {
   if (argc > 1) {
     string argCmd = argv[1];
     if (argCmd == "-h" || argCmd == "--help")       { usage(); return 0; }
+    else if (argCmd == "list")                      { listKeyboards(); return 0; }
     else if (argCmd == "-s" && argc == 3)           return setStartupEffect(argv[2]);
     else if (argCmd == "-a" && argc == 3)           return setAllKeys(argv[2], true);
     else if (argCmd == "-an" && argc == 3)          return setAllKeys(argv[2], false);
