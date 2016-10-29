@@ -221,30 +221,8 @@ void findG810() {
     libusb_device_descriptor desc = {0};
     libusb_get_device_descriptor(device, &desc);
     if (desc.idVendor == 0x046d) {
-      if (desc.idProduct == 0xc331) lg_pid=0xc331;
-      if (desc.idProduct == 0xc337) lg_pid=0xc337;
-    }
-  }
-  libusb_free_device_list(devs, 1); 
-  libusb_exit(ctx);
-}
-
-void findG410() {
-  libusb_device **devs;
-  libusb_context *ctx = NULL;
-  int r;
-  ssize_t cnt;
-  r = libusb_init(&ctx);
-  if(r < 0) return;
-  cnt = libusb_get_device_list(ctx, &devs);
-  if(cnt < 0) return;
-  ssize_t i;
-  for(i = 0; i < cnt; i++) {
-    libusb_device *device = devs[i];
-    libusb_device_descriptor desc = {0};
-    libusb_get_device_descriptor(device, &desc);
-    if (desc.idVendor == 0x046d) {
-      if (desc.idProduct == 0xc330) lg_pid=0xc330;
+      if (desc.idProduct == 0xc331) { lg_pid=0xc331; break; }
+      if (desc.idProduct == 0xc337) { lg_pid=0xc337; break; }
     }
   }
   libusb_free_device_list(devs, 1); 
@@ -258,7 +236,7 @@ int main(int argc, char *argv[]) {
   size_t split = str.find_last_of("/\\");
   str = str.substr(split + 1);
   
-  if (str == "g410-led") findG410();
+  if (str == "g410-led") lg_pid=0xc330;
   else findG810();
   
   if (argc > 1) {
