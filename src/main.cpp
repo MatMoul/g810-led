@@ -31,7 +31,7 @@ void usage() {
   cout<<"\n";
   cout<<"  -c :\t\t\tCommit changes\n";
   cout<<"\n";
-  cout<<"  -p  porfilefile :\tLoad a profile\n";
+  cout<<"  -p  profilefile :\tLoad a profile\n";
   cout<<"\n";
   cout<<"  -h | --help :\t\tthis help message\n";
   cout<<"  -lk | --list-keys :\tList keys in groups\n";
