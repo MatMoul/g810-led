@@ -9,12 +9,35 @@ bool Keyboard::isAttached() {
   return m_isAttached;
 }
 
-bool Keyboard::attach(int lg_pid) {
+bool Keyboard::attach() {
   if (m_isAttached == true) return false;
   int r;
   r = libusb_init(&ctx);
   if (r < 0) return false;
-  dev_handle = libusb_open_device_with_vid_pid(ctx, 0x046d, lg_pid);
+  
+  libusb_device **devs;
+  ssize_t cnt = libusb_get_device_list(ctx, &devs);
+  if(cnt < 0) return false;
+  int pid = 0;
+  for(ssize_t i = 0; i < cnt; i++) {
+    libusb_device *device = devs[i];
+    libusb_device_descriptor desc = {0};
+    libusb_get_device_descriptor(device, &desc);
+    if (desc.idVendor == 0x046d) {
+      if (desc.idProduct == 0xc331) { pid = desc.idProduct; break; } // G810
+      if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810
+      if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410
+      if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610
+    }
+  }
+  libusb_free_device_list(devs, 1);
+  if (pid == 0) {
+    libusb_exit(ctx);
+    ctx = NULL;
+    return false;
+  }
+  
+  dev_handle = libusb_open_device_with_vid_pid(ctx, 0x046d, pid);
   if (dev_handle == NULL) {
     libusb_exit(ctx);
     ctx = NULL;

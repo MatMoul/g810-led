@@ -1,21 +1,12 @@
-#include <iostream>
-#include <iomanip>
 #include <map>
-#include <string>
 #include <vector>
-#include <algorithm>
 #include <fstream>
-#include <string>
-#include "/usr/include/libusb-1.0/libusb.h"
 #include "classes/Keyboard.h"
 
 using namespace std;
 
-int lg_pid;
-
 void usage() {
   string appname = "g810-led";
-  if (lg_pid == 0xc330) appname = "g410-led";
   cout<<appname<<" Usages :\n";
   cout<<"-----------------\n";
   cout<<"\n";
@@ -51,7 +42,6 @@ void usage() {
 
 void listkeys() {
   string appname = "g810-led";
-  if (lg_pid == 0xc330) appname = "g410-led";
   cout<<appname<<" Keys in groups :\n";
   cout<<"-------------------------\n";
   cout<<"\n";
@@ -139,7 +129,7 @@ void listkeys() {
 
 int commit() {
   Keyboard lg_kbd;
-  lg_kbd.attach(lg_pid);
+  lg_kbd.attach();
   lg_kbd.commit();
   lg_kbd.detach();
   
@@ -150,7 +140,7 @@ int setStartupEffect(string effect) {
   Keyboard lg_kbd;
   Keyboard::PowerOnEffect powerOnEffect;
   if (lg_kbd.parsePowerOnEffect(effect, powerOnEffect) == true) {
-    lg_kbd.attach(lg_pid);
+    lg_kbd.attach();
     lg_kbd.setPowerOnEffect(powerOnEffect);
     lg_kbd.commit();
     lg_kbd.detach();
@@ -168,7 +158,7 @@ int setKey(string key, string color, bool commit) {
       Keyboard::KeyValue keyValue;
       keyValue.key = keyAddress;
       keyValue.colors = colors;
-      lg_kbd.attach(lg_pid);
+      lg_kbd.attach();
       lg_kbd.setKey(keyValue);
       if (commit == true) lg_kbd.commit();
       lg_kbd.detach();
@@ -182,7 +172,7 @@ int setAllKeys(string color, bool commit) {
   Keyboard lg_kbd;
   Keyboard::KeyColors colors;
   if (lg_kbd.parseColor(color, colors) == true) {
-    lg_kbd.attach(lg_pid);
+    lg_kbd.attach();
     lg_kbd.setAllKeys(colors);
     if (commit == true) lg_kbd.commit();
     lg_kbd.detach();
@@ -197,7 +187,7 @@ int setGroupKeys(string groupKeys, string color, bool commit) {
   if (lg_kbd.parseKeyGroup(groupKeys, keyGroup) == true) {
     Keyboard::KeyColors colors;
     if (lg_kbd.parseColor(color, colors) == true) {
-      lg_kbd.attach(lg_pid);
+      lg_kbd.attach();
       lg_kbd.setGroupKeys(keyGroup, colors);
       if (commit == true) lg_kbd.commit();
       lg_kbd.detach();
@@ -226,7 +216,7 @@ int loadProfile(string profileFile) {
     map<string, string> var;
     vector<Keyboard::KeyValue> keys;
     
-    lg_kbd.attach(lg_pid);
+    lg_kbd.attach();
     
     while (!file.eof()) {
       getline(file, line);
@@ -294,40 +284,10 @@ int loadProfile(string profileFile) {
   return 1;
 }
 
-
-void findG810() {
-  libusb_device **devs;
-  libusb_context *ctx = NULL;
-  int r;
-  ssize_t cnt;
-  r = libusb_init(&ctx);
-  if(r < 0) return;
-  cnt = libusb_get_device_list(ctx, &devs);
-  if(cnt < 0) return;
-  ssize_t i;
-  for(i = 0; i < cnt; i++) {
-    libusb_device *device = devs[i];
-    libusb_device_descriptor desc = {0};
-    libusb_get_device_descriptor(device, &desc);
-    if (desc.idVendor == 0x046d) {
-      if (desc.idProduct == 0xc331) { lg_pid=0xc331; break; }
-      if (desc.idProduct == 0xc337) { lg_pid=0xc337; break; }
-    }
-  }
-  libusb_free_device_list(devs, 1); 
-  libusb_exit(ctx);
-}
-
-
-
 int main(int argc, char *argv[]) {
   string str = argv[0];
   size_t split = str.find_last_of("/\\");
   str = str.substr(split + 1);
-  
-  if (str == "g410-led") lg_pid=0xc330;
-  else findG810();
-  
   if (argc > 1) {
     string argCmd = argv[1];
     if (argCmd == "-h" || argCmd == "--help")             { usage(); return 0; }
