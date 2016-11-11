@@ -57,7 +57,7 @@ bool Keyboard::commit() {
   data[3] = 0x5a;
   for(int i = 4; i < 20; i++) data[i] = 0x00;
   retval = sendDataInternal(data, 20);
-  delete data;
+  delete[] data;
   return retval;
 }
 
@@ -471,7 +471,7 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
     }
   }
   retval = sendDataInternal(data, data_size);
-  delete data;
+  delete[] data;
   return retval;
 }
 
@@ -495,7 +495,7 @@ bool Keyboard::setPowerOnEffect(PowerOnEffect powerOnEffect) {
   }
   for(int i = 7; i < data_size; i++) data[i] = 0x00;
   retval = sendDataInternal(data, data_size);
-  delete data;
+  delete[] data;
   return retval;
 }
 
@@ -518,7 +518,7 @@ bool Keyboard::setKey(KeyValue keyValue) {
   data[11] = keyValue.colors.blue;
   for(int i = 12; i < data_size; i++) data[i] = 0x00;
   retval = sendDataInternal(data, data_size);
-  delete data;
+  delete[] data;
   return retval;
 }
 
