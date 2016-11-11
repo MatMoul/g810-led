@@ -588,7 +588,7 @@ bool Keyboard::setAllKeys(KeyColors colors) {
 }
 
 bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
-  KeyValue keyValues[119];
+  KeyValue keyValues[54];
   int keyValuesCount = 0;
   switch (keyGroup) {
     case KeyGroup::logo:
@@ -651,7 +651,7 @@ bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::keys:
-      for (int i = 63; i < 119; i++) {
+      for (int i = 63; i < 117; i++) {
         getKeyAddress((Key)i, keyValues[i - 63].key);
         keyValues[i - 63].colors = colors;
         keyValuesCount++;
