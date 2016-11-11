@@ -454,7 +454,7 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
     data_size = 64;
     data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
-    int maxKeyValueCount = data_size / 4;
+    int maxKeyValueCount = (data_size - 8) / 4;
     if (keyValueCount > maxKeyValueCount) keyValueCount = maxKeyValueCount;
     for(int i = 0; i < maxKeyValueCount; i++) {
       if (i < keyValueCount) {
@@ -562,7 +562,7 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
   
   if (keysCount > 0) {
-    int maxKeyValueCount = 12; // Normally max 16 but dont work
+    int maxKeyValueCount = 12; // Normally max 14 but dont work
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
