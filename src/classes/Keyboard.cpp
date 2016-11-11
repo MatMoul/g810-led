@@ -1,12 +1,8 @@
 #include "Keyboard.h"
 #include <vector>
-#include <iostream>
 #include <unistd.h>
 #include <algorithm>
-#include <unistd.h>
 #include "/usr/include/libusb-1.0/libusb.h"
-
-using namespace std;
 
 
 bool Keyboard::isAttached() {
