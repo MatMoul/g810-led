@@ -585,7 +585,7 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
   
   if (keysCount > 0) {
-    int maxKeyValueCount = 12; // Normally max 14 but dont work
+    int maxKeyValueCount = 2; // Normally max 14 but dont work
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
