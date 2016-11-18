@@ -2,7 +2,7 @@
 
 Linux LED controller for the Logitech G810 Keyboard
 
-Compatible with the Logitech G410 Keyboard (look at the wiki : https://github.com/MatMoul/g810-led/wiki)
+Compatible with the Logitech G410 and G610 Keyboard (look at the wiki : https://github.com/MatMoul/g810-led/wiki)
 
 ![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/logitech_g810-2.jpg)
 

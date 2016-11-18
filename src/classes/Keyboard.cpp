@@ -394,6 +394,7 @@ bool Keyboard::parseKeyGroup(std::string key, KeyGroup &keyGroup) {
 }
 
 bool Keyboard::parseColor(std::string color, KeyColors &colors) {
+  if (color.length() == 2) color = color + "0000";  // For G610
   if (color.length() != 6) return false;
   colors.red = std::stoul("0x"+color.substr(0,2), nullptr, 16);
   colors.green = std::stoul("0x"+color.substr(2,2), nullptr, 16);
