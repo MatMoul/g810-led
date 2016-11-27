@@ -8,10 +8,11 @@ class Keyboard {
 
   public:
     
+    enum class KeyboardProtocol { spectrum, spark };
     enum class PowerOnEffect { rainbow, color };
-    enum class KeyAddressGroup { logo, indicators, multimedia, keys };
-    enum class Key { // 117 items
-      logo,
+    enum class KeyAddressGroup { logo, indicators, multimedia, keys, gkeys };
+    enum class Key { // 127 items
+      logo, logo2,
       caps, num, scroll, game, backlight,
       mute, play, stop, prev, next,
       f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
@@ -26,9 +27,10 @@ class Keyboard {
       tilde, minus, equal, 
       open_bracket, close_bracket, backslash, 
       semicolon, quote, dollar,
-      intl_backslash, comma, period, slash
+      intl_backslash, comma, period, slash,
+      g1, g2, g3, g4, g5, g6, g7, g8, g9
     };
-    enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys};
+    enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys, gkeys};
     
     struct KeyColors { char red; char green; char blue; };
     struct KeyAddress { KeyAddressGroup addressGroup; char id; };
@@ -55,6 +57,7 @@ class Keyboard {
     
     bool m_isAttached = false;
     bool m_isKernellDetached = false;
+    KeyboardProtocol kbdProtocol = KeyboardProtocol::spectrum;
     libusb_device **devs;
     libusb_device_handle *dev_handle;
     libusb_context *ctx = NULL;
