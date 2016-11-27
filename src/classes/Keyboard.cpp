@@ -28,7 +28,7 @@ bool Keyboard::attach() {
       if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810 spectrum
       if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410 spectrum
       if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610 spectrum
-      if (desc.idProduct == 0xc333) {  // G910 spark
+      if (desc.idProduct == 0xc32b) {  // G910 spark
         pid = desc.idProduct;
         kbdProtocol = KeyboardProtocol::spark;
         break;
@@ -89,8 +89,8 @@ bool Keyboard::commit() {
     case KeyboardProtocol::spark:
       data[0] = 0x11;
       data[1] = 0xff;
-      data[2] = 0x0c; //Need change
-      data[3] = 0x5a; //Need change
+      data[2] = 0x0f;
+      data[3] = 0x5d;
       break;
     default:
       return false;
@@ -154,39 +154,39 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
       break;
     case Key::g1:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x01;
       break;
     case Key::g2:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x02;
       break;
     case Key::g3:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x03;
       break;
     case Key::g4:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x04;
       break;
     case Key::g5:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x05;
       break;
     case Key::g6:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x06;
       break;
     case Key::g7:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x07;
       break;
     case Key::g8:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x08;
       break;
     case Key::g9:
       keyAddress.addressGroup = KeyAddressGroup::gkeys;
-      keyAddress.id = 0x00; // Need change
+      keyAddress.id = 0x09;
       break;
     default:
       keyAddress.addressGroup = KeyAddressGroup::keys;
@@ -535,12 +535,12 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
         case KeyAddressGroup::logo:
           data[0] = 0x11;  // Base address
           data[1] = 0xff;  // Base address
-          data[2] = 0x0c;  // Base address
+          data[2] = 0x0f;  // Base address
           data[3] = 0x3a;  // Base address
           data[4] = 0x00;  // Base address
           data[5] = 0x10;  // Base address
           data[6] = 0x00;  // Base address
-          data[7] = 0x01;  // Base address
+          data[7] = 0x02;  // Base address
           break;
         case KeyAddressGroup::indicators:
           data[0] = 0x12;  // Base address
@@ -552,7 +552,7 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
           data[6] = 0x00;  // Base address
           data[7] = 0x05;  // Base address
           break;
-        case KeyAddressGroup::multimedia:
+        case KeyAddressGroup::multimedia: // Not tested
           data[0] = 0x12;  // Base address
           data[1] = 0xff;  // Base address
           data[2] = 0x0c;  // Base address
@@ -565,8 +565,8 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
         case KeyAddressGroup::keys:
           data[0] = 0x12;  // Base address
           data[1] = 0xff;  // Base address
-          data[2] = 0x0c;  // Base address
-          data[3] = 0x3a;  // Base address
+          data[2] = 0x0f;  // Base address
+          data[3] = 0x3d;  // Base address
           data[4] = 0x00;  // Base address
           data[5] = 0x01;  // Base address
           data[6] = 0x00;  // Base address
@@ -575,12 +575,12 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
         case KeyAddressGroup::gkeys:
           data[0] = 0x12;  // Base address
           data[1] = 0xff;  // Base address
-          data[2] = 0x0c;  // Base address
-          data[3] = 0x3a;  // Base address
+          data[2] = 0x0f;  // Base address
+          data[3] = 0x3e;  // Base address
           data[4] = 0x00;  // Base address
-          data[5] = 0x01;  // Base address
+          data[5] = 0x04;  // Base address
           data[6] = 0x00;  // Base address
-          data[7] = 0x0e;  // Base address
+          data[7] = 0x09;  // Base address
           break;
         default:
           return false;
