@@ -24,10 +24,15 @@ bool Keyboard::attach() {
     libusb_device_descriptor desc = {0};
     libusb_get_device_descriptor(device, &desc);
     if (desc.idVendor == 0x046d) {
-      if (desc.idProduct == 0xc331) { pid = desc.idProduct; break; } // G810
-      if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810
-      if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410
-      if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610
+      if (desc.idProduct == 0xc331) { pid = desc.idProduct; break; } // G810 spectrum
+      if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810 spectrum
+      if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410 spectrum
+      if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610 spectrum
+      if (desc.idProduct == 0xc333) {  // G910 spark
+        pid = desc.idProduct;
+        kbdProtocol = KeyboardProtocol::spark;
+        break;
+      }
     }
   }
   libusb_free_device_list(devs, 1);
@@ -74,10 +79,23 @@ bool Keyboard::commit() {
   if (m_isAttached == false) return false;
   bool retval = false;
   unsigned char *data = new unsigned char[20];
-  data[0] = 0x11;
-  data[1] = 0xff;
-  data[2] = 0x0c;
-  data[3] = 0x5a;
+  switch (kbdProtocol) {
+    case KeyboardProtocol::spectrum:
+      data[0] = 0x11;
+      data[1] = 0xff;
+      data[2] = 0x0c;
+      data[3] = 0x5a;
+      break;
+    case KeyboardProtocol::spark:
+      data[0] = 0x11;
+      data[1] = 0xff;
+      data[2] = 0x0c; //Need change
+      data[3] = 0x5a; //Need change
+      break;
+    default:
+      return false;
+      break;
+  }
   for(int i = 4; i < 20; i++) data[i] = 0x00;
   retval = sendDataInternal(data, 20);
   delete[] data;
@@ -89,6 +107,10 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
     case Key::logo:
       keyAddress.addressGroup = KeyAddressGroup::logo;
       keyAddress.id = 0x01;
+      break;
+    case Key::logo2:
+      keyAddress.addressGroup = KeyAddressGroup::logo;
+      keyAddress.id = 0x02;
       break;
     case Key::backlight:
       keyAddress.addressGroup = KeyAddressGroup::indicators;
@@ -129,6 +151,42 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
     case Key::mute:
       keyAddress.addressGroup = KeyAddressGroup::multimedia;
       keyAddress.id = 0xe2;
+      break;
+    case Key::g1:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g2:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g3:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g4:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g5:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g6:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g7:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g8:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
+      break;
+    case Key::g9:
+      keyAddress.addressGroup = KeyAddressGroup::gkeys;
+      keyAddress.id = 0x00; // Need change
       break;
     default:
       keyAddress.addressGroup = KeyAddressGroup::keys;
@@ -257,6 +315,7 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   std::transform(key.begin(), key.end(), key.begin(), ::tolower);
   Key parsedKey;
   if (key == "logo") parsedKey = Key::logo;
+  else if (key == "logo2") parsedKey = Key::logo2;
   else if (key == "back_light" || key == "backlight" || key == "light") parsedKey = Key::backlight;
   else if (key == "game_mode" || key == "gamemode" || key == "game") parsedKey = Key::game;
   else if (key == "caps_indicator" || key == "capsindicator" || key == "caps") parsedKey = Key::caps;
@@ -375,6 +434,15 @@ bool Keyboard::parseKey(std::string key, KeyAddress &keyAddress) {
   else if (key == "alt_right" || key == "altright" || key == "altr" || key == "altgr") parsedKey = Key::alt_right;
   else if (key == "win_right" || key == "winright" || key == "winr") parsedKey = Key::win_right;
   else if (key == "meta_right" || key == "metaright" || key == "metar") parsedKey = Key::win_right;
+  else if (key == "g1") parsedKey = Key::g1;
+  else if (key == "g2") parsedKey = Key::g2;
+  else if (key == "g3") parsedKey = Key::g3;
+  else if (key == "g4") parsedKey = Key::g4;
+  else if (key == "g5") parsedKey = Key::g5;
+  else if (key == "g6") parsedKey = Key::g6;
+  else if (key == "g7") parsedKey = Key::g7;
+  else if (key == "g8") parsedKey = Key::g8;
+  else if (key == "g9") parsedKey = Key::g9;
   else return false;
   return getKeyAddress(parsedKey, keyAddress);
 }
@@ -389,6 +457,7 @@ bool Keyboard::parseKeyGroup(std::string key, KeyGroup &keyGroup) {
   else if (key == "numeric") keyGroup = KeyGroup::numeric;
   else if (key == "functions") keyGroup = KeyGroup::functions;
   else if (key == "keys") keyGroup = KeyGroup::keys;
+  else if (key == "gkeys") keyGroup = KeyGroup::gkeys;
   else return false;
   return true;
 }
@@ -413,46 +482,110 @@ bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
 }
 
 bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsigned char *data) {
-  switch (addressGroup) {
-    case KeyAddressGroup::logo:
-      data[0] = 0x11;  // Base address
-      data[1] = 0xff;  // Base address
-      data[2] = 0x0c;  // Base address
-      data[3] = 0x3a;  // Base address
-      data[4] = 0x00;  // Base address
-      data[5] = 0x10;  // Base address
-      data[6] = 0x00;  // Base address
-      data[7] = 0x01;  // Base address
+  switch (kbdProtocol) {
+    case KeyboardProtocol::spectrum:
+      switch (addressGroup) {
+        case KeyAddressGroup::logo:
+          data[0] = 0x11;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x10;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x01;  // Base address
+          break;
+        case KeyAddressGroup::indicators:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x40;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x05;  // Base address
+          break;
+        case KeyAddressGroup::multimedia:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x02;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x05;  // Base address
+          break;
+        case KeyAddressGroup::keys:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x01;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x0e;  // Base address
+          break;
+        default:
+          return false;
+          break;
+      }
       break;
-    case KeyAddressGroup::indicators:
-      data[0] = 0x12;  // Base address
-      data[1] = 0xff;  // Base address
-      data[2] = 0x0c;  // Base address
-      data[3] = 0x3a;  // Base address
-      data[4] = 0x00;  // Base address
-      data[5] = 0x40;  // Base address
-      data[6] = 0x00;  // Base address
-      data[7] = 0x05;  // Base address
-      break;
-    case KeyAddressGroup::multimedia:
-      data[0] = 0x12;  // Base address
-      data[1] = 0xff;  // Base address
-      data[2] = 0x0c;  // Base address
-      data[3] = 0x3a;  // Base address
-      data[4] = 0x00;  // Base address
-      data[5] = 0x02;  // Base address
-      data[6] = 0x00;  // Base address
-      data[7] = 0x05;  // Base address
-      break;
-    case KeyAddressGroup::keys:
-      data[0] = 0x12;  // Base address
-      data[1] = 0xff;  // Base address
-      data[2] = 0x0c;  // Base address
-      data[3] = 0x3a;  // Base address
-      data[4] = 0x00;  // Base address
-      data[5] = 0x01;  // Base address
-      data[6] = 0x00;  // Base address
-      data[7] = 0x0e;  // Base address
+    case KeyboardProtocol::spark:
+      switch (addressGroup) {
+        case KeyAddressGroup::logo:
+          data[0] = 0x11;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x10;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x01;  // Base address
+          break;
+        case KeyAddressGroup::indicators:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x40;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x05;  // Base address
+          break;
+        case KeyAddressGroup::multimedia:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x02;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x05;  // Base address
+          break;
+        case KeyAddressGroup::keys:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x01;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x0e;  // Base address
+          break;
+        case KeyAddressGroup::gkeys:
+          data[0] = 0x12;  // Base address
+          data[1] = 0xff;  // Base address
+          data[2] = 0x0c;  // Base address
+          data[3] = 0x3a;  // Base address
+          data[4] = 0x00;  // Base address
+          data[5] = 0x01;  // Base address
+          data[6] = 0x00;  // Base address
+          data[7] = 0x0e;  // Base address
+          break;
+        default:
+          return false;
+          break;
+      }
       break;
     default:
       return false;
@@ -562,11 +695,13 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   int multimediaCount = 0;
   KeyValue keys[200];
   int keysCount = 0;
+  KeyValue gkeys[200];
+  int gkeysCount = 0;
   
   for (int i = 0; i < keyValueCount; i++) {
     if(keyValue[i].key.addressGroup == KeyAddressGroup::logo) {
-      logo[0] = keyValue[i];
-      logoCount = 1;
+      logo[logoCount] = keyValue[i];
+      logoCount++;
     } else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators) {
       indicators[indicatorsCount] = keyValue[i];
       indicatorsCount++;
@@ -576,10 +711,13 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
     } else if(keyValue[i].key.addressGroup == KeyAddressGroup::keys) {
       keys[keysCount] = keyValue[i];
       keysCount++;
+    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::gkeys) {
+      gkeys[gkeysCount] = keyValue[i];
+      gkeysCount++;
     }
   }
   
-  if (logoCount > 0) setKey(logo[logoCount - 1]);
+  if (logoCount > 0) setKeysInternal(KeyAddressGroup::logo, logo, logoCount);
   
   if (indicatorsCount > 0) setKeysInternal(KeyAddressGroup::indicators, indicators, indicatorsCount);
   
@@ -598,16 +736,18 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
     }
   }
   
+  if (gkeysCount > 0) setKeysInternal(KeyAddressGroup::gkeys, gkeys, gkeysCount);
+  
   return true;
 }
 
 bool Keyboard::setAllKeys(KeyColors colors) {
-  KeyValue keyValues[117];
-  for (int i = 0; i < 117; i++) {
+  KeyValue keyValues[127];
+  for (int i = 0; i < 127; i++) {
     getKeyAddress((Key)i, keyValues[i].key);
     keyValues[i].colors = colors;
   }
-  setKeys(keyValues, 117);
+  setKeys(keyValues, 127);
   return true;
 }
 
@@ -616,68 +756,81 @@ bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
   int keyValuesCount = 0;
   switch (keyGroup) {
     case KeyGroup::logo:
-      setKey(Key::logo, colors);
+      for (int i = 0; i < 2; i++) {
+        getKeyAddress((Key)i, keyValues[i].key);
+        keyValues[i].colors = colors;
+        keyValuesCount++;
+      }
+      setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::indicators:
-      for (int i = 1; i < 6; i++) {
-        getKeyAddress((Key)i, keyValues[i - 1].key);
-        keyValues[i - 1].colors = colors;
+      for (int i = 2; i < 7; i++) {
+        getKeyAddress((Key)i, keyValues[i - 2].key);
+        keyValues[i - 2].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::multimedia:
-      for (int i = 6; i < 11; i++) {
-        getKeyAddress((Key)i, keyValues[i - 6].key);
-        keyValues[i - 6].colors = colors;
+      for (int i = 7; i < 12; i++) {
+        getKeyAddress((Key)i, keyValues[i - 7].key);
+        keyValues[i - 7].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::fkeys:
-      for (int i = 11; i < 23; i++) {
-        getKeyAddress((Key)i, keyValues[i - 11].key);
-        keyValues[i - 11].colors = colors;
+      for (int i = 12; i < 24; i++) {
+        getKeyAddress((Key)i, keyValues[i - 12].key);
+        keyValues[i - 12].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::modifiers:
-      for (int i = 23; i < 32; i++) {
-        getKeyAddress((Key)i, keyValues[i - 23].key);
-        keyValues[i - 23].colors = colors;
+      for (int i = 24; i < 33; i++) {
+        getKeyAddress((Key)i, keyValues[i - 24].key);
+        keyValues[i - 24].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::arrows:
-      for (int i = 32; i < 36; i++) {
-        getKeyAddress((Key)i, keyValues[i - 32].key);
-        keyValues[i - 32].colors = colors;
+      for (int i = 33; i < 37; i++) {
+        getKeyAddress((Key)i, keyValues[i - 33].key);
+        keyValues[i - 33].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::numeric:
-      for (int i = 36; i < 53; i++) {
-        getKeyAddress((Key)i, keyValues[i - 36].key);
-        keyValues[i - 36].colors = colors;
+      for (int i = 37; i < 54; i++) {
+        getKeyAddress((Key)i, keyValues[i - 37].key);
+        keyValues[i - 37].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::functions:
-      for (int i = 53; i < 63; i++) {
-        getKeyAddress((Key)i, keyValues[i - 53].key);
-        keyValues[i - 53].colors = colors;
+      for (int i = 54; i < 64; i++) {
+        getKeyAddress((Key)i, keyValues[i - 54].key);
+        keyValues[i - 54].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
       break;
     case KeyGroup::keys:
-      for (int i = 63; i < 117; i++) {
-        getKeyAddress((Key)i, keyValues[i - 63].key);
-        keyValues[i - 63].colors = colors;
+      for (int i = 64; i < 118; i++) {
+        getKeyAddress((Key)i, keyValues[i - 64].key);
+        keyValues[i - 64].colors = colors;
+        keyValuesCount++;
+      }
+      setKeys(keyValues, keyValuesCount);
+      break;
+    case KeyGroup::gkeys:
+      for (int i = 118; i < 127; i++) {
+        getKeyAddress((Key)i, keyValues[i - 118].key);
+        keyValues[i - 118].colors = colors;
         keyValuesCount++;
       }
       setKeys(keyValues, keyValuesCount);
