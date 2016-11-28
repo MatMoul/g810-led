@@ -530,7 +530,7 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
           break;
       }
       break;
-    case KeyboardProtocol::spark:
+    case KeyboardProtocol::spark: // gkeys and mkeys seem not changeable
       switch (addressGroup) {
         case KeyAddressGroup::logo:
           data[0] = 0x11;  // Base address
@@ -549,16 +549,6 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
           data[3] = 0x3a;  // Base address
           data[4] = 0x00;  // Base address
           data[5] = 0x40;  // Base address
-          data[6] = 0x00;  // Base address
-          data[7] = 0x05;  // Base address
-          break;
-        case KeyAddressGroup::multimedia: // Not tested
-          data[0] = 0x12;  // Base address
-          data[1] = 0xff;  // Base address
-          data[2] = 0x0c;  // Base address
-          data[3] = 0x3a;  // Base address
-          data[4] = 0x00;  // Base address
-          data[5] = 0x02;  // Base address
           data[6] = 0x00;  // Base address
           data[7] = 0x05;  // Base address
           break;
@@ -695,7 +685,7 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   int multimediaCount = 0;
   KeyValue keys[200];
   int keysCount = 0;
-  KeyValue gkeys[200];
+  KeyValue gkeys[25];
   int gkeysCount = 0;
   
   for (int i = 0; i < keyValueCount; i++) {
