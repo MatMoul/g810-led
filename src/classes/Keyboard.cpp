@@ -588,20 +588,30 @@ bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[
   bool retval = false;
   unsigned char *data;
   int data_size;
+  int maxKeyValueCount = 0;
   if (addressGroup == KeyAddressGroup::logo) {
     data_size = 20;
     data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
-    data[8] = keyValues[0].key.id;
-    data[9] = keyValues[0].colors.red;
-    data[10] = keyValues[0].colors.green;
-    data[11] = keyValues[0].colors.blue;
-    for(int i = 12; i < data_size; i++) data[i] = 0x00;
+    maxKeyValueCount = (data_size - 8) / 4;
+    for(int i = 0; i < maxKeyValueCount; i++) {
+      if (i < keyValueCount) {
+        data[8 + i * 4 + 0] = keyValues[i].key.id;
+        data[8 + i * 4 + 1] = keyValues[i].colors.red;
+        data[8 + i * 4 + 2] = keyValues[i].colors.green;
+        data[8 + i * 4 + 3] = keyValues[i].colors.blue;
+      } else {
+        data[8 + i * 4 + 0] = 0x00;
+        data[8 + i * 4 + 1] = 0x00;
+        data[8 + i * 4 + 2] = 0x00;
+        data[8 + i * 4 + 3] = 0x00;
+      }
+    }
   } else {
     data_size = 64;
     data = new unsigned char[data_size];
     populateAddressGroupInternal(addressGroup, data);
-    int maxKeyValueCount = (data_size - 8) / 4;
+    maxKeyValueCount = (data_size - 8) / 4;
     if (keyValueCount > maxKeyValueCount) keyValueCount = maxKeyValueCount;
     for(int i = 0; i < maxKeyValueCount; i++) {
       if (i < keyValueCount) {
