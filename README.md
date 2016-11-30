@@ -1,8 +1,11 @@
 # g810-led
 
-Linux LED controller for the Logitech G810 Keyboard
+Linux LED controller for the Logitech G810 Orion Spectrum Keyboard
 
-Compatible with the Logitech G410 and G610 Keyboard (look at the wiki : https://github.com/MatMoul/g810-led/wiki)
+Other compatible keyboard :</br>
+G410 Atlas Spectrum</br>
+G610 Orion</br>
+g910 Orion Spark
 
 ![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/logitech_g810-2.jpg)
 
