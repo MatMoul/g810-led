@@ -14,7 +14,7 @@ bool Keyboard::attach() {
   int r;
   r = libusb_init(&ctx);
   if (r < 0) return false;
-  
+
   libusb_device **devs;
   ssize_t cnt = libusb_get_device_list(ctx, &devs);
   if(cnt < 0) return false;
@@ -33,6 +33,11 @@ bool Keyboard::attach() {
         kbdProtocol = KeyboardProtocol::spark;
         break;
       }
+      if (desc.idProduct == 0xc335) {
+        pid = desc.idProduct;
+        kbdProtocol = KeyboardProtocol::spark;
+        break;
+      }
     }
   }
   libusb_free_device_list(devs, 1);
@@ -41,7 +46,7 @@ bool Keyboard::attach() {
     ctx = NULL;
     return false;
   }
-  
+
   dev_handle = libusb_open_device_with_vid_pid(ctx, 0x046d, pid);
   if (dev_handle == NULL) {
     libusb_exit(ctx);
@@ -677,7 +682,7 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   int keysCount = 0;
   KeyValue gkeys[25];
   int gkeysCount = 0;
-  
+
   for (int i = 0; i < keyValueCount; i++) {
     if(keyValue[i].key.addressGroup == KeyAddressGroup::logo) {
       logo[logoCount] = keyValue[i];
@@ -696,13 +701,13 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
       gkeysCount++;
     }
   }
-  
+
   if (logoCount > 0) setKeysInternal(KeyAddressGroup::logo, logo, logoCount);
-  
+
   if (indicatorsCount > 0) setKeysInternal(KeyAddressGroup::indicators, indicators, indicatorsCount);
-  
+
   if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
-  
+
   if (keysCount > 0) {
     int maxKeyValueCount = 2; // Normally max 14 but dont work
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
@@ -715,9 +720,9 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
       setKeysInternal(KeyAddressGroup::keys, keysBlock, keysBlockCount);
     }
   }
-  
+
   if (gkeysCount > 0) setKeysInternal(KeyAddressGroup::gkeys, gkeys, gkeysCount);
-  
+
   return true;
 }
 
