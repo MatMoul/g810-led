@@ -46,7 +46,8 @@ void listkeys() {
   cout<<"-------------------------\n";
   cout<<"\n";
   cout<<"Group logo :\n";
-  cout<<" Logo\n";
+  cout<<" logo\n";
+  cout<<" logo2\n";
   cout<<"\n";
   cout<<"Group indicators :\n";
   cout<<" num_indicator, numindicator, num\n";
@@ -125,6 +126,8 @@ void listkeys() {
   cout<<" comma\n";
   cout<<" period\n";
   cout<<" slash\n";
+  cout<<"Group gkeys :\n";
+  cout<<" g1 - g9\n";
 }
 
 int commit() {
