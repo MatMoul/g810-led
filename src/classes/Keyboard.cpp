@@ -672,31 +672,36 @@ bool Keyboard::setKey(Key key, KeyColors colors) {
 }
 
 bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
-  KeyValue logo[5];
+  int maxLogoKeys = 5;
   int logoCount = 0;
-  KeyValue indicators[25];
+  KeyValue logo[maxLogoKeys];
+  int maxIndicatorsKeys = 25;
   int indicatorsCount = 0;
-  KeyValue multimedia[25];
+  KeyValue indicators[maxIndicatorsKeys];
+  int maxMultimediaKeys = 25;
   int multimediaCount = 0;
-  KeyValue keys[200];
+  KeyValue multimedia[maxMultimediaKeys];
+  int maxKeys = 200;
   int keysCount = 0;
-  KeyValue gkeys[25];
+  KeyValue keys[maxKeys];
+  int maxGKeys = 25;
   int gkeysCount = 0;
+  KeyValue gkeys[maxGKeys];
 
   for (int i = 0; i < keyValueCount; i++) {
-    if(keyValue[i].key.addressGroup == KeyAddressGroup::logo) {
+    if(keyValue[i].key.addressGroup == KeyAddressGroup::logo && logoCount <= maxLogoKeys) {
       logo[logoCount] = keyValue[i];
       logoCount++;
-    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators) {
+    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators && logoCount <= maxIndicatorsKeys) {
       indicators[indicatorsCount] = keyValue[i];
       indicatorsCount++;
-    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::multimedia) {
+    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::multimedia && logoCount <= maxMultimediaKeys) {
       multimedia[multimediaCount] = keyValue[i];
       multimediaCount++;
-    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::keys) {
+    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::keys && logoCount <= maxKeys) {
       keys[keysCount] = keyValue[i];
       keysCount++;
-    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::gkeys) {
+    } else if(keyValue[i].key.addressGroup == KeyAddressGroup::gkeys && logoCount <= maxGKeys) {
       gkeys[gkeysCount] = keyValue[i];
       gkeysCount++;
     }
