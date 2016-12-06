@@ -709,13 +709,15 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
   if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
 
   if (keysCount > 0) {
-    int maxKeyValueCount = 2; // Normally max 14 but dont work
+    int maxKeyValueCount = 14;
     for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
       KeyValue keysBlock[maxKeyValueCount];
       int keysBlockCount = 0;
       for (int j = 0; j < maxKeyValueCount; j++) {
-        keysBlock[j] = keys[i + j];
-        keysBlockCount++;
+        if((i + j) < keysCount ) {
+	        keysBlock[j] = keys[i + j];
+	        keysBlockCount++;
+	      }
       }
       setKeysInternal(KeyAddressGroup::keys, keysBlock, keysBlockCount);
     }
