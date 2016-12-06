@@ -28,14 +28,14 @@ bool Keyboard::attach() {
       if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810 spectrum
       if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410 spectrum
       if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610 spectrum
-      if (desc.idProduct == 0xc32b) {  // G910 spark
+      if (desc.idProduct == 0xc32b) { // G910 spark
         pid = desc.idProduct;
-        kbdProtocol = KeyboardProtocol::spark;
+        kbdProtocol = KeyboardProtocol::g910;
         break;
       }
-      if (desc.idProduct == 0xc335) {
+      if (desc.idProduct == 0xc335) { // G910 spectrum
         pid = desc.idProduct;
-        kbdProtocol = KeyboardProtocol::spark;
+        kbdProtocol = KeyboardProtocol::g910;
         break;
       }
     }
@@ -85,13 +85,13 @@ bool Keyboard::commit() {
   bool retval = false;
   unsigned char *data = new unsigned char[20];
   switch (kbdProtocol) {
-    case KeyboardProtocol::spectrum:
+    case KeyboardProtocol::generic:
       data[0] = 0x11;
       data[1] = 0xff;
       data[2] = 0x0c;
       data[3] = 0x5a;
       break;
-    case KeyboardProtocol::spark:
+    case KeyboardProtocol::g910:
       data[0] = 0x11;
       data[1] = 0xff;
       data[2] = 0x0f;
@@ -488,7 +488,7 @@ bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
 
 bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsigned char *data) {
   switch (kbdProtocol) {
-    case KeyboardProtocol::spectrum:
+    case KeyboardProtocol::generic:
       switch (addressGroup) {
         case KeyAddressGroup::logo:
           data[0] = 0x11;  // Base address
@@ -535,7 +535,7 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
           break;
       }
       break;
-    case KeyboardProtocol::spark: // gkeys and mkeys seem not changeable
+    case KeyboardProtocol::g910: // gkeys and mkeys seem not changeable
       switch (addressGroup) {
         case KeyAddressGroup::logo:
           data[0] = 0x11;  // Base address

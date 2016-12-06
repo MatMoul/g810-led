@@ -8,7 +8,7 @@ class Keyboard {
 
   public:
     
-    enum class KeyboardProtocol { spectrum, spark };
+    enum class KeyboardProtocol { generic, g910 };
     enum class PowerOnEffect { rainbow, color };
     enum class KeyAddressGroup { logo, indicators, multimedia, keys, gkeys };
     enum class Key { // 127 items
@@ -57,7 +57,7 @@ class Keyboard {
     
     bool m_isAttached = false;
     bool m_isKernellDetached = false;
-    KeyboardProtocol kbdProtocol = KeyboardProtocol::spectrum;
+    KeyboardProtocol kbdProtocol = KeyboardProtocol::generic;
     libusb_device **devs;
     libusb_device_handle *dev_handle;
     libusb_context *ctx = NULL;
