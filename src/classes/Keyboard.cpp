@@ -692,16 +692,16 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
 		if(keyValue[i].key.addressGroup == KeyAddressGroup::logo && logoCount <= maxLogoKeys) {
 			logo[logoCount] = keyValue[i];
 			logoCount++;
-		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators && logoCount <= maxIndicatorsKeys) {
+		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::indicators && indicatorsCount <= maxIndicatorsKeys) {
 			indicators[indicatorsCount] = keyValue[i];
 			indicatorsCount++;
-		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::multimedia && logoCount <= maxMultimediaKeys) {
+		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::multimedia && multimediaCount <= maxMultimediaKeys) {
 			multimedia[multimediaCount] = keyValue[i];
 			multimediaCount++;
-		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::keys && logoCount <= maxKeys) {
+		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::keys && keysCount <= maxKeys) {
 			keys[keysCount] = keyValue[i];
 			keysCount++;
-		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::gkeys && logoCount <= maxGKeys) {
+		} else if(keyValue[i].key.addressGroup == KeyAddressGroup::gkeys && gkeysCount <= maxGKeys) {
 			gkeys[gkeysCount] = keyValue[i];
 			gkeysCount++;
 		}
