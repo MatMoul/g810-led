@@ -1,5 +1,6 @@
 CC=g++
 CFLAGS=-Wall -O2 -std=gnu++11
+LIBUSB_INC?=-I/usr/include/libusb-1.0
 LDFLAGS=-lusb-1.0
 PROGN=g810-led
 
@@ -7,11 +8,11 @@ PROGN=g810-led
 
 all: bin/$(PROGN)
 
-bin/$(PROGN): src/main.cpp src/classes/*.cpp
+bin/$(PROGN): src/main.cpp src/classes/*.cpp src/classes/*.h
 	@mkdir -p bin
-	$(CC) -o $@ $(CFLAGS) $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) $(LIBUSB_INC) -o $@ $^ $(LDFLAGS)
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g -Wextra -pedantic
 debug: bin/$(PROGN)
 
 clean:

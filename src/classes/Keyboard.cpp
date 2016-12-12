@@ -21,7 +21,20 @@ bool Keyboard::attach() {
 	int pid = 0;
 	for(ssize_t i = 0; i < cnt; i++) {
 		libusb_device *device = devs[i];
-		libusb_device_descriptor desc = {0};
+		libusb_device_descriptor desc = {0, // bLength
+		0, // bDescriptorType
+		0, // bcdUSB
+		0, // bDeviceClass
+		0, // bDeviceSubClass
+		0, // bDeviceProtocol
+		0, // bMaxPacketSize0
+		0, // idVendor
+		0, // idProduct
+		0, // bcdDevice
+		0, // iManufacturer
+		0, // iProduct
+		0, // iSerialNumber
+		0}; // bNumConfigurations
 		libusb_get_device_descriptor(device, &desc);
 		if (desc.idVendor == 0x046d) {
 			if (desc.idProduct == 0xc331) { pid = desc.idProduct; break; } // G810 spectrum
@@ -476,7 +489,7 @@ bool Keyboard::parseColor(std::string color, KeyColors &colors) {
 	return true;
 }
 
-bool Keyboard::sendDataInternal(unsigned char *data, int data_size) {
+bool Keyboard::sendDataInternal(unsigned char *data, uint16_t data_size) {
 	if (m_isAttached == false) return false;
 	int r;
 	if (data_size > 20) r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0212, 1, data, data_size, 2000);
@@ -589,17 +602,15 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
 	return true;
 }
 
-bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], int keyValueCount) {
+bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], size_t keyValueCount) {
 	bool retval = false;
-	unsigned char *data;
 	int data_size;
-	int maxKeyValueCount = 0;
 	if (addressGroup == KeyAddressGroup::logo) data_size = 20;
 	else data_size = 64;
-	data = new unsigned char[data_size];
+	unsigned char *data = new unsigned char[data_size];
+	const size_t maxKeyValueCount = (data_size - 8) / 4;
 	populateAddressGroupInternal(addressGroup, data);
-	maxKeyValueCount = (data_size - 8) / 4;
-	for(int i = 0; i < maxKeyValueCount; i++) {
+	for(size_t i = 0; i < maxKeyValueCount; i++) {
 		if (i < keyValueCount) {
 			data[8 + i * 4 + 0] = keyValues[i].key.id;
 			data[8 + i * 4 + 1] = keyValues[i].colors.red;
@@ -671,24 +682,24 @@ bool Keyboard::setKey(Key key, KeyColors colors) {
 	return setKey(keyValue);
 }
 
-bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
-	int maxLogoKeys = 5;
-	int logoCount = 0;
+bool Keyboard::setKeys(KeyValue keyValue[], size_t keyValueCount) {
+	const size_t maxLogoKeys = 5;
+	const size_t maxIndicatorsKeys = 25;
+	const size_t maxMultimediaKeys = 25;
+	const size_t maxKeys = 200;
+	const size_t maxGKeys = 25;
+	size_t logoCount = 0;
+	size_t indicatorsCount = 0;
+	size_t multimediaCount = 0;
+	size_t keysCount = 0;
+	size_t gkeysCount = 0;
 	KeyValue logo[maxLogoKeys];
-	int maxIndicatorsKeys = 25;
-	int indicatorsCount = 0;
 	KeyValue indicators[maxIndicatorsKeys];
-	int maxMultimediaKeys = 25;
-	int multimediaCount = 0;
 	KeyValue multimedia[maxMultimediaKeys];
-	int maxKeys = 200;
-	int keysCount = 0;
 	KeyValue keys[maxKeys];
-	int maxGKeys = 25;
-	int gkeysCount = 0;
 	KeyValue gkeys[maxGKeys];
 	
-	for (int i = 0; i < keyValueCount; i++) {
+	for (size_t i = 0; i < keyValueCount; i++) {
 		if(keyValue[i].key.addressGroup == KeyAddressGroup::logo && logoCount <= maxLogoKeys) {
 			logo[logoCount] = keyValue[i];
 			logoCount++;
@@ -714,11 +725,11 @@ bool Keyboard::setKeys(KeyValue keyValue[], int keyValueCount) {
 	if (multimediaCount > 0) setKeysInternal(KeyAddressGroup::multimedia, multimedia, multimediaCount);
 	
 	if (keysCount > 0) {
-		int maxKeyValueCount = 14;
-		for (int i = 0; i < keysCount; i = i + maxKeyValueCount) {
+		const size_t maxKeyValueCount = 14;
+		for (size_t i = 0; i < keysCount; i = i + maxKeyValueCount) {
 			KeyValue keysBlock[maxKeyValueCount];
-			int keysBlockCount = 0;
-			for (int j = 0; j < maxKeyValueCount; j++) {
+			size_t keysBlockCount = 0;
+			for (size_t j = 0; j < maxKeyValueCount; j++) {
 				if((i + j) < keysCount ) {
 					keysBlock[j] = keys[i + j];
 					keysBlockCount++;
