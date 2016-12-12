@@ -2,7 +2,7 @@
 #define DEF_KEYBOARD
 
 #include <iostream>
-#include "/usr/include/libusb-1.0/libusb.h"
+#include <libusb.h>
 
 class Keyboard {
 	
@@ -32,8 +32,8 @@ class Keyboard {
 		};
 		enum class KeyGroup { logo, indicators, multimedia, fkeys, modifiers, arrows, numeric, functions, keys, gkeys};
 		
-		struct KeyColors { char red; char green; char blue; };
-		struct KeyAddress { KeyAddressGroup addressGroup; char id; };
+		struct KeyColors { uint8_t red; uint8_t green; uint8_t blue; };
+		struct KeyAddress { KeyAddressGroup addressGroup; uint8_t id; };
 		struct KeyValue { KeyAddress key; KeyColors colors; };
 		
 		bool isAttached();
@@ -48,7 +48,7 @@ class Keyboard {
 		bool setPowerOnEffect(PowerOnEffect powerOnEffect);
 		bool setKey(KeyValue keyValue);
 		bool setKey(Key key, KeyColors colors);
-		bool setKeys(KeyValue keyValue[], int keyValueCount);
+		bool setKeys(KeyValue keyValue[], size_t keyValueCount);
 		bool setAllKeys(KeyColors colors);
 		bool setGroupKeys(KeyGroup keyGroup, KeyColors colors);
 		
@@ -63,8 +63,8 @@ class Keyboard {
 		libusb_context *ctx = NULL;
 		
 		bool populateAddressGroupInternal(KeyAddressGroup addressGroup, unsigned char *data);
-		bool sendDataInternal(unsigned char *data, int data_size);
-		bool setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], int keyValueCount);
+		bool sendDataInternal(unsigned char *data, uint16_t data_size);
+		bool setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], size_t keyValueCount);
 		
 };
 
