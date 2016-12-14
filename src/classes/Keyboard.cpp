@@ -2,7 +2,7 @@
 #include <vector>
 #include <unistd.h>
 #include <algorithm>
-#include "/usr/include/libusb-1.0/libusb.h"
+#include "libusb.h"
 
 
 bool Keyboard::isAttached() {
@@ -21,20 +21,22 @@ bool Keyboard::attach() {
 	int pid = 0;
 	for(ssize_t i = 0; i < cnt; i++) {
 		libusb_device *device = devs[i];
-		libusb_device_descriptor desc = {0, // bLength
-		0, // bDescriptorType
-		0, // bcdUSB
-		0, // bDeviceClass
-		0, // bDeviceSubClass
-		0, // bDeviceProtocol
-		0, // bMaxPacketSize0
-		0, // idVendor
-		0, // idProduct
-		0, // bcdDevice
-		0, // iManufacturer
-		0, // iProduct
-		0, // iSerialNumber
-		0}; // bNumConfigurations
+		libusb_device_descriptor desc = {
+			0, // bLength
+			0, // bDescriptorType
+			0, // bcdUSB
+			0, // bDeviceClass
+			0, // bDeviceSubClass
+			0, // bDeviceProtocol
+			0, // bMaxPacketSize0
+			0, // idVendor
+			0, // idProduct
+			0, // bcdDevice
+			0, // iManufacturer
+			0, // iProduct
+			0, // iSerialNumber
+			0  // bNumConfigurations
+		};
 		libusb_get_device_descriptor(device, &desc);
 		if (desc.idVendor == 0x046d) {
 			if (desc.idProduct == 0xc331) { pid = desc.idProduct; break; } // G810 spectrum
