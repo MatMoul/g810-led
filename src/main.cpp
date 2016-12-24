@@ -31,7 +31,7 @@ void usage() {
 	cout<<"\n";
 	cout<<"effect values :\t\trainbow, color\n";
 	cout<<"key values :\t\tabc... 123... and other\n";
-	cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys\n";
+	cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys, gkeys\n";
 	cout<<"\n";
 	cout<<"sample :\n";
 	cout<<appname<<" -k logo ff0000\n";
