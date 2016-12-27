@@ -56,7 +56,7 @@ k w $raw3
 k e $raw3
 k r $raw3
 k t $raw3
-k z $raw3
+k y $raw3
 k u $raw3
 k i $raw3
 k o $raw3
@@ -94,7 +94,7 @@ k num_plus $raw4
 # Raw 5 :
 k shift_left $raw5
 k intl_backslash $raw5
-k y $raw5
+k z $raw5
 k x $raw5
 k c $raw5
 k v $raw5

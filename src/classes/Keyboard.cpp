@@ -235,8 +235,8 @@ bool Keyboard::getKeyAddress(Key key, KeyAddress &keyAddress) {
 				case Key::v: keyAddress.id = 0x19; break;
 				case Key::w: keyAddress.id = 0x1a; break;
 				case Key::x: keyAddress.id = 0x1b; break;
-				case Key::z: keyAddress.id = 0x1c; break;
-				case Key::y: keyAddress.id = 0x1d; break;
+				case Key::y: keyAddress.id = 0x1c; break;
+				case Key::z: keyAddress.id = 0x1d; break;
 				case Key::n1: keyAddress.id = 0x1e; break;
 				case Key::n2: keyAddress.id = 0x1f; break;
 				case Key::n3: keyAddress.id = 0x20; break;
