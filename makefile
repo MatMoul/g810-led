@@ -4,7 +4,7 @@ LIBUSB_INC?=-I/usr/include/libusb-1.0
 LDFLAGS=-lusb-1.0
 PROGN=g810-led
 
-.PHONY: all debug clean install uninstall update
+.PHONY: all debug clean install uninstall
 
 all: bin/$(PROGN)
 
