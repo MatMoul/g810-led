@@ -51,6 +51,7 @@ class Keyboard {
 		bool setKeys(KeyValue keyValue[], size_t keyValueCount);
 		bool setAllKeys(KeyColors colors);
 		bool setGroupKeys(KeyGroup keyGroup, KeyColors colors);
+		bool setFXColor(KeyColors colors);
 		
 		
 	private:

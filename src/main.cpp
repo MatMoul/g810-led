@@ -200,6 +200,18 @@ int setGroupKeys(string groupKeys, string color, bool commit) {
 	return 1;
 }
 
+int setFXColor(string color) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	if (lg_kbd.parseColor(color, colors) == true) {
+		lg_kbd.attach();
+		lg_kbd.setFXColor(colors);
+		lg_kbd.detach();
+		return 0;
+	}
+	return 1;
+}
+
 int loadProfile(string profileFile) {
 	ifstream file;
 	
@@ -304,6 +316,7 @@ int main(int argc, char *argv[]) {
 		else if (argCmd == "-kn" && argc == 4)                return setKey(argv[2], argv[3], false);
 		else if (argCmd == "-c" && argc == 2)                 return commit();
 		else if (argCmd == "-p" && argc == 3)                 return loadProfile(argv[2]);
+		else if (argCmd == "-fx-color" && argc == 3)          return setFXColor(argv[2]);
 	}
 	usage();
 	return 1;

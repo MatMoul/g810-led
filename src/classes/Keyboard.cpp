@@ -843,3 +843,77 @@ bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
 	}
 	return true;
 }
+
+bool Keyboard::setFXColor(KeyColors colors) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Indicators
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0c;  // Base address
+	data[3] = 0x4c;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x40;  // Base address
+	
+	data[6] = colors.red;
+	data[7] = colors.green;
+	data[8] = colors.blue;
+	
+	for(int i = 9; i < data_size; i++) data[i] = 0x00;
+	
+	retval = sendDataInternal(data, data_size);
+	
+	
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0c;  // Base address
+	data[3] = 0x5c;  // Base address
+
+	for(int i = 4; i < data_size; i++) data[i] = 0x00;
+	
+	retval = sendDataInternal(data, data_size);
+	
+	
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x01;  // Base address
+	
+	data[6] = colors.red;
+	data[7] = colors.green;
+	data[8] = colors.blue;
+	data[9] = 0x02;
+	
+	for(int i = 10; i < data_size; i++) data[i] = 0x00;
+	
+	retval = sendDataInternal(data, data_size);
+	
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x01;  // Base address
+	
+	data[6] = colors.red;
+	data[7] = colors.green;
+	data[8] = colors.blue;
+	data[9] = 0x02;
+	
+	for(int i = 10; i < data_size; i++) data[i] = 0x00;
+	
+	retval = sendDataInternal(data, data_size);
+	
+	
+	delete[] data;
+	return retval;
+}
+
