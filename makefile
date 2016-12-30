@@ -34,8 +34,8 @@ install:
 uninstall:
 	@sudo systemctl disable $(PROGN)
 	@sudo systemctl disable $(PROGN)-reboot
-	@sudo rm /usr/lib/systemd/system/$(PROGN).service
-	@sudo rm /usr/lib/systemd/system/$(PROGN)-reboot.service
+	@sudo rm /lib/systemd/system/$(PROGN).service
+	@sudo rm /lib/systemd/system/$(PROGN)-reboot.service
 	@sudo rm /etc/udev/rules.d/$(PROGN).rules
 	@sudo rm /usr/bin/$(PROGN)
 	@sudo rm -R /etc/$(PROGN)
