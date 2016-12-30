@@ -25,8 +25,8 @@ install:
 	@sudo cp bin/$(PROGN) /usr/bin
 	@sudo test -s /etc/$(PROGN)/profile || sudo cp /etc/$(PROGN)/samples/group_keys /etc/$(PROGN)/profile
 	@sudo test -s /etc/$(PROGN)/reboot || sudo cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
-	@sudo cp systemd/$(PROGN).service /usr/lib/systemd/system
-	@sudo cp systemd/$(PROGN)-reboot.service /usr/lib/systemd/system
+	@sudo cp systemd/$(PROGN).service /lib/systemd/system
+	@sudo cp systemd/$(PROGN)-reboot.service /lib/systemd/system
 	@sudo systemctl start $(PROGN)
 	@sudo systemctl enable $(PROGN)
 	@sudo systemctl enable $(PROGN)-reboot
