@@ -340,6 +340,7 @@ int loadProfile(string profileFile) {
 		Keyboard::KeyAddress keyAddress;
 		Keyboard::KeyValue keyValue;
 		Keyboard::KeyColors colors;
+		uint8_t speedValue;
 		
 		map<string, string> var;
 		vector<Keyboard::KeyValue> keys;
@@ -396,6 +397,106 @@ int loadProfile(string profileFile) {
 				lg_kbd.setKeys(&keys[0], keys.size());
 				keys.clear();
 				lg_kbd.commit();
+			} else if (line.substr(0,8) == "fx-color") {
+				line = line.substr(9);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)];
+				} else line = line.substr(0, 6);
+				if (lg_kbd.parseColor(line, colors) == true) {
+					keys.clear();
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXColor(colors);
+				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+			} else if (line.substr(0,12) == "fx-breathing") {
+				line = line.substr(13);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)] + " " + line.substr(ind + 1);
+				}
+				if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
+					ind = line.find(" ");
+					line = line.substr(ind + 1, 2);
+					if (lg_kbd.parseSpeed(line, speedValue) == true) {
+						keys.clear();
+						lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+						lg_kbd.commit();
+						lg_kbd.detach();
+						lg_kbd.attach();
+						lg_kbd.setFXBreathing(colors, speedValue);
+					} else cout<<"Error1 on line "<<lineCount<<" : "<<line<<"\n";
+				} else cout<<"Error2 on line "<<lineCount<<" : "<<line<<"\n";
+			} else if (line.substr(0,8) == "fx-cycle") {
+				line = line.substr(9);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)];
+				} else line = line.substr(0, 2);
+				if (lg_kbd.parseSpeed(line, speedValue) == true) {
+					keys.clear();
+					colors.red = 0xff;
+					colors.green = 0xff;
+					colors.blue = 0xff;
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXColorCycle(speedValue);
+				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+			} else if (line.substr(0,8) == "fx-hwave") {
+				line = line.substr(9);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)];
+				} else line = line.substr(0, 2);
+				if (lg_kbd.parseSpeed(line, speedValue) == true) {
+					keys.clear();
+					colors.red = 0xff;
+					colors.green = 0xff;
+					colors.blue = 0xff;
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXHWave(speedValue);
+				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+			} else if (line.substr(0,8) == "fx-vwave") {
+				line = line.substr(9);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)];
+				} else line = line.substr(0, 2);
+				if (lg_kbd.parseSpeed(line, speedValue) == true) {
+					keys.clear();
+					colors.red = 0xff;
+					colors.green = 0xff;
+					colors.blue = 0xff;
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXVWave(speedValue);
+				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+			} else if (line.substr(0,8) == "fx-cwave") {
+				line = line.substr(9);
+				if (line.substr(0, 1) == "$") {
+					ind = line.find(" ");
+					line = var[line.substr(1, ind - 1)];
+				} else line = line.substr(0, 2);
+				if (lg_kbd.parseSpeed(line, speedValue) == true) {
+					keys.clear();
+					colors.red = 0xff;
+					colors.green = 0xff;
+					colors.blue = 0xff;
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXCWave(speedValue);
+				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			} else if ((line.substr(0, 1) != "#") && (line.substr(0, 1) != "")) {
 				cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			}
