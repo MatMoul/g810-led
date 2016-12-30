@@ -491,6 +491,13 @@ bool Keyboard::parseColor(std::string color, KeyColors &colors) {
 	return true;
 }
 
+bool Keyboard::parseSpeed(std::string speed, uint8_t &speedValue) {
+	if (speed.length() == 1) speed = speed + "0";
+	if (speed.length() != 2) return false;
+	speedValue = std::stoul("0x"+speed, nullptr, 16);
+	return true;
+}
+
 bool Keyboard::sendDataInternal(unsigned char *data, uint16_t data_size) {
 	if (m_isAttached == false) return false;
 	int r;
@@ -849,34 +856,6 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
 	
-	// Indicators
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0c;  // Base address
-	data[3] = 0x4c;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x40;  // Base address
-	
-	data[6] = colors.red;
-	data[7] = colors.green;
-	data[8] = colors.blue;
-	
-	for(int i = 9; i < data_size; i++) data[i] = 0x00;
-	
-	retval = sendDataInternal(data, data_size);
-	
-	
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0c;  // Base address
-	data[3] = 0x5c;  // Base address
-
-	for(int i = 4; i < data_size; i++) data[i] = 0x00;
-	
-	retval = sendDataInternal(data, data_size);
-	
-	
-	
 	// Keys
 	data[0] = 0x11;  // Base address
 	data[1] = 0xff;  // Base address
@@ -884,16 +863,12 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	data[3] = 0x3c;  // Base address
 	data[4] = 0x00;  // Base address
 	data[5] = 0x01;  // Base address
-	
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
 	data[9] = 0x02;
-	
 	for(int i = 10; i < data_size; i++) data[i] = 0x00;
-	
 	retval = sendDataInternal(data, data_size);
-	
 	
 	// Logo
 	data[0] = 0x11;  // Base address
@@ -902,16 +877,102 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	data[3] = 0x3c;  // Base address
 	data[4] = 0x01;  // Base address
 	data[5] = 0x01;  // Base address
-	
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
 	data[9] = 0x02;
-	
 	for(int i = 10; i < data_size; i++) data[i] = 0x00;
-	
 	retval = sendDataInternal(data, data_size);
 	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x02;  // Base address
+	data[6] = colors.red;
+	data[7] = colors.green;
+	data[8] = colors.blue;
+	data[9] = speed;  // Speed
+	data[10] = 0x10;  // ???
+	data[11] = 0x00;
+	data[12] = 0x64;
+	for(int i = 13; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x02;  // Base address
+	data[6] = colors.red;
+	data[7] = colors.green;
+	data[8] = colors.blue;
+	data[9] = speed;  // Speed
+	data[10] = 0x10;  // ???
+	data[11] = 0x00;
+	data[12] = 0x64;
+	for(int i = 13; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXColorCycle(uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x03;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = speed; // Speed
+	data[12] = 0x00;  // ???
+	data[13] = 0x00;
+	data[14] = 0x64;
+	for(int i = 15; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3c;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x03;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = speed; // Speed
+	data[12] = 0x00;  // ???
+	data[13] = 0x00;
+	data[14] = 0x64;
+	for(int i = 15; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
 	
 	delete[] data;
 	return retval;

@@ -10,34 +10,40 @@ void usage() {
 	cout<<appname<<" Usages :\n";
 	cout<<"-----------------\n";
 	cout<<"\n";
-	cout<<"  -s  effect :\t\tSet keyboard startup effect\n";
+	cout<<"  -s  effect :\t\t\tSet keyboard startup effect\n";
 	cout<<"\n";
-	cout<<"  -a  color :\t\tSet all keys\n";
-	cout<<"  -g  group, color :\tSet a group of keys\n";
-	cout<<"  -k  key, color :\tSet a key\n";
+	cout<<"  -a  color :\t\t\tSet all keys\n";
+	cout<<"  -g  group, color :\t\tSet a group of keys\n";
+	cout<<"  -k  key, color :\t\tSet a key\n";
 	cout<<"\n";
-	cout<<"  -an color :\t\tSet all keys without commit\n";
-	cout<<"  -gn group, color :\tSet a group of keys without commit\n";
-	cout<<"  -kn key, color :\tSet a key without commit\n";
+	cout<<"  -an color :\t\t\tSet all keys without commit\n";
+	cout<<"  -gn group, color :\t\tSet a group of keys without commit\n";
+	cout<<"  -kn key, color :\t\tSet a key without commit\n";
 	cout<<"\n";
-	cout<<"  -c :\t\t\tCommit changes\n";
+	cout<<"  -c :\t\t\t\tCommit changes\n";
 	cout<<"\n";
-	cout<<"  -p  profilefile :\tLoad a profile\n";
+	cout<<"  -fx-color color :\t\tSet static color effect\n";
+	cout<<"  -fx-breathing color, speed :\tSet breathing effect\n";
+	cout<<"  -fx-cycle speed :\t\tSet color cycle effect\n";
 	cout<<"\n";
-	cout<<"  -h | --help :\t\tthis help message\n";
-	cout<<"  -lk | --list-keys :\tList keys in groups\n";
+	cout<<"  -p  profilefile :\t\tLoad a profile\n";
 	cout<<"\n";
-	cout<<"color formats :\t\tRRGGBB (hex value for red, green and blue)\n";
+	cout<<"  -h | --help :\t\t\tthis help message\n";
+	cout<<"  -lk | --list-keys :\t\tList keys in groups\n";
 	cout<<"\n";
-	cout<<"effect values :\t\trainbow, color\n";
-	cout<<"key values :\t\tabc... 123... and other\n";
-	cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys, gkeys\n";
+	cout<<"color formats :\t\t\tRRGGBB (hex value for red, green and blue)\n";
+	cout<<"speed formats :\t\t\tSS (hex value for speed)\n";
+	cout<<"\n";
+	cout<<"effect values :\t\t\trainbow, color\n";
+	cout<<"key values :\t\t\tabc... 123... and other\n";
+	cout<<"group values :\t\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys, gkeys\n";
 	cout<<"\n";
 	cout<<"sample :\n";
 	cout<<appname<<" -k logo ff0000\n";
 	cout<<appname<<" -a 00ff00\n";
 	cout<<appname<<" -g fkeys ff00ff\n";
 	cout<<appname<<" -s color\n";
+	cout<<appname<<" -fx-cycle 10\n";
 }
 
 void listkeys() {
@@ -205,12 +211,58 @@ int setFXColor(string color) {
 	Keyboard::KeyColors colors;
 	if (lg_kbd.parseColor(color, colors) == true) {
 		lg_kbd.attach();
+		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+		lg_kbd.commit();
+		lg_kbd.detach();
+		lg_kbd.attach();
 		lg_kbd.setFXColor(colors);
 		lg_kbd.detach();
 		return 0;
 	}
 	return 1;
 }
+
+int setFXBreathing(string color, string speed) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	if (lg_kbd.parseColor(color, colors) == true) {
+		if (lg_kbd.parseSpeed(speed, speedValue) == true) {
+			lg_kbd.attach();
+			lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+			lg_kbd.commit();
+			lg_kbd.detach();
+			lg_kbd.attach();
+			lg_kbd.setFXBreathing(colors, speedValue);
+			lg_kbd.detach();
+			return 0;
+		}
+	}
+	return 1;
+}
+
+int setFXColorCycle(string speed) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	if (lg_kbd.parseSpeed(speed, speedValue) == true) {
+		colors.red = 0xff;
+		colors.green = 0xff;
+		colors.blue = 0xff;
+		lg_kbd.attach();
+		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+		lg_kbd.commit();
+		lg_kbd.detach();
+		lg_kbd.attach();
+		lg_kbd.setFXColorCycle(speedValue);
+		lg_kbd.detach();
+		return 0;
+	}
+	return 1;
+}
+
+
+
 
 int loadProfile(string profileFile) {
 	ifstream file;
@@ -317,6 +369,8 @@ int main(int argc, char *argv[]) {
 		else if (argCmd == "-c" && argc == 2)                 return commit();
 		else if (argCmd == "-p" && argc == 3)                 return loadProfile(argv[2]);
 		else if (argCmd == "-fx-color" && argc == 3)          return setFXColor(argv[2]);
+		else if (argCmd == "-fx-breathing" && argc == 4)      return setFXBreathing(argv[2], argv[3]);
+		else if (argCmd == "-fx-cycle" && argc == 3)          return setFXColorCycle(argv[2]);
 	}
 	usage();
 	return 1;

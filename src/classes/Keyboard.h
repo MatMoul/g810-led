@@ -45,6 +45,7 @@ class Keyboard {
 		bool parseKey(std::string key, KeyAddress &keyAddress);
 		bool parseKeyGroup(std::string key, KeyGroup &keyGroup);
 		bool parseColor(std::string color, KeyColors &colors);
+		bool parseSpeed(std::string speed, uint8_t &speedValue);
 		bool setPowerOnEffect(PowerOnEffect powerOnEffect);
 		bool setKey(KeyValue keyValue);
 		bool setKey(Key key, KeyColors colors);
@@ -52,6 +53,8 @@ class Keyboard {
 		bool setAllKeys(KeyColors colors);
 		bool setGroupKeys(KeyGroup keyGroup, KeyColors colors);
 		bool setFXColor(KeyColors colors);
+		bool setFXBreathing(KeyColors colors, uint8_t speed);
+		bool setFXColorCycle(uint8_t speed);
 		
 		
 	private:
