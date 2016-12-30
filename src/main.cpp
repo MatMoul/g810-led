@@ -25,6 +25,9 @@ void usage() {
 	cout<<"  -fx-color color :\t\tSet static color effect\n";
 	cout<<"  -fx-breathing color, speed :\tSet breathing effect\n";
 	cout<<"  -fx-cycle speed :\t\tSet color cycle effect\n";
+	cout<<"  -fx-hwave speed :\t\tSet horizontal color wave effect\n";
+	cout<<"  -fx-vwave speed :\t\tSet vertical color wave effect\n";
+	cout<<"  -fx-cwave speed :\t\tSet center color wave effect\n";
 	cout<<"\n";
 	cout<<"  -p  profilefile :\t\tLoad a profile\n";
 	cout<<"\n";
@@ -261,8 +264,66 @@ int setFXColorCycle(string speed) {
 	return 1;
 }
 
+int setFXHWave(string speed) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	if (lg_kbd.parseSpeed(speed, speedValue) == true) {
+		colors.red = 0xff;
+		colors.green = 0xff;
+		colors.blue = 0xff;
+		lg_kbd.attach();
+		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+		lg_kbd.commit();
+		lg_kbd.detach();
+		lg_kbd.attach();
+		lg_kbd.setFXHWave(speedValue);
+		lg_kbd.detach();
+		return 0;
+	}
+	return 1;
+}
 
+int setFXVWave(string speed) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	if (lg_kbd.parseSpeed(speed, speedValue) == true) {
+		colors.red = 0xff;
+		colors.green = 0xff;
+		colors.blue = 0xff;
+		lg_kbd.attach();
+		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+		lg_kbd.commit();
+		lg_kbd.detach();
+		lg_kbd.attach();
+		lg_kbd.setFXVWave(speedValue);
+		lg_kbd.detach();
+		return 0;
+	}
+	return 1;
+}
 
+int setFXCWave(string speed) {
+	Keyboard lg_kbd;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	if (lg_kbd.parseSpeed(speed, speedValue) == true) {
+		colors.red = 0xff;
+		colors.green = 0xff;
+		colors.blue = 0xff;
+		lg_kbd.attach();
+		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+		lg_kbd.commit();
+		lg_kbd.detach();
+		lg_kbd.attach();
+		lg_kbd.setFXCWave(speedValue);
+		lg_kbd.detach();
+		return 0;
+	}
+	return 1;
+	return 1;
+}
 
 int loadProfile(string profileFile) {
 	ifstream file;
@@ -371,6 +432,9 @@ int main(int argc, char *argv[]) {
 		else if (argCmd == "-fx-color" && argc == 3)          return setFXColor(argv[2]);
 		else if (argCmd == "-fx-breathing" && argc == 4)      return setFXBreathing(argv[2], argv[3]);
 		else if (argCmd == "-fx-cycle" && argc == 3)          return setFXColorCycle(argv[2]);
+		else if (argCmd == "-fx-hwave" && argc == 3)          return setFXHWave(argv[2]);
+		else if (argCmd == "-fx-vwave" && argc == 3)          return setFXVWave(argv[2]);
+		else if (argCmd == "-fx-cwave" && argc == 3)          return setFXCWave(argv[2]);
 	}
 	usage();
 	return 1;

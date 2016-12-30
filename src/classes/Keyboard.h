@@ -55,6 +55,9 @@ class Keyboard {
 		bool setFXColor(KeyColors colors);
 		bool setFXBreathing(KeyColors colors, uint8_t speed);
 		bool setFXColorCycle(uint8_t speed);
+		bool setFXHWave(uint8_t speed);
+		bool setFXVWave(uint8_t speed);
+		bool setFXCWave(uint8_t speed);
 		
 		
 	private:

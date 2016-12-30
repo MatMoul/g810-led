@@ -978,3 +978,149 @@ bool Keyboard::setFXColorCycle(uint8_t speed) {
 	return retval;
 }
 
+bool Keyboard::setFXHWave(uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x04;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = 0x00;
+	data[12] = 0x88;
+	data[13] = 0x01;
+	data[14] = 0x64;
+	data[15] = speed; // Speed
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x03;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = speed; // Speed
+	data[12] = 0x88;
+	data[13] = 0x64;
+	data[14] = 0x00;
+	data[15] = 0x00;
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXVWave(uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x04;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = 0x00;
+	data[12] = 0x88;
+	data[13] = 0x02;
+	data[14] = 0x64;
+	data[15] = speed; // Speed
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x03;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = speed; // Speed
+	data[12] = 0x88;
+	data[13] = 0x64;
+	data[14] = 0x00;
+	data[15] = 0x00;
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXCWave(uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
+	// Keys
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x00;  // Base address
+	data[5] = 0x04;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = 0x00;
+	data[12] = 0x88;
+	data[13] = 0x03;
+	data[14] = 0x64;
+	data[15] = speed; // Speed
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	// Logo
+	data[0] = 0x11;  // Base address
+	data[1] = 0xff;  // Base address
+	data[2] = 0x0d;  // Base address
+	data[3] = 0x3b;  // Base address
+	data[4] = 0x01;  // Base address
+	data[5] = 0x03;  // Base address
+	data[6] = 0x00;
+	data[7] = 0x00;
+	data[8] = 0x00;
+	data[9] = 0x00;
+	data[10] = 0x00;
+	data[11] = speed; // Speed
+	data[12] = 0x88;
+	data[13] = 0x64;
+	data[14] = 0x00;
+	data[15] = 0x00;
+	for(int i = 16; i < data_size; i++) data[i] = 0x00;
+	retval = sendDataInternal(data, data_size);
+	
+	delete[] data;
+	return retval;
+}
