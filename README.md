@@ -20,11 +20,11 @@ Samples :</br>
 `g810-led -g fkeys ff00ff # Set color of a group of keys`</br>
 `g810-led -s color # Set keyboard power on effect`</br>
 `g810-led -fx-color 00ff00 # Set fixed color effect`</br>
-`g810-led -fx-breathing 00ff00 10 # Set breathing effect`</br>
-`g810-led -fx-cycle 10 # Set color cycle effect`</br>
-`g810-led -fx-hwave 10 # Set horizontal wave effect`</br>
-`g810-led -fx-vwave 10 # Set vertical wave effect`</br>
-`g810-led -fx-cwave 10 # Set center wave effect`</br>
+`g810-led -fx-breathing 00ff00 0a # Set breathing effect`</br>
+`g810-led -fx-cycle 0a # Set color cycle effect`</br>
+`g810-led -fx-hwave 0a # Set horizontal wave effect`</br>
+`g810-led -fx-vwave 0a # Set vertical wave effect`</br>
+`g810-led -fx-cwave 0a # Set center wave effect`</br>
 
 
 Samples with no commit :</br>
