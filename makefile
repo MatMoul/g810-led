@@ -23,12 +23,9 @@ install:
 	@sudo cp sample_profiles/* /etc/$(PROGN)/samples
 	@sudo cp udev/$(PROGN).rules /etc/udev/rules.d
 	@sudo cp bin/$(PROGN) /usr/bin
-	@sudo rm /usr/bin/g410-led
-	@sudo rm /usr/bin/g610-led
-	@sudo rm /usr/bin/g910-led
-	@sudo ln -s /usr/bin/$(PROGN) /usr/bin/g410-led
-	@sudo ln -s /usr/bin/$(PROGN) /usr/bin/g610-led
-	@sudo ln -s /usr/bin/$(PROGN) /usr/bin/g910-led
+	@sudo test -s /usr/bin/g410-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g410-led
+	@sudo test -s /usr/bin/g610-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g610-led
+	@sudo test -s /usr/bin/g910-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g910-led
 	@sudo test -s /etc/$(PROGN)/profile || sudo cp /etc/$(PROGN)/samples/group_keys /etc/$(PROGN)/profile
 	@sudo test -s /etc/$(PROGN)/reboot || sudo cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
 	@sudo cp systemd/$(PROGN).service /lib/systemd/system
