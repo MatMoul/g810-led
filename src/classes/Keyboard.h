@@ -70,6 +70,7 @@ class Keyboard {
 		libusb_context *ctx = NULL;
 		
 		bool populateAddressGroupInternal(KeyAddressGroup addressGroup, unsigned char *data);
+		bool populateFXAddressInternal(unsigned char *data);
 		bool sendDataInternal(unsigned char *data, uint16_t data_size);
 		bool setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], size_t keyValueCount);
 		

@@ -611,6 +611,27 @@ bool Keyboard::populateAddressGroupInternal(KeyAddressGroup addressGroup, unsign
 	return true;
 }
 
+bool Keyboard::populateFXAddressInternal(unsigned char *data) {
+	switch (kbdProtocol) {
+		case KeyboardProtocol::generic:
+			data[0] = 0x11;  // Base address
+			data[1] = 0xff;  // Base address
+			data[2] = 0x0d;  // Base address
+			data[3] = 0x3c;  // Base address
+			break;
+		case KeyboardProtocol::g910:
+			data[0] = 0x11;  // Base address
+			data[1] = 0xff;  // Base address
+			data[2] = 0x10;  // Base address
+			data[3] = 0x3c;  // Base address
+			break;
+		default:
+			return false;
+			break;
+	}
+	return true;
+}
+
 bool Keyboard::setKeysInternal(KeyAddressGroup addressGroup, KeyValue keyValues[], size_t keyValueCount) {
 	bool retval = false;
 	int data_size;
@@ -867,12 +888,9 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x01;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x01;  // Effect
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
@@ -881,12 +899,9 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x01;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x01;  // Effect
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
@@ -904,12 +919,9 @@ bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x02;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x02;  // Effect
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
@@ -921,12 +933,9 @@ bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x02;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x02;  // Effect
 	data[6] = colors.red;
 	data[7] = colors.green;
 	data[8] = colors.blue;
@@ -947,12 +956,9 @@ bool Keyboard::setFXColorCycle(uint8_t speed) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x03;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x03;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -966,12 +972,9 @@ bool Keyboard::setFXColorCycle(uint8_t speed) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3c;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x03;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x03;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -994,12 +997,9 @@ bool Keyboard::setFXHWave(uint8_t speed) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x04;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x04;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -1014,12 +1014,9 @@ bool Keyboard::setFXHWave(uint8_t speed) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x03;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x03;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -1043,12 +1040,9 @@ bool Keyboard::setFXVWave(uint8_t speed) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x04;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x04;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -1063,12 +1057,9 @@ bool Keyboard::setFXVWave(uint8_t speed) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x03;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x03;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -1092,12 +1083,9 @@ bool Keyboard::setFXCWave(uint8_t speed) {
 	unsigned char *data = new unsigned char[data_size];
 	
 	// Keys
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x04;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x00;  // Keys
+	data[5] = 0x04;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
@@ -1112,12 +1100,9 @@ bool Keyboard::setFXCWave(uint8_t speed) {
 	retval = sendDataInternal(data, data_size);
 	
 	// Logo
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x3b;  // Base address
-	data[4] = 0x01;  // Base address
-	data[5] = 0x03;  // Base address
+	populateFXAddressInternal(data);
+	data[4] = 0x01;  // Logo
+	data[5] = 0x03;  // Effect
 	data[6] = 0x00;
 	data[7] = 0x00;
 	data[8] = 0x00;
