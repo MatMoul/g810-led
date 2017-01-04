@@ -30,6 +30,7 @@ install:
 	@sudo test -s /etc/$(PROGN)/reboot || sudo cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
 	@sudo cp systemd/$(PROGN).service /lib/systemd/system
 	@sudo cp systemd/$(PROGN)-reboot.service /lib/systemd/system
+	@sudo systemctl daemon-reload
 	@sudo systemctl start $(PROGN)
 	@sudo systemctl enable $(PROGN)
 	@sudo systemctl enable $(PROGN)-reboot
@@ -39,6 +40,7 @@ uninstall:
 	@sudo systemctl disable $(PROGN)-reboot
 	@sudo rm /lib/systemd/system/$(PROGN).service
 	@sudo rm /lib/systemd/system/$(PROGN)-reboot.service
+	@sudo systemctl daemon-reload
 	@sudo rm /etc/udev/rules.d/$(PROGN).rules
 	@sudo rm /usr/bin/g410-led
 	@sudo rm /usr/bin/g610-led
