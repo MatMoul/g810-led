@@ -641,12 +641,22 @@ bool Keyboard::setPowerOnEffect(PowerOnEffect powerOnEffect) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
-	data[0] = 0x11;  // Base address
-	data[1] = 0xff;  // Base address
-	data[2] = 0x0d;  // Base address
-	data[3] = 0x5a;  // Base address
-	data[4] = 0x00;  // Base address
-	data[5] = 0x01;  // Base address
+	switch (kbdProtocol) {
+		case KeyboardProtocol::generic:
+			data[0] = 0x11;  // Base address
+			data[1] = 0xff;  // Base address
+			data[2] = 0x0d;  // Base address
+			data[3] = 0x5a;  // Base address
+			data[4] = 0x00;  // Base address
+			data[5] = 0x01;  // Base address
+		case KeyboardProtocol::g910:
+			data[0] = 0x11;  // Base address
+			data[1] = 0xff;  // Base address
+			data[2] = 0x10;  // Base address
+			data[3] = 0x5e;  // Base address
+			data[4] = 0x00;  // Base address
+			data[5] = 0x01;  // Base address
+	}
 	switch (powerOnEffect) {
 		case PowerOnEffect::rainbow:
 			data[6] = 0x01;
