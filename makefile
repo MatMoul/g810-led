@@ -22,6 +22,7 @@ install:
 	@sudo mkdir -p /etc/$(PROGN)/samples
 	@sudo cp sample_profiles/* /etc/$(PROGN)/samples
 	@sudo cp udev/$(PROGN).rules /etc/udev/rules.d
+	@sudo udevadm control --reload-rules
 	@sudo cp bin/$(PROGN) /usr/bin
 	@sudo test -s /usr/bin/g410-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g410-led
 	@sudo test -s /usr/bin/g610-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g610-led
@@ -41,9 +42,10 @@ uninstall:
 	@sudo rm /lib/systemd/system/$(PROGN).service
 	@sudo rm /lib/systemd/system/$(PROGN)-reboot.service
 	@sudo systemctl daemon-reload
-	@sudo rm /etc/udev/rules.d/$(PROGN).rules
 	@sudo rm /usr/bin/g410-led
 	@sudo rm /usr/bin/g610-led
 	@sudo rm /usr/bin/g910-led
 	@sudo rm /usr/bin/$(PROGN)
 	@sudo rm -R /etc/$(PROGN)
+	@sudo rm /etc/udev/rules.d/$(PROGN).rules
+	@sudo udevadm control --reload-rules
