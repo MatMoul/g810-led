@@ -43,6 +43,7 @@ bool Keyboard::attach() {
 			if (desc.idProduct == 0xc337) { pid = desc.idProduct; break; } // G810 spectrum
 			if (desc.idProduct == 0xc330) { pid = desc.idProduct; break; } // G410 spectrum
 			if (desc.idProduct == 0xc333) { pid = desc.idProduct; break; } // G610 spectrum
+			if (desc.idProduct == 0xc338) { pid = desc.idProduct; break; } // G610 spectrum
 			if (desc.idProduct == 0xc32b) { // G910 spark
 				pid = desc.idProduct;
 				kbdProtocol = KeyboardProtocol::g910;
