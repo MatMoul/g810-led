@@ -9,7 +9,10 @@ G810 Orion Spectrum</br>
 G910 Orion Spark</br>
 G910 Orion Spectrum
 
-![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/logitech_g810-2.jpg)
+![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g410.png)
+![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g610.png)
+![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g810.jpg)
+![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g910.jpg)
 
 Install and use :</br>
 - look at the wiki : https://github.com/MatMoul/g810-led/wiki
