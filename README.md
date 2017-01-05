@@ -2,9 +2,10 @@
 
 Linux LED controller for the Logitech G810 Orion Spectrum Keyboard
 
-Other compatible keyboard :</br>
+**Compatible keyboards :**</br>
 G410 Atlas Spectrum</br>
-G610 Orion</br>
+G610 Orion (Brown and Red)</br>
+G810 Orion Spectrum</br>
 G910 Orion Spark</br>
 G910 Orion Spectrum
 
