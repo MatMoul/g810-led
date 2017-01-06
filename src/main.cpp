@@ -1,7 +1,9 @@
 #include <map>
 #include <vector>
 #include <fstream>
+#include <istream>
 #include "classes/Keyboard.h"
+#include <unistd.h>
 
 using namespace std;
 
@@ -29,7 +31,8 @@ void usage() {
 	cout<<"  -fx-vwave speed :\t\tSet vertical color wave effect\n";
 	cout<<"  -fx-cwave speed :\t\tSet center color wave effect\n";
 	cout<<"\n";
-	cout<<"  -p  profilefile :\t\tLoad a profile\n";
+	cout<<"  -p  profilefile :\t\tLoad a profile from a file\n";
+	cout<<"  -pp profilepipe :\t\tLoad a profile from stdin\n";
 	cout<<"\n";
 	cout<<"  -h | --help :\t\t\tthis help message\n";
 	cout<<"  -lk | --list-keys :\t\tList keys in groups\n";
@@ -325,192 +328,199 @@ int setFXCWave(string speed) {
 	return 1;
 }
 
-int loadProfile(string profileFile) {
-	ifstream file;
+int parseProfile(istream &is) {
+	string line;
+	int lineCount = 1;
+	int ind;
 	
-	file.open(profileFile);
-	if (file.is_open()) {
+	Keyboard lg_kbd;
+	Keyboard::KeyGroup keyGroup;
+	Keyboard::KeyAddress keyAddress;
+	Keyboard::KeyValue keyValue;
+	Keyboard::KeyColors colors;
+	uint8_t speedValue;
+	
+	map<string, string> var;
+	vector<Keyboard::KeyValue> keys;
+	
+	lg_kbd.attach();
+	
+	while (!is.eof()) {
+		getline(is, line);
 		
-		string line;
-		int lineCount = 1;
-		int ind;
-		
-		Keyboard lg_kbd;
-		Keyboard::KeyGroup keyGroup;
-		Keyboard::KeyAddress keyAddress;
-		Keyboard::KeyValue keyValue;
-		Keyboard::KeyColors colors;
-		uint8_t speedValue;
-		
-		map<string, string> var;
-		vector<Keyboard::KeyValue> keys;
-		
-		lg_kbd.attach();
-		
-		while (!file.eof()) {
-			getline(file, line);
-			
-			if (line.substr(0, 3) == "var") {
-				line = line.substr(4);
+		if (line.substr(0, 3) == "var") {
+			line = line.substr(4);
+			ind = line.find(" ");
+			var[line.substr(0, ind)] = line.substr(ind + 1, 6);
+		} else if (line.substr(0, 1) == "a") {
+			line = line.substr(2);
+			if (line.substr(0, 1) == "$") {
 				ind = line.find(" ");
-				var[line.substr(0, ind)] = line.substr(ind + 1, 6);
-			} else if (line.substr(0, 1) == "a") {
-				line = line.substr(2);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 6);
-				if (lg_kbd.parseColor(line, colors) == true) {
-					keys.clear();
-					lg_kbd.setAllKeys(colors);
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "g") {
-				line = line.substr(2);
-				ind = line.find(" ");
-				if (lg_kbd.parseKeyGroup(line.substr(0, ind), keyGroup) == true) {
-					line = line.substr(ind + 1);
-					if (line.substr(0, 1) == "$") {
-						ind = line.find(" ");
-						line = var[line.substr(1, ind - 1)];
-					};
-					if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-						lg_kbd.setGroupKeys(keyGroup, colors);
-					} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "k") {
-				line = line.substr(2);
-				ind = line.find(" ");
-				if (lg_kbd.parseKey(line.substr(0, ind), keyAddress) == true) {
-					line = line.substr(ind + 1);
-					if (line.substr(0, 1) == "$") {
-						ind = line.find(" ");
-						line = var[line.substr(1, ind - 1)];
-					}
-					if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-						keyValue.key = keyAddress;
-						keyValue.colors = colors;
-						keys.push_back(keyValue);
-					} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "c") {
-				lg_kbd.commit();
-				lg_kbd.setKeys(&keys[0], keys.size());
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 6);
+			if (lg_kbd.parseColor(line, colors) == true) {
 				keys.clear();
-				lg_kbd.commit();
-			} else if (line.substr(0,8) == "fx-color") {
-				line = line.substr(9);
+				lg_kbd.setAllKeys(colors);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,1) == "g") {
+			line = line.substr(2);
+			ind = line.find(" ");
+			if (lg_kbd.parseKeyGroup(line.substr(0, ind), keyGroup) == true) {
+				line = line.substr(ind + 1);
 				if (line.substr(0, 1) == "$") {
 					ind = line.find(" ");
 					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 6);
-				if (lg_kbd.parseColor(line, colors) == true) {
-					keys.clear();
-					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
-					lg_kbd.setFXColor(colors);
+				};
+				if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
+					lg_kbd.setGroupKeys(keyGroup, colors);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,12) == "fx-breathing") {
-				line = line.substr(13);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,1) == "k") {
+			line = line.substr(2);
+			ind = line.find(" ");
+			if (lg_kbd.parseKey(line.substr(0, ind), keyAddress) == true) {
+				line = line.substr(ind + 1);
 				if (line.substr(0, 1) == "$") {
 					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)] + " " + line.substr(ind + 1);
+					line = var[line.substr(1, ind - 1)];
 				}
 				if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-					ind = line.find(" ");
-					line = line.substr(ind + 1, 2);
-					if (lg_kbd.parseSpeed(line, speedValue) == true) {
-						keys.clear();
-						lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-						lg_kbd.commit();
-						lg_kbd.detach();
-						lg_kbd.attach();
-						lg_kbd.setFXBreathing(colors, speedValue);
-					} else cout<<"Error1 on line "<<lineCount<<" : "<<line<<"\n";
-				} else cout<<"Error2 on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,8) == "fx-cycle") {
-				line = line.substr(9);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 2);
-				if (lg_kbd.parseSpeed(line, speedValue) == true) {
-					keys.clear();
-					colors.red = 0xff;
-					colors.green = 0xff;
-					colors.blue = 0xff;
-					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
-					lg_kbd.setFXColorCycle(speedValue);
+					keyValue.key = keyAddress;
+					keyValue.colors = colors;
+					keys.push_back(keyValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,8) == "fx-hwave") {
-				line = line.substr(9);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 2);
-				if (lg_kbd.parseSpeed(line, speedValue) == true) {
-					keys.clear();
-					colors.red = 0xff;
-					colors.green = 0xff;
-					colors.blue = 0xff;
-					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
-					lg_kbd.setFXHWave(speedValue);
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,8) == "fx-vwave") {
-				line = line.substr(9);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 2);
-				if (lg_kbd.parseSpeed(line, speedValue) == true) {
-					keys.clear();
-					colors.red = 0xff;
-					colors.green = 0xff;
-					colors.blue = 0xff;
-					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
-					lg_kbd.setFXVWave(speedValue);
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,8) == "fx-cwave") {
-				line = line.substr(9);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 2);
-				if (lg_kbd.parseSpeed(line, speedValue) == true) {
-					keys.clear();
-					colors.red = 0xff;
-					colors.green = 0xff;
-					colors.blue = 0xff;
-					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
-					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
-					lg_kbd.setFXCWave(speedValue);
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if ((line.substr(0, 1) != "#") && (line.substr(0, 1) != "")) {
-				cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,1) == "c") {
+			lg_kbd.commit();
+			lg_kbd.setKeys(&keys[0], keys.size());
+			keys.clear();
+			lg_kbd.commit();
+		} else if (line.substr(0,8) == "fx-color") {
+			line = line.substr(9);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 6);
+			if (lg_kbd.parseColor(line, colors) == true) {
+				keys.clear();
+				lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+				lg_kbd.commit();
+				lg_kbd.detach();
+				lg_kbd.attach();
+				lg_kbd.setFXColor(colors);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,12) == "fx-breathing") {
+			line = line.substr(13);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)] + " " + line.substr(ind + 1);
 			}
-		
-			lineCount++;
+			if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
+				ind = line.find(" ");
+				line = line.substr(ind + 1, 2);
+				if (lg_kbd.parseSpeed(line, speedValue) == true) {
+					keys.clear();
+					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+					lg_kbd.commit();
+					lg_kbd.detach();
+					lg_kbd.attach();
+					lg_kbd.setFXBreathing(colors, speedValue);
+				} else cout<<"Error1 on line "<<lineCount<<" : "<<line<<"\n";
+			} else cout<<"Error2 on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,8) == "fx-cycle") {
+			line = line.substr(9);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 2);
+			if (lg_kbd.parseSpeed(line, speedValue) == true) {
+				keys.clear();
+				colors.red = 0xff;
+				colors.green = 0xff;
+				colors.blue = 0xff;
+				lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+				lg_kbd.commit();
+				lg_kbd.detach();
+				lg_kbd.attach();
+				lg_kbd.setFXColorCycle(speedValue);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,8) == "fx-hwave") {
+			line = line.substr(9);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 2);
+			if (lg_kbd.parseSpeed(line, speedValue) == true) {
+				keys.clear();
+				colors.red = 0xff;
+				colors.green = 0xff;
+				colors.blue = 0xff;
+				lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+				lg_kbd.commit();
+				lg_kbd.detach();
+				lg_kbd.attach();
+				lg_kbd.setFXHWave(speedValue);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,8) == "fx-vwave") {
+			line = line.substr(9);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 2);
+			if (lg_kbd.parseSpeed(line, speedValue) == true) {
+				keys.clear();
+				colors.red = 0xff;
+				colors.green = 0xff;
+				colors.blue = 0xff;
+				lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+				lg_kbd.commit();
+				lg_kbd.detach();
+				lg_kbd.attach();
+				lg_kbd.setFXVWave(speedValue);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if (line.substr(0,8) == "fx-cwave") {
+			line = line.substr(9);
+			if (line.substr(0, 1) == "$") {
+				ind = line.find(" ");
+				line = var[line.substr(1, ind - 1)];
+			} else line = line.substr(0, 2);
+			if (lg_kbd.parseSpeed(line, speedValue) == true) {
+				keys.clear();
+				colors.red = 0xff;
+				colors.green = 0xff;
+				colors.blue = 0xff;
+				lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
+				lg_kbd.commit();
+				lg_kbd.detach();
+				lg_kbd.attach();
+				lg_kbd.setFXCWave(speedValue);
+			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+		} else if ((line.substr(0, 1) != "#") && (line.substr(0, 1) != "")) {
+			cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 		}
-		
-		lg_kbd.detach();
-		
+	
+		lineCount++;
+	}
+	
+	lg_kbd.detach();
+	
+	return 0;
+}
+
+int loadProfile(string profileFile) {
+	ifstream file;
+	file.open(profileFile);
+	if (file.is_open()) {
+		int retval = parseProfile(file);
 		file.close();
-		
-		return 0;
+		return retval;
 	}
 	return 1;
+}
+
+int pipeProfile() {
+	if (isatty(fileno(stdin))) return 1;
+	return parseProfile(cin);
 }
 
 int main(int argc, char *argv[]) {
@@ -530,6 +540,7 @@ int main(int argc, char *argv[]) {
 		else if (argCmd == "-kn" && argc == 4)                return setKey(argv[2], argv[3], false);
 		else if (argCmd == "-c" && argc == 2)                 return commit();
 		else if (argCmd == "-p" && argc == 3)                 return loadProfile(argv[2]);
+		else if (argCmd == "-pp" && argc == 2)                return pipeProfile();
 		else if (argCmd == "-fx-color" && argc == 3)          return setFXColor(argv[2]);
 		else if (argCmd == "-fx-breathing" && argc == 4)      return setFXBreathing(argv[2], argv[3]);
 		else if (argCmd == "-fx-cycle" && argc == 3)          return setFXColorCycle(argv[2]);
