@@ -6,21 +6,13 @@ Linux LED controller for Logitech Led Keyboards.</br>
 - look at the wiki : https://github.com/MatMoul/g810-led/wiki</br>
 
 ##Compatible keyboards :</br>
-
 **G410 Atlas Spectrum :**</br>
-![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g410.png)</br>
-
 **G610 Orion (Brown and Red) :**</br>
-![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g610.png)</br>
-
 **G810 Orion Spectrum :**</br>
-![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g810.jpg)</br>
-
 **G910 Orion (Spark and Spectrum) :**</br>
-![jj](https://raw.githubusercontent.com/MatMoul/g810-led/master/pictures/g910.jpg)</br>
 
 ##Samples :</br>
-`g810-led -p /etc/g810/profile # Set a profile`</br>
+`g810-led -p /etc/g810/profile # Load a profile`</br>
 `g810-led -k logo ff0000 # Set color of a key`</br>
 `g810-led -a 00ff00 # Set color of all keys`</br>
 `g810-led -g fkeys ff00ff # Set color of a group of keys`</br>
@@ -45,3 +37,7 @@ Linux LED controller for Logitech Led Keyboards.</br>
 `g610-led -a 60 # Set intensity of all keys`</br>
 `g610-led -k logo ff # Set intensity of a key`</br>
 `g610-led -g fkeys aa # Set intensity of a group of keys`</br>
+
+##Samples with pipe :</br>
+`g810-led -pp < profilefile # Load a profile`</br>
+`echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
