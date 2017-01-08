@@ -883,7 +883,7 @@ bool Keyboard::setGroupKeys(KeyGroup keyGroup, KeyColors colors) {
 	return true;
 }
 
-bool Keyboard::setFXColor(KeyColors colors) {
+bool Keyboard::setFXColorKeys(KeyColors colors) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -898,6 +898,15 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	data[9] = 0x02;
 	for(int i = 10; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
+	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXColorLogo(KeyColors colors) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
 	
 	// Logo
 	populateFXAddressInternal(data);
@@ -914,7 +923,7 @@ bool Keyboard::setFXColor(KeyColors colors) {
 	return retval;
 }
 
-bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
+bool Keyboard::setFXBreathingKeys(KeyColors colors, uint8_t speed) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -933,6 +942,15 @@ bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
 	for(int i = 13; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
 	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXBreathingLogo(KeyColors colors, uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
 	// Logo
 	populateFXAddressInternal(data);
 	data[4] = 0x01;  // Logo
@@ -951,7 +969,7 @@ bool Keyboard::setFXBreathing(KeyColors colors, uint8_t speed) {
 	return retval;
 }
 
-bool Keyboard::setFXColorCycle(uint8_t speed) {
+bool Keyboard::setFXColorCycleKeys(uint8_t speed) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -972,6 +990,15 @@ bool Keyboard::setFXColorCycle(uint8_t speed) {
 	for(int i = 15; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
 	
+	delete[] data;
+	return retval;
+}
+
+bool Keyboard::setFXColorCycleLogo(uint8_t speed) {
+	bool retval = false;
+	int data_size = 20;
+	unsigned char *data = new unsigned char[data_size];
+	
 	// Logo
 	populateFXAddressInternal(data);
 	data[4] = 0x01;  // Logo
@@ -992,7 +1019,7 @@ bool Keyboard::setFXColorCycle(uint8_t speed) {
 	return retval;
 }
 
-bool Keyboard::setFXHWave(uint8_t speed) {
+bool Keyboard::setFXHWaveKeys(uint8_t speed) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -1014,28 +1041,11 @@ bool Keyboard::setFXHWave(uint8_t speed) {
 	for(int i = 16; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
 	
-	// Logo
-	populateFXAddressInternal(data);
-	data[4] = 0x01;  // Logo
-	data[5] = 0x03;  // Effect
-	data[6] = 0x00;
-	data[7] = 0x00;
-	data[8] = 0x00;
-	data[9] = 0x00;
-	data[10] = 0x00;
-	data[11] = speed; // Speed
-	data[12] = 0x88;
-	data[13] = 0x64;
-	data[14] = 0x00;
-	data[15] = 0x00;
-	for(int i = 16; i < data_size; i++) data[i] = 0x00;
-	retval = sendDataInternal(data, data_size);
-	
 	delete[] data;
 	return retval;
 }
 
-bool Keyboard::setFXVWave(uint8_t speed) {
+bool Keyboard::setFXVWaveKeys(uint8_t speed) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -1057,28 +1067,11 @@ bool Keyboard::setFXVWave(uint8_t speed) {
 	for(int i = 16; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
 	
-	// Logo
-	populateFXAddressInternal(data);
-	data[4] = 0x01;  // Logo
-	data[5] = 0x03;  // Effect
-	data[6] = 0x00;
-	data[7] = 0x00;
-	data[8] = 0x00;
-	data[9] = 0x00;
-	data[10] = 0x00;
-	data[11] = speed; // Speed
-	data[12] = 0x88;
-	data[13] = 0x64;
-	data[14] = 0x00;
-	data[15] = 0x00;
-	for(int i = 16; i < data_size; i++) data[i] = 0x00;
-	retval = sendDataInternal(data, data_size);
-	
 	delete[] data;
 	return retval;
 }
 
-bool Keyboard::setFXCWave(uint8_t speed) {
+bool Keyboard::setFXCWaveKeys(uint8_t speed) {
 	bool retval = false;
 	int data_size = 20;
 	unsigned char *data = new unsigned char[data_size];
@@ -1097,23 +1090,6 @@ bool Keyboard::setFXCWave(uint8_t speed) {
 	data[13] = 0x03;
 	data[14] = 0x64;
 	data[15] = speed; // Speed
-	for(int i = 16; i < data_size; i++) data[i] = 0x00;
-	retval = sendDataInternal(data, data_size);
-	
-	// Logo
-	populateFXAddressInternal(data);
-	data[4] = 0x01;  // Logo
-	data[5] = 0x03;  // Effect
-	data[6] = 0x00;
-	data[7] = 0x00;
-	data[8] = 0x00;
-	data[9] = 0x00;
-	data[10] = 0x00;
-	data[11] = speed; // Speed
-	data[12] = 0x88;
-	data[13] = 0x64;
-	data[14] = 0x00;
-	data[15] = 0x00;
 	for(int i = 16; i < data_size; i++) data[i] = 0x00;
 	retval = sendDataInternal(data, data_size);
 	

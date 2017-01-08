@@ -52,12 +52,15 @@ class Keyboard {
 		bool setKeys(KeyValue keyValue[], size_t keyValueCount);
 		bool setAllKeys(KeyColors colors);
 		bool setGroupKeys(KeyGroup keyGroup, KeyColors colors);
-		bool setFXColor(KeyColors colors);
-		bool setFXBreathing(KeyColors colors, uint8_t speed);
-		bool setFXColorCycle(uint8_t speed);
-		bool setFXHWave(uint8_t speed);
-		bool setFXVWave(uint8_t speed);
-		bool setFXCWave(uint8_t speed);
+		bool setFXColorKeys(KeyColors colors);
+		bool setFXColorLogo(KeyColors colors);
+		bool setFXBreathingKeys(KeyColors colors, uint8_t speed);
+		bool setFXBreathingLogo(KeyColors colors, uint8_t speed);
+		bool setFXColorCycleKeys(uint8_t speed);
+		bool setFXColorCycleLogo(uint8_t speed);
+		bool setFXHWaveKeys(uint8_t speed);
+		bool setFXVWaveKeys(uint8_t speed);
+		bool setFXCWaveKeys(uint8_t speed);
 		
 		
 	private:
