@@ -20,7 +20,7 @@ void usage() {
 	cout<<"  -k  key, color :\t\tSet a key"<<endl;
 	cout<<""<<endl;
 	cout<<"  -an color :\t\t\tSet all keys without commit"<<endl;
-	cout<<"  -gn group, color :\t\tSet a group of keys without commit"<<endl;
+    cout<<"  -gn group, color :\t\tSet a group of keys without commit"<<endl;
 	cout<<"  -kn key, color :\t\tSet a key without commit"<<endl;
 	cout<<"  -c :\t\t\t\tCommit changes"<<endl;
 	cout<<""<<endl;
@@ -179,14 +179,14 @@ int setStartupEffect(string effect) {
 	return 1;
 }
 
-int setKey(string key, string color, bool commit) {
+int setKey(string key_string, string color, bool commit) {
 	Keyboard lg_kbd;
-	Keyboard::KeyAddress keyAddress;
-	if (lg_kbd.parseKey(key, keyAddress) == true) {
+	Keyboard::Key key;
+	if (lg_kbd.parseKey(key_string, key) == true) {
 		Keyboard::KeyColors colors;
 		if (lg_kbd.parseColor(color, colors) == true) {
 			Keyboard::KeyValue keyValue;
-			keyValue.key = keyAddress;
+			keyValue.key = key;
 			keyValue.colors = colors;
 			lg_kbd.attach();
 			lg_kbd.setKey(keyValue);
@@ -319,7 +319,7 @@ int parseProfile(istream &is) {
 	
 	Keyboard lg_kbd;
 	Keyboard::KeyGroup keyGroup;
-	Keyboard::KeyAddress keyAddress;
+	Keyboard::Key key;
 	Keyboard::KeyValue keyValue;
 	Keyboard::KeyColors colors;
 	uint8_t speedValue;
@@ -362,21 +362,21 @@ int parseProfile(istream &is) {
 		} else if (line.substr(0,1) == "k") {
 			line = line.substr(2);
 			ind = line.find(" ");
-			if (lg_kbd.parseKey(line.substr(0, ind), keyAddress) == true) {
+			if (lg_kbd.parseKey(line.substr(0, ind), key) == true) {
 				line = line.substr(ind + 1);
 				if (line.substr(0, 1) == "$") {
 					ind = line.find(" ");
 					line = var[line.substr(1, ind - 1)];
 				}
 				if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-					keyValue.key = keyAddress;
+					keyValue.key = key;
 					keyValue.colors = colors;
 					keys.push_back(keyValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 		} else if (line.substr(0,1) == "c") {
 			lg_kbd.commit();
-			lg_kbd.setKeys(&keys[0], keys.size());
+			lg_kbd.setKeys(keys);
 			keys.clear();
 			lg_kbd.commit();
 		} else if (line.substr(0,2) == "fx") {
