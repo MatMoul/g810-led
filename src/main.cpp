@@ -234,8 +234,6 @@ int setFXColor(string color, bool keys, bool logo) {
 		lg_kbd.attach();
 		lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
 		lg_kbd.commit();
-		lg_kbd.detach();
-		lg_kbd.attach();
 		if(keys) lg_kbd.setFXColorKeys(colors);
 		if(logo) lg_kbd.setFXColorLogo(colors);
 		lg_kbd.detach();
@@ -401,8 +399,6 @@ int parseProfile(istream &is) {
 				if (lg_kbd.parseColor(line, colors) == true) {
 					lg_kbd.setGroupKeys(Keyboard::KeyGroup::indicators, colors);
 					lg_kbd.commit();
-					lg_kbd.detach();
-					lg_kbd.attach();
 					if(fxkeys) lg_kbd.setFXColorKeys(colors);
 					if(fxlogo) lg_kbd.setFXColorLogo(colors);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
@@ -418,8 +414,6 @@ int parseProfile(istream &is) {
 					ind = line.find(" ");
 					line = line.substr(ind + 1, 2);
 					if (lg_kbd.parseSpeed(line.substr(0, 2), speedValue) == true) {
-						lg_kbd.detach();
-						lg_kbd.attach();
 						if(fxkeys) lg_kbd.setFXBreathingKeys(colors, speedValue);
 						if(fxlogo) lg_kbd.setFXBreathingLogo(colors, speedValue);
 					} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
@@ -427,32 +421,24 @@ int parseProfile(istream &is) {
 			} else if (line.substr(0,5) == "cycle") {
 				line = line.substr(6);
 				if (lg_kbd.parseSpeed(line.substr(0, 2), speedValue) == true) {
-					lg_kbd.detach();
-					lg_kbd.attach();
 					if(fxkeys) lg_kbd.setFXColorCycleKeys(speedValue);
 					if(fxlogo) lg_kbd.setFXColorCycleLogo(speedValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			} else if (line.substr(0,5) == "hwave") {
 				line = line.substr(6);
 				if (lg_kbd.parseSpeed(line.substr(0, 2), speedValue) == true) {
-					lg_kbd.detach();
-					lg_kbd.attach();
 					if(fxkeys) lg_kbd.setFXHWaveKeys(speedValue);
 					if(fxkeys && fxlogo) lg_kbd.setFXColorCycleLogo(speedValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			} else if (line.substr(0,5) == "vwave") {
 				line = line.substr(6);
 				if (lg_kbd.parseSpeed(line.substr(0, 2), speedValue) == true) {
-					lg_kbd.detach();
-					lg_kbd.attach();
 					if(fxkeys) lg_kbd.setFXVWaveKeys(speedValue);
 					if(fxkeys && fxlogo) lg_kbd.setFXColorCycleLogo(speedValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
 			} else if (line.substr(0,5) == "cwave") {
 				line = line.substr(6);
 				if (lg_kbd.parseSpeed(line.substr(0, 2), speedValue) == true) {
-					lg_kbd.detach();
-					lg_kbd.attach();
 					if(fxkeys) lg_kbd.setFXCWaveKeys(speedValue);
 					if(fxkeys && fxlogo) lg_kbd.setFXColorCycleLogo(speedValue);
 				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
