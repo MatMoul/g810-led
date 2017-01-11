@@ -504,7 +504,7 @@ bool Keyboard::sendDataInternal(unsigned char *data, uint16_t data_size) {
 	int r;
 	if (data_size > 20) r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0212, 1, data, data_size, 2000);
 	else r = libusb_control_transfer(dev_handle, 0x21, 0x09, 0x0211, 1, data, data_size, 2000);
-	usleep(1);
+	usleep(1000);
 	if (r < 0) return false;
 	unsigned char buffer[64];
 	int len = 0;
