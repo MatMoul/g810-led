@@ -3,8 +3,8 @@ Description=Set Logitech G810 Led Profile
 
 [Service]
 ExecStart=/usr/bin/g810-led -p /etc/g810-led/profile
+Type=oneshot
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
-Type=oneshot
-RemainAfterExit=yes
