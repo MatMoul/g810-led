@@ -3,6 +3,7 @@ CFLAGS=-Wall -O2 -std=gnu++11
 LIBUSB_INC?=-I/usr/include/libusb-1.0
 LDFLAGS=-lusb-1.0
 PROGN=g810-led
+SYSTEMDDIR?=/usr/lib/systemd
 
 .PHONY: all debug clean install uninstall
 
@@ -19,33 +20,37 @@ clean:
 	@rm -rf bin
 
 install:
-	@sudo mkdir -p /etc/$(PROGN)/samples
-	@sudo cp sample_profiles/* /etc/$(PROGN)/samples
-	@sudo cp udev/$(PROGN).rules /etc/udev/rules.d
-	@sudo udevadm control --reload-rules
-	@sudo cp bin/$(PROGN) /usr/bin
-	@sudo test -s /usr/bin/g410-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g410-led
-	@sudo test -s /usr/bin/g610-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g610-led
-	@sudo test -s /usr/bin/g910-led || sudo ln -s /usr/bin/$(PROGN) /usr/bin/g910-led
-	@sudo test -s /etc/$(PROGN)/profile || sudo cp /etc/$(PROGN)/samples/group_keys /etc/$(PROGN)/profile
-	@sudo test -s /etc/$(PROGN)/reboot || sudo cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
-	@sudo cp systemd/$(PROGN).service /lib/systemd/system
-	@sudo cp systemd/$(PROGN)-reboot.service /lib/systemd/system
-	@sudo systemctl daemon-reload
-	@sudo systemctl start $(PROGN)
-	@sudo systemctl enable $(PROGN)
-	@sudo systemctl enable $(PROGN)-reboot
+	@install -m 755 -d \
+		$(DESTDIR)/etc/$(PROGN)/samples \
+		$(DESTDIR)/etc/udev/rules.d \
+		$(DESTDIR)$(SYSTEMDDIR)/system \
+		$(DESTDIR)/usr/bin
+	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
+	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
+	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
+	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
+	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
+	@cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples
+	@test -s $(DESTDIR)/etc/$(PROGN)/profile || cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile
+	@test -s $(DESTDIR)/etc/$(PROGN)/reboot || cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot
+	@cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system
+	@cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
+	@udevadm control --reload-rules
+	@systemctl daemon-reload
+	@systemctl start $(PROGN)
+	@systemctl enable $(PROGN)
+	@systemctl enable $(PROGN)-reboot
 
 uninstall:
-	@sudo systemctl disable $(PROGN)
-	@sudo systemctl disable $(PROGN)-reboot
-	@sudo rm /lib/systemd/system/$(PROGN).service
-	@sudo rm /lib/systemd/system/$(PROGN)-reboot.service
-	@sudo systemctl daemon-reload
-	@sudo rm /usr/bin/g410-led
-	@sudo rm /usr/bin/g610-led
-	@sudo rm /usr/bin/g910-led
-	@sudo rm /usr/bin/$(PROGN)
-	@sudo rm -R /etc/$(PROGN)
-	@sudo rm /etc/udev/rules.d/$(PROGN).rules
-	@sudo udevadm control --reload-rules
+	@systemctl disable $(PROGN)
+	@systemctl disable $(PROGN)-reboot
+	@rm $(SYSTEMDDIR)/system/$(PROGN).service
+	@rm $(SYSTEMDDIR)/system/$(PROGN)-reboot.service
+	@systemctl daemon-reload
+	@rm /usr/bin/g410-led
+	@rm /usr/bin/g610-led
+	@rm /usr/bin/g910-led
+	@rm /usr/bin/$(PROGN)
+	@rm -R /etc/$(PROGN)
+	@rm /etc/udev/rules.d/$(PROGN).rules
+	@udevadm control --reload-rules
