@@ -14,7 +14,7 @@ ArchLinux :</br>
 Debian :</br>
 `sudo apt-get install git g++ make libusb-1.0-0-dev`</br>
 OpenSUSE :</br>
-`zypper in git make gcc-c++ libstdc++-devel libusb-1_0-devel`</br>
+`sudo zypper in git make gcc-c++ libstdc++-devel libusb-1_0-devel`</br>
 CentOS :</br>
 `sudo yum install git make gcc-c++ libstdc++-devel libusb-devel`</br>
 
@@ -30,7 +30,7 @@ Same as install, but your profile and reboot files are preserved.</br>
 ## Uninstall :</br>
 `sudo make uninstall`</br>
 
-## Boot profile :</br>
+## Boot profiles :</br>
 g810-led has 2 systemd units (g810-led and g810-led-reboot).</br>
 These 2 units set the keyboard profile on boot and reboot.</br>
 Profiles are stored in /etc/g810 :</br>
