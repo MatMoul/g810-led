@@ -14,7 +14,10 @@ Linux LED controller for Logitech Led Keyboards.</br>
 * https://github.com/MatMoul/g810-led/blob/master/INSTALL.md
 
 ##Help :</br>
+`g410-led --help`</br>
+`g610-led --help`</br>
 `g810-led --help`</br>
+`g910-led --help`</br>
 
 ##Samples :</br>
 `g810-led -p /etc/g810/profile # Load a profile`</br>
