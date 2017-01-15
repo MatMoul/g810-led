@@ -11,7 +11,7 @@ Linux LED controller for Logitech Led Keyboards.</br>
 - **G910 Orion Spectrum**</br>
 
 ##Install and use :</br>
-* INSTALL.md</br>
+* https://github.com/MatMoul/g810-led/blob/master/INSTALL.md
 
 ##Help :</br>
 `g810-led --help`</br>
