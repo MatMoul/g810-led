@@ -7,6 +7,7 @@
 
 ## Dependencies :</br>
 * libusb
+* systemd
 
 ## Installation of dependencies :</br>
 ArchLinux :</br>
