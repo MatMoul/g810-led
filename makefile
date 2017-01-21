@@ -42,8 +42,12 @@ install:
 			$(DESTDIR)/etc/$(PROGN)/samples \
 			$(DESTDIR)$(SYSTEMDDIR)/system && \
 		cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples && \
-		test -s $(DESTDIR)/etc/$(PROGN)/profile || cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile && \
-		test -s $(DESTDIR)/etc/$(PROGN)/reboot || cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot && \
+		test -s $(DESTDIR)/etc/$(PROGN)/profile || \
+			cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile
+	@test -s /usr/bin/systemd-run && \
+		test -s $(DESTDIR)/etc/$(PROGN)/reboot || \
+			cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot
+	@test -s /usr/bin/systemd-run && \
 		cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system && \
 		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system && \
 		systemctl daemon-reload && \
