@@ -186,7 +186,6 @@ int pipeProfile(LedKeyboard &kbd) {
 
 
 int main(int argc, char **argv) {
-	
 	if (argc > 1) {
 		
 		std::string arg = argv[1];

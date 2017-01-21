@@ -4,7 +4,11 @@
 #include <unistd.h>
 #include <vector>
 
-#include "libusb-1.0/libusb.h"
+#if defined(hidapi)
+	#include "hidapi/hidapi.h"
+#elif defined(libusb)
+	#include "libusb-1.0/libusb.h"
+#endif
 
 
 using namespace std;
@@ -17,61 +21,38 @@ LedKeyboard::~LedKeyboard() {
 
 
 bool LedKeyboard::listKeyboards() {
-	libusb_context *ctx = NULL;
-	if(libusb_init(&m_ctx) < 0) return false;
-	
-	libusb_device **devs;
-	ssize_t cnt = libusb_get_device_list(ctx, &devs);
-	if(cnt >= 0) {
-		for(ssize_t i = 0; i < cnt; i++) {
-			libusb_device *device = devs[i];
-			libusb_device_descriptor desc = {
-				0, // bLength
-				0, // bDescriptorType
-				0, // bcdUSB
-				0, // bDeviceClass
-				0, // bDeviceSubClass
-				0, // bDeviceProtocol
-				0, // bMaxPacketSize0
-				0, // idVendor
-				0, // idProduct
-				0, // bcdDevice
-				0, // iManufacturer
-				0, // iProduct
-				0, // iSerialNumber
-				0  // bNumConfigurations
-			};
-			libusb_get_device_descriptor(device, &desc);
+	#if defined(hidapi)
+		if (hid_init() < 0) return false;
+		
+		struct hid_device_info *devs, *dev;
+		devs = hid_enumerate(0x0, 0x0);
+		dev = devs;
+		while (dev) {
 			for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
-				if (desc.idVendor == SuportedKeyboards[i][0]) {
-					if (desc.idProduct == SuportedKeyboards[i][1]) {
-						cout<<"0x"<<std::hex<<desc.idVendor \
-							<<" 0x"<<std::hex<<desc.idProduct<<endl;
+				if (dev->vendor_id == SuportedKeyboards[i][0]) {
+					if (dev->product_id == SuportedKeyboards[i][1]) {
+						cout<<"0x"<<std::hex<<dev->vendor_id \
+							<<" 0x"<<std::hex<<dev->product_id \
+							<<" "<<dev->serial_number \
+							<<" "<<dev->path<<" ";
+						dev = dev->next;
+						cout<<dev->serial_number<<" "<<dev->path<<endl;
+						i++;
 						break;
 					}
 				}
 			}
+			dev = dev->next;
 		}
-		libusb_free_device_list(devs, 1);
-		libusb_exit(m_ctx);
-	} else return false;
-	
-	return true;
-}
-
-
-bool LedKeyboard::isOpen() {
-	return m_isOpen;
-}
-
-bool LedKeyboard::open() {
-	if (m_isOpen) return true;
-	
-	if(libusb_init(&m_ctx) < 0) return false;
-	
-	if (m_keyboardModel == KeyboardModel::unknown) {
+		hid_free_enumeration(devs);
+		
+		hid_exit();
+	#elif defined(libusb)
+		libusb_context *ctx = NULL;
+		if(libusb_init(&m_ctx) < 0) return false;
+		
 		libusb_device **devs;
-		ssize_t cnt = libusb_get_device_list(m_ctx, &devs);
+		ssize_t cnt = libusb_get_device_list(ctx, &devs);
 		if(cnt >= 0) {
 			for(ssize_t i = 0; i < cnt; i++) {
 				libusb_device *device = devs[i];
@@ -95,72 +76,170 @@ bool LedKeyboard::open() {
 				for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
 					if (desc.idVendor == SuportedKeyboards[i][0]) {
 						if (desc.idProduct == SuportedKeyboards[i][1]) {
-							m_vendorID = desc.idVendor;
-							m_productID = desc.idProduct;
+							cout<<"0x"<<std::hex<<desc.idVendor \
+								<<" 0x"<<std::hex<<desc.idProduct<<endl;
+							break;
+						}
+					}
+				}
+			}
+			libusb_free_device_list(devs, 1);
+			libusb_exit(m_ctx);
+		} else return false;
+	#endif
+	
+	return true;
+}
+
+
+bool LedKeyboard::isOpen() {
+	return m_isOpen;
+}
+
+bool LedKeyboard::open() {
+	if (m_isOpen) return true;
+	
+	#if defined(hidapi)
+		if (hid_init() < 0) return false;
+		
+		if (m_keyboardModel == KeyboardModel::unknown) {
+			struct hid_device_info *devs, *dev;
+			devs = hid_enumerate(0x0, 0x0);
+			dev = devs;
+			m_keyboardModel = KeyboardModel::unknown;
+			while (dev) {
+				for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
+					if (dev->vendor_id == SuportedKeyboards[i][0]) {
+						if (dev->product_id == SuportedKeyboards[i][1]) {
+							m_vendorID = dev->vendor_id;
+							m_productID = dev->product_id;
 							m_keyboardModel = (KeyboardModel)SuportedKeyboards[i][2];
 							break;
 						}
 					}
 				}
-				
 				if (m_keyboardModel != KeyboardModel::unknown) break;
-				
+				dev = dev->next;
 			}
-			libusb_free_device_list(devs, 1);
+			hid_free_enumeration(devs);
+			
+			if (! dev) {
+				cout<<"Keyboard not found"<<endl;
+				m_keyboardModel = KeyboardModel::unknown;
+				hid_exit();
+				return false;
+			}
 		}
-	}
-	
-	if (m_keyboardModel == KeyboardModel::unknown) {
-		cout<<"Keyboard not found"<<endl;
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-	
-	m_hidHandle = libusb_open_device_with_vid_pid(m_ctx, m_vendorID, m_productID);
-	
-	if(m_hidHandle == 0) {
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-	
-	
-	if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
-		if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
+		
+		m_hidHandle = hid_open(m_vendorID, m_productID, NULL);
+		
+		if(m_hidHandle == 0) {
+			hid_exit();
+			return false;
+		}
+	#elif defined(libusb)
+		if(libusb_init(&m_ctx) < 0) return false;
+		
+		if (m_keyboardModel == KeyboardModel::unknown) {
+			libusb_device **devs;
+			ssize_t cnt = libusb_get_device_list(m_ctx, &devs);
+			if(cnt >= 0) {
+				for(ssize_t i = 0; i < cnt; i++) {
+					libusb_device *device = devs[i];
+					libusb_device_descriptor desc = {
+						0, // bLength
+						0, // bDescriptorType
+						0, // bcdUSB
+						0, // bDeviceClass
+						0, // bDeviceSubClass
+						0, // bDeviceProtocol
+						0, // bMaxPacketSize0
+						0, // idVendor
+						0, // idProduct
+						0, // bcdDevice
+						0, // iManufacturer
+						0, // iProduct
+						0, // iSerialNumber
+						0  // bNumConfigurations
+					};
+					libusb_get_device_descriptor(device, &desc);
+					for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
+						if (desc.idVendor == SuportedKeyboards[i][0]) {
+							if (desc.idProduct == SuportedKeyboards[i][1]) {
+								m_vendorID = desc.idVendor;
+								m_productID = desc.idProduct;
+								m_keyboardModel = (KeyboardModel)SuportedKeyboards[i][2];
+								break;
+							}
+						}
+					}
+					
+					if (m_keyboardModel != KeyboardModel::unknown) break;
+					
+				}
+				libusb_free_device_list(devs, 1);
+			}
+		}
+		
+		if (m_keyboardModel == KeyboardModel::unknown) {
+			cout<<"Keyboard not found"<<endl;
 			libusb_exit(m_ctx);
 			m_ctx = NULL;
 			return false;
 		}
-		m_isKernellDetached = true;
-	}
-	if(libusb_claim_interface(m_hidHandle, 1) < 0) {
-		if(m_isKernellDetached==true) {
-			libusb_attach_kernel_driver(m_hidHandle, 1);
-			m_isKernellDetached = false;
+		
+		m_hidHandle = libusb_open_device_with_vid_pid(m_ctx, m_vendorID, m_productID);
+		
+		if(m_hidHandle == 0) {
+			libusb_exit(m_ctx);
+			m_ctx = NULL;
+			return false;
 		}
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-	
+		
+		
+		if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
+			if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
+				libusb_exit(m_ctx);
+				m_ctx = NULL;
+				return false;
+			}
+			m_isKernellDetached = true;
+		}
+		if(libusb_claim_interface(m_hidHandle, 1) < 0) {
+			if(m_isKernellDetached==true) {
+				libusb_attach_kernel_driver(m_hidHandle, 1);
+				m_isKernellDetached = false;
+			}
+			libusb_exit(m_ctx);
+			m_ctx = NULL;
+			return false;
+		}
+	#endif
 	
 	m_isOpen = true;
 	return true;
 }
 
 bool LedKeyboard::close() {
-	if (! m_isOpen) return false;
+	if (! m_isOpen) return true;
 	m_isOpen = false;
-	if(libusb_release_interface(m_hidHandle, 1) != 0) return false;
-	if(m_isKernellDetached==true) {
-		libusb_attach_kernel_driver(m_hidHandle, 1);
-		m_isKernellDetached = false;
-	}
-	libusb_close(m_hidHandle);
-	m_hidHandle = NULL;
-	libusb_exit(m_ctx);
-	m_ctx = NULL;
+	
+	#if defined(hidapi)
+		hid_close(m_hidHandle);
+		m_hidHandle = 0;
+		hid_exit();
+	#elif defined(libusb)
+		if(libusb_release_interface(m_hidHandle, 1) != 0) return false;
+		if(m_isKernellDetached==true) {
+			libusb_attach_kernel_driver(m_hidHandle, 1);
+			m_isKernellDetached = false;
+		}
+		libusb_close(m_hidHandle);
+		m_hidHandle = NULL;
+		libusb_exit(m_ctx);
+		m_ctx = NULL;
+	#endif
+	
 	return true;
 }
 
@@ -438,16 +517,32 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 
 
 
-bool LedKeyboard::sendDataInternal(const byte_buffer_t &data) {
+bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (! m_isOpen) return false;
-	int r;
-	if (data.size() > 20) r = libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0212, 1, const_cast<unsigned char*>(data.data()), data.size(), 2000);
-	else r = libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0211, 1, const_cast<unsigned char*>(data.data()), data.size(), 2000);
-	usleep(1000);
-	if (r < 0) return false;
-	unsigned char buffer[64];
-	int len = 0;
-	r = libusb_interrupt_transfer(m_hidHandle, 0x82, buffer, sizeof(buffer), &len, 1);
+	
+	if (data.size() > 0) {
+		#if defined(hidapi)
+			data.insert(data.begin(), 0x00);
+			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
+				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
+				return false;
+			}
+			usleep(500);
+			byte_buffer_t data2;
+			data2.resize(21, 0x00);
+			hid_read_timeout(m_hidHandle, const_cast<unsigned char*>(data2.data()), data2.size(), 0);
+		#elif defined(libusb)
+			int r;
+			if (data.size() > 20) r = libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0212, 1, const_cast<unsigned char*>(data.data()), data.size(), 2000);
+			else r = libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0211, 1, const_cast<unsigned char*>(data.data()), data.size(), 2000);
+			usleep(1000);
+			if (r < 0) return false;
+			unsigned char buffer[64];
+			int len = 0;
+			r = libusb_interrupt_transfer(m_hidHandle, 0x82, buffer, sizeof(buffer), &len, 1);
+		#endif
+	}
+	
 	return true;
 }
 

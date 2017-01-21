@@ -4,7 +4,11 @@
 #include <iostream>
 #include <vector>
 
-#include "libusb-1.0/libusb.h"
+#if defined(hidapi)
+	#include "hidapi/hidapi.h"
+#elif defined(libusb)
+	#include "libusb-1.0/libusb.h"
+#endif
 
 
 class LedKeyboard {
@@ -180,15 +184,20 @@ class LedKeyboard {
 		};
 		
 		bool m_isOpen = false;
-		bool m_isKernellDetached = false;
 		uint16_t m_vendorID = 0;
 		uint16_t m_productID = 0;
 		KeyboardModel m_keyboardModel = KeyboardModel::unknown;
-		libusb_device_handle *m_hidHandle;
-		libusb_context *m_ctx = NULL;
+		
+		#if defined(hidapi)
+			hid_device *m_hidHandle;
+		#elif defined(libusb)
+			bool m_isKernellDetached = false;
+			libusb_device_handle *m_hidHandle;
+			libusb_context *m_ctx = NULL;
+		#endif
 		
 		
-		bool sendDataInternal(const byte_buffer_t &data);
+		bool sendDataInternal(byte_buffer_t &data);
 		byte_buffer_t getKeyGroupAddress(KeyAddressGroup keyAddressGroup);
 		
 };
