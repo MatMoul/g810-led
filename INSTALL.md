@@ -14,10 +14,8 @@ ArchLinux :</br>
 `sudo pacman -S git gcc make libusb`</br>
 Debian :</br>
 `sudo apt-get install git g++ make libusb-1.0-0-dev`</br>
-OpenSUSE :</br>
-`sudo zypper in git make gcc-c++ libstdc++-devel libusb-1_0-devel`</br>
-CentOS :</br>
-`sudo yum install git make gcc-c++ libstdc++-devel libusb-devel`</br>
+Fedora :</br>
+`sudo dnf install git make gcc-c++ libusb-devel`</br>
 
 ## Installation :</br>
 `git clone https://github.com/MatMoul/g810-led.git`</br>

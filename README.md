@@ -11,7 +11,7 @@ Linux LED controller for Logitech Led Keyboards.</br>
 - **G910 Orion Spectrum**</br>
 
 ##Install and use :</br>
-* https://github.com/MatMoul/g810-led/blob/master/INSTALL.md
+* INSTALL.md
 
 ##Help :</br>
 `g410-led --help`</br>
@@ -25,12 +25,12 @@ Linux LED controller for Logitech Led Keyboards.</br>
 `g810-led -a 00ff00 # Set color of all keys`</br>
 `g810-led -g fkeys ff00ff # Set color of a group of keys`</br>
 `g810-led -s color # Set keyboard power on effect`</br>
-`g810-led -fx-color 00ff00 # Set fixed color effect`</br>
-`g810-led -fx-breathing 00ff00 0a # Set breathing effect`</br>
-`g810-led -fx-cycle 0a # Set color cycle effect`</br>
-`g810-led -fx-hwave 0a # Set horizontal wave effect`</br>
-`g810-led -fx-vwave 0a # Set vertical wave effect`</br>
-`g810-led -fx-cwave 0a # Set center wave effect`</br>
+`g810-led -fx color keys 00ff00 # Set fixed color effect`</br>
+`g810-led -fx breathing logo 00ff00 0a # Set breathing effect`</br>
+`g810-led -fx cycle all 0a # Set color cycle effect`</br>
+`g810-led -fx hwave keys 0a # Set horizontal wave effect`</br>
+`g810-led -fx vwave keys 0a # Set vertical wave effect`</br>
+`g810-led -fx cwave keys 0a # Set center wave effect`</br>
 
 ##Samples with no commit :</br>
 `g810-led -an 000000 # Set color of all key with no action`</br>

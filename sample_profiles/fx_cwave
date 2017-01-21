@@ -1,2 +1,2 @@
 
-fx-cwave 10 # Set center wave effect with speed 10
+fx cwave all 20 # Set center wave effect with speed 20
