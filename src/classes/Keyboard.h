@@ -174,7 +174,7 @@ class LedKeyboard {
 			Key::a, Key::b, Key::c, Key::d, Key::e, Key::f, Key::g, Key::h, Key::i, Key::j, Key::k, Key::l, Key::m, 
 			Key::n, Key::o, Key::p, Key::q, Key::r, Key::s, Key::t, Key::u, Key::v, Key::w, Key::x, Key::y, Key::z,
 			Key::n1, Key::n2, Key::n3, Key::n4, Key::n5, Key::n6, Key::n7, Key::n8, Key::n9, Key::n0,
-			Key::enter, Key::esc, Key::backspace, Key::tab, Key::space, Key::minus, Key::equal,
+			Key::enter, Key::backspace, Key::tab, Key::space, Key::minus, Key::equal,
 			Key::open_bracket, Key::close_bracket, Key::backslash, Key::dollar, Key::semicolon, Key::quote, Key::tilde,
 			Key::comma, Key::period, Key::slash, Key::caps_lock, Key::intl_backslash
 		};
