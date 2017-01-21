@@ -16,19 +16,20 @@ hidapi is recommended but if you encounter problem on your system, switch to lib
 
 ## Installation of dependencies :</br>
 ArchLinux :</br>
-`sudo pacman -S git gcc make hidapi` (for hidapi)</br>
-`sudo pacman -S git gcc make libusb` (for libusb)</br>
+`sudo pacman -S git gcc make hidapi` # for hidapi</br>
+`sudo pacman -S git gcc make libusb` # for libusb</br>
 Debian :</br>
-`sudo apt-get install git g++ make libhidapi-dev` (for hidapi)</br>
-`sudo apt-get install git g++ make libusb-1.0-0-dev` (for libusb)</br>
+`sudo apt-get install git g++ make libhidapi-dev` # for hidapi</br>
+`sudo apt-get install git g++ make libusb-1.0-0-dev` # for libusb</br>
 Fedora :</br>
-`sudo dnf install git make gcc-c++ hidapi-devel` (for hidapi)</br>
-`sudo dnf install git make gcc-c++ libusbx-devel` (for libusb)</br>
+`sudo dnf install git make gcc-c++ hidapi-devel` # for hidapi</br>
+`sudo dnf install git make gcc-c++ libusbx-devel` # for libusb</br>
 
 ## Installation :</br>
 `git clone https://github.com/MatMoul/g810-led.git`</br>
 `cd g810-led`</br>
-`make` or `make LIB=libusb`</br>
+`make` # for hidapi</br>
+`make LIB=libusb` # for libusb</br>
 `sudo make install`</br>
 
 ## Update :</br>
@@ -43,3 +44,5 @@ These 2 units set the keyboard profile on boot and reboot.</br>
 Profiles are stored in /etc/g810-led :</br>
 * /etc/g810-led/profile
 * /etc/g810-led/reboot
+
+Samples can be found in /etc/g810-led/samples.</br>
