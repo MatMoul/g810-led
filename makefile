@@ -24,32 +24,24 @@ debug: bin/$(PROGN)
 	
 clean:
 	@rm -rf bin
-	
-install:
-	@install -m 755 -d \
-		$(DESTDIR)/etc/udev/rules.d \
-		$(DESTDIR)/usr/bin
+
+setup:
+	@install -m 755 -d $(DESTDIR)/etc/udev/rules.d $(DESTDIR)/usr/bin
 	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
 	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
-	
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
+	@install -m 755 -d $(DESTDIR)/etc/$(PROGN)/samples $(DESTDIR)$(SYSTEMDDIR)/system
+	@cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples
+	@cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile
+	@cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot
+	@cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system
+	@cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
+
+install: setup
 	@udevadm control --reload-rules
-	
 	@test -s /usr/bin/systemd-run && \
-		install -m 755 -d \
-			$(DESTDIR)/etc/$(PROGN)/samples \
-			$(DESTDIR)$(SYSTEMDDIR)/system && \
-		cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples && \
-		test -s $(DESTDIR)/etc/$(PROGN)/profile || \
-			cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile
-	@test -s /usr/bin/systemd-run && \
-		test -s $(DESTDIR)/etc/$(PROGN)/reboot || \
-			cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot
-	@test -s /usr/bin/systemd-run && \
-		cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system && \
-		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system && \
 		systemctl daemon-reload && \
 		systemctl start $(PROGN) && \
 		systemctl enable $(PROGN) && \
