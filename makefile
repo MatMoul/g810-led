@@ -11,7 +11,7 @@ endif
 PROGN=g810-led
 SYSTEMDDIR?=/usr/lib/systemd
 
-.PHONY: all debug clean install uninstall
+.PHONY: all debug clean setup install uninstall
 
 all: bin/$(PROGN)
 
@@ -26,20 +26,26 @@ clean:
 	@rm -rf bin
 
 setup:
-	@install -m 755 -d $(DESTDIR)/etc/udev/rules.d $(DESTDIR)/usr/bin
+	@install -m 755 -d \
+		$(DESTDIR)/usr/bin \
+		$(DESTDIR)/etc/$(PROGN)/samples \
+		$(DESTDIR)/etc/udev/rules.d
 	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
 	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
-	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
-	@install -m 755 -d $(DESTDIR)/etc/$(PROGN)/samples $(DESTDIR)$(SYSTEMDDIR)/system
 	@cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples
-	@cp $(DESTDIR)/etc/$(PROGN)/samples/group_keys $(DESTDIR)/etc/$(PROGN)/profile
-	@cp $(DESTDIR)/etc/$(PROGN)/samples/all_off $(DESTDIR)/etc/$(PROGN)/reboot
-	@cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system
-	@cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
-
+	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
+	@test -s /usr/bin/systemd-run && \
+		install -m 755 -d $(DESTDIR)$(SYSTEMDDIR)/system && \
+		cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system && \
+		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
+	
 install: setup
+	@test -s /etc/$(PROGN)/profile || \
+		cp /etc/$(PROGN)/samples/group_keys /etc/$(PROGN)/profile
+	@test -s /etc/$(PROGN)/reboot || \
+		cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
 	@udevadm control --reload-rules
 	@test -s /usr/bin/systemd-run && \
 		systemctl daemon-reload && \
