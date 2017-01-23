@@ -237,7 +237,7 @@ bool LedKeyboard::commit() {
 			data = { 0x11, 0xff, 0x0c, 0x5a };
 			break;
 		case KeyboardModel::g910:
-			data = { 0x11, 0xff, 0x10, 0x3c };
+			data = { 0x11, 0xff, 0x0f, 0x5d };
 			break;
 		default:
 			return false;
