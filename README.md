@@ -1,6 +1,6 @@
 # g810-led</br>
 
-Linux LED controller for Logitech Led Keyboards.</br>
+Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 
 ##Compatible keyboards :</br>
 - **G410 Atlas Spectrum**</br>
