@@ -10,6 +10,9 @@ Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 - **G910 Orion Spark**</br>
 - **G910 Orion Spectrum**</br>
 
+##Contribute and evolution :</br>
+* [TODO.md](https://github.com/MatMoul/g810-led/blob/master/TODO.md)
+
 ##Install :</br>
 * [INSTALL.md](https://github.com/MatMoul/g810-led/blob/master/INSTALL.md)
 
@@ -22,9 +25,6 @@ Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 `g810-led --help-keys`</br>
 `g810-led --help-effects`</br>
 `g810-led --help-samples`</br>
-
-##Contribute and evolution :</br>
-* [TODO.md](https://github.com/MatMoul/g810-led/blob/master/TODO.md)
 
 ##Samples :</br>
 `g810-led -p /etc/g810/profile # Load a profile`</br>
@@ -53,6 +53,6 @@ Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 `g610-led -k logo ff # Set intensity of a key`</br>
 `g610-led -g fkeys aa # Set intensity of a group of keys`</br>
 
-##Samples with pipe :</br>
+##Samples with pipe (for effects) :</br>
 `g810-led -pp < profilefile # Load a profile`</br>
 `echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
