@@ -14,6 +14,13 @@ hidapi is very more speed than libusb (~20ms vs ~150ms).</br>
 hidapi seem not work on CentOS, writing on hidraw is not allowed.</br>
 hidapi is recommended but if you encounter problem on your system, switch to libusb.</br>
 
+
+## Installation by repos :</br>
+ArchLinux (aur) :</br>
+`sudo yaourt -S g810-led-git` # with yaourt</br>
+`sudo pacaur -S g810-led-git` # with pacaur</br>
+
+
 ## Installation of dependencies :</br>
 ArchLinux :</br>
 `sudo pacman -S git gcc make hidapi` # for hidapi</br>
