@@ -93,7 +93,7 @@ int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4
 				case LedKeyboard::NativeEffect::cwave:
 					if (! kbd.setGroupKeys(
 						LedKeyboard::KeyGroup::indicators, 
-						LedKeyboard::Color({0x00, 0xff, 0xff}))
+						LedKeyboard::Color({0xff, 0xff, 0xff}))
 					) retval = 1;
 					if (! kbd.commit()) retval = 1;
 					break;
