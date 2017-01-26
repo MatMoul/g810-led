@@ -10,14 +10,21 @@ Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 - **G910 Orion Spark**</br>
 - **G910 Orion Spectrum**</br>
 
-##Install and use :</br>
-* INSTALL.md
+##Install :</br>
+* [INSTALL.md](https://github.com/MatMoul/g810-led/blob/master/INSTALL.md)
 
 ##Help :</br>
 `g410-led --help`</br>
 `g610-led --help`</br>
 `g810-led --help`</br>
 `g910-led --help`</br>
+
+`g810-led --help-keys`</br>
+`g810-led --help-effects`</br>
+`g810-led --help-samples`</br>
+
+##Contribute and evolution :</br>
+* [TODO.md](https://github.com/MatMoul/g810-led/blob/master/TODO.md)
 
 ##Samples :</br>
 `g810-led -p /etc/g810/profile # Load a profile`</br>
