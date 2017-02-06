@@ -14,7 +14,7 @@
 ArchLinux (in AUR): g810-led-git
 
 ## Tasks (Assigned to MatMoul but you can participate) :
-* (0%) Avoid sending keys that not supported by a keyboard model
+* (20%) Avoid sending keys that not supported by a keyboard model
 * (0%) Add deamon mode for custom effects
 
 ## Tasks (Assigned to MatMoul) :

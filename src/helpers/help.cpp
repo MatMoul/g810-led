@@ -56,41 +56,55 @@ namespace help {
 		cout<<"-------------"<<endl;
 		cout<<endl;
 		cout<<"Group List :"<<endl;
-		cout<<" logo"<<endl;
-		cout<<" indicators"<<endl;
-		cout<<" gkeys"<<endl;
+		
+		cout<<" logo"<<endl; // need confirmation for g410
+		if (cmdName != "g410-led") cout<<" indicators"<<endl;
+		if (cmdName != "g910-led") cout<<" gkeys"<<endl;
 		cout<<" fkeys"<<endl;
 		cout<<" modifiers"<<endl;
-		cout<<" multimedia"<<endl;
+		if (cmdName != "g410-led") cout<<" multimedia"<<endl;
 		cout<<" arrows"<<endl;
-		cout<<" numeric"<<endl;
+		if (cmdName != "g410-led") cout<<" numeric"<<endl;
 		cout<<" functions"<<endl;
 		cout<<" keys"<<endl;
 		cout<<endl;
 		cout<<endl;
-		cout<<"Group logo :"<<endl;
-		cout<<" logo"<<endl;
-		 
-		// g910, ... ?
-		cout<<" logo2"<<endl;
 		
-		cout<<""<<endl;
-		cout<<"Group indicators :"<<endl;
-		cout<<" num_indicator, numindicator, num"<<endl;
-		cout<<" caps_indicator, capsindicator, caps"<<endl;
-		cout<<" scroll_indicator, scrollindicator, scroll"<<endl;
-		cout<<" game_mode, gamemode, game"<<endl;
-		cout<<" back_light, backlight, light"<<endl;
+		 // need confirmation for g410
+		if (cmdName == "g610-led") {
+			cout<<"Group logo :"<<endl;
+			cout<<" logo (Need confirmation)"<<endl;
+			cout<<" logo2 (Need confirmation)"<<endl;
+		} if (cmdName == "g910-led") {
+			cout<<"Group logo :"<<endl;
+			cout<<" logo"<<endl;
+			cout<<" logo2"<<endl;
+		} else {
+			cout<<"Group logo :"<<endl;
+			cout<<" logo"<<endl;
+		}
 		cout<<""<<endl;
 		
-		// Only g910
-		cout<<"Group gkeys :"<<endl;
-		cout<<" g1 - g9"<<endl;
-		cout<<""<<endl;
+		if (cmdName != "g410-led") {
+			cout<<"Group indicators :"<<endl;
+			cout<<" num_indicator, numindicator, num"<<endl;
+			cout<<" caps_indicator, capsindicator, caps"<<endl;
+			cout<<" scroll_indicator, scrollindicator, scroll"<<endl;
+			cout<<" game_mode, gamemode, game"<<endl;
+			cout<<" back_light, backlight, light"<<endl;
+			cout<<""<<endl;
+		}
+		
+		if (cmdName == "g910-led") {
+			cout<<"Group gkeys :"<<endl;
+			cout<<" g1 - g9"<<endl;
+			cout<<""<<endl;
+		}
 		
 		cout<<"Group fkeys :"<<endl;
 		cout<<" f1 - f12"<<endl;
 		cout<<""<<endl;
+		
 		cout<<"Group modifiers :"<<endl;
 		cout<<" shift_left, shiftleft, shiftl"<<endl;
 		cout<<" ctrl_left, ctrlleft, ctrll"<<endl;
@@ -103,14 +117,15 @@ namespace help {
 		cout<<" shift_right, shiftright, shiftr"<<endl;
 		cout<<""<<endl;
 		
-		// Exclude g610
-		cout<<"Group multimedia :"<<endl;
-		cout<<" mute"<<endl;
-		cout<<" play_pause, playpause, play"<<endl;
-		cout<<" stop"<<endl;
-		cout<<" previous, prev"<<endl;
-		cout<<" next"<<endl;
-		cout<<""<<endl;
+		if (cmdName != "g410-led" || cmdName != "g910-led") {
+			cout<<"Group multimedia :"<<endl;
+			cout<<" mute"<<endl;
+			cout<<" play_pause, playpause, play"<<endl;
+			cout<<" stop"<<endl;
+			cout<<" previous, prev"<<endl;
+			cout<<" next"<<endl;
+			cout<<""<<endl;
+		}
 		
 		cout<<"Group arrows :"<<endl;
 		cout<<" arrow_top, arrowtop, top"<<endl;
@@ -119,17 +134,18 @@ namespace help {
 		cout<<" arrow_right, arrowright, right"<<endl;
 		cout<<""<<endl;
 		
-		// Exclude g610
-		cout<<"Group numeric :"<<endl;
-		cout<<" num_lock, numlock"<<endl;
-		cout<<" num_slash, numslash, num/"<<endl;
-		cout<<" num_asterisk, numasterisk, num*"<<endl;
-		cout<<" num_minus, numminus, num-"<<endl;
-		cout<<" num_plus, numplus, num+"<<endl;
-		cout<<" numenter"<<endl;
-		cout<<" num0 - num9"<<endl;
-		cout<<" num_dot, numdot, num."<<endl;
-		cout<<""<<endl;
+		if (cmdName != "g410-led") {
+			cout<<"Group numeric :"<<endl;
+			cout<<" num_lock, numlock"<<endl;
+			cout<<" num_slash, numslash, num/"<<endl;
+			cout<<" num_asterisk, numasterisk, num*"<<endl;
+			cout<<" num_minus, numminus, num-"<<endl;
+			cout<<" num_plus, numplus, num+"<<endl;
+			cout<<" numenter"<<endl;
+			cout<<" num0 - num9"<<endl;
+			cout<<" num_dot, numdot, num."<<endl;
+			cout<<""<<endl;
+		}
 		
 		cout<<"Group functions :"<<endl;
 		cout<<" escape, esc"<<endl;
