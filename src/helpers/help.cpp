@@ -57,12 +57,13 @@ namespace help {
 		cout<<endl;
 		cout<<"Group List :"<<endl;
 		
-		cout<<" logo"<<endl; // need confirmation for g410
+		if (cmdName == "g410-led") cout<<" logo (Need confirmation)"<<endl; 
+		else cout<<" logo"<<endl; 
 		if (cmdName != "g410-led") cout<<" indicators"<<endl;
 		if (cmdName == "g910-led") cout<<" gkeys"<<endl;
 		cout<<" fkeys"<<endl;
 		cout<<" modifiers"<<endl;
-		if (cmdName != "g410-led") cout<<" multimedia"<<endl;
+		if (cmdName != "g410-led" && cmdName != "g910-led") cout<<" multimedia"<<endl;
 		cout<<" arrows"<<endl;
 		if (cmdName != "g410-led") cout<<" numeric"<<endl;
 		cout<<" functions"<<endl;
@@ -117,7 +118,7 @@ namespace help {
 		cout<<" shift_right, shiftright, shiftr"<<endl;
 		cout<<""<<endl;
 		
-		if (cmdName != "g410-led" || cmdName != "g910-led") {
+		if (cmdName != "g410-led" && cmdName != "g910-led") {
 			cout<<"Group multimedia :"<<endl;
 			cout<<" mute"<<endl;
 			cout<<" play_pause, playpause, play"<<endl;
