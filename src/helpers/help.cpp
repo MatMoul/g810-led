@@ -70,12 +70,12 @@ namespace help {
 		cout<<endl;
 		cout<<endl;
 		
-		 // need confirmation for g410
-		if (cmdName == "g610-led") {
+		// need confirmation for g410
+		if (cmdName == "g410-led") {
 			cout<<"Group logo :"<<endl;
 			cout<<" logo (Need confirmation)"<<endl;
 			cout<<" logo2 (Need confirmation)"<<endl;
-		} if (cmdName == "g910-led") {
+		} else if (cmdName == "g910-led") {
 			cout<<"Group logo :"<<endl;
 			cout<<" logo"<<endl;
 			cout<<" logo2"<<endl;
