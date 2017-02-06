@@ -70,7 +70,10 @@ namespace help {
 		cout<<endl;
 		cout<<"Group logo :"<<endl;
 		cout<<" logo"<<endl;
+		 
+		// g910, ... ?
 		cout<<" logo2"<<endl;
+		
 		cout<<""<<endl;
 		cout<<"Group indicators :"<<endl;
 		cout<<" num_indicator, numindicator, num"<<endl;
@@ -79,9 +82,12 @@ namespace help {
 		cout<<" game_mode, gamemode, game"<<endl;
 		cout<<" back_light, backlight, light"<<endl;
 		cout<<""<<endl;
+		
+		// Only g910
 		cout<<"Group gkeys :"<<endl;
 		cout<<" g1 - g9"<<endl;
 		cout<<""<<endl;
+		
 		cout<<"Group fkeys :"<<endl;
 		cout<<" f1 - f12"<<endl;
 		cout<<""<<endl;
@@ -96,6 +102,8 @@ namespace help {
 		cout<<" ctrl_right, ctrlright, ctrlr"<<endl;
 		cout<<" shift_right, shiftright, shiftr"<<endl;
 		cout<<""<<endl;
+		
+		// Exclude g610
 		cout<<"Group multimedia :"<<endl;
 		cout<<" mute"<<endl;
 		cout<<" play_pause, playpause, play"<<endl;
@@ -103,12 +111,15 @@ namespace help {
 		cout<<" previous, prev"<<endl;
 		cout<<" next"<<endl;
 		cout<<""<<endl;
+		
 		cout<<"Group arrows :"<<endl;
 		cout<<" arrow_top, arrowtop, top"<<endl;
 		cout<<" arrow_left, arrowleft, left"<<endl;
 		cout<<" arrow_bottom, arrowbottom, bottom"<<endl;
 		cout<<" arrow_right, arrowright, right"<<endl;
 		cout<<""<<endl;
+		
+		// Exclude g610
 		cout<<"Group numeric :"<<endl;
 		cout<<" num_lock, numlock"<<endl;
 		cout<<" num_slash, numslash, num/"<<endl;
@@ -119,6 +130,7 @@ namespace help {
 		cout<<" num0 - num9"<<endl;
 		cout<<" num_dot, numdot, num."<<endl;
 		cout<<""<<endl;
+		
 		cout<<"Group functions :"<<endl;
 		cout<<" escape, esc"<<endl;
 		cout<<" print_screen, printscreen, printscr"<<endl;
@@ -154,6 +166,7 @@ namespace help {
 		cout<<" slash"<<endl;
 	}
 	
+	// Need info for supported model (g810 : ok)
 	void effects(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
 		cout<<cmdName<<" Effects"<<endl;
@@ -174,6 +187,7 @@ namespace help {
 		cout<<endl;
 	}
 	
+	// Need more samples
 	void samples(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
 		cout<<cmdName<<" Samples"<<endl;
