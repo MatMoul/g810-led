@@ -3,7 +3,7 @@
 ## Tasks (Help wanted) :
 * (0%) Code review (memory leak and other...)
 * (0%) Improve INSTALL.md to support more distributions (And CentOS with hidapi)
-* (0%) Send specialized help based on executable name
+* (80%) Send specialized help based on executable name
 * (0%) Improve --help-effects
 * (0%) Improve --help-samples
 * (0%) Add a python sample effects that use stdin
@@ -14,7 +14,7 @@
 ArchLinux (in AUR): g810-led-git
 
 ## Tasks (Assigned to MatMoul but you can participate) :
-* (20%) Avoid sending keys that not supported by a keyboard model
+* (0%) Avoid sending keys that not supported by a keyboard model
 * (0%) Add deamon mode for custom effects
 
 ## Tasks (Assigned to MatMoul) :
