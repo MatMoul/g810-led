@@ -183,7 +183,6 @@ namespace help {
 		cout<<" slash"<<endl;
 	}
 	
-	// Need info for supported model (g810 : ok)
 	void effects(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
 		cout<<cmdName<<" Effects"<<endl;
