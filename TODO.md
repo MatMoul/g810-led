@@ -7,7 +7,7 @@
 * (0%) Improve --help-effects
 * (0%) Improve --help-samples
 * (0%) Add a python sample effects that use stdin
-* (0%) Use a default profile compatible with the G610 (for indicators)
+* (100%) Use a default profile compatible with the G610 (for indicators)
 * (0%) Use a more generic name for config dir and systemd units
 * (0%) Choose versionning method
 * (1%) Make distributions ready package but it's dependent to versionning method</br>
