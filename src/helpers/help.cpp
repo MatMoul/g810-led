@@ -59,7 +59,7 @@ namespace help {
 		
 		cout<<" logo"<<endl; // need confirmation for g410
 		if (cmdName != "g410-led") cout<<" indicators"<<endl;
-		if (cmdName != "g910-led") cout<<" gkeys"<<endl;
+		if (cmdName == "g910-led") cout<<" gkeys"<<endl;
 		cout<<" fkeys"<<endl;
 		cout<<" modifiers"<<endl;
 		if (cmdName != "g410-led") cout<<" multimedia"<<endl;
