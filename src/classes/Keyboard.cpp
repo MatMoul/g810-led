@@ -427,22 +427,38 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 
 
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color) {
+	uint8_t protocolByte = 0;
+	
+	switch (m_keyboardModel) {
+		case KeyboardModel::g410:
+		case KeyboardModel::g610:
+		case KeyboardModel::g810:
+			protocolByte = 0x0d;
+			break;
+		case KeyboardModel::g910:
+			protocolByte = 0x10;
+			break;
+		default:
+			return false;
+	}
+	
 	byte_buffer_t data;
+	
 	switch (effect) {
 		
 		case NativeEffect::color:
-			data = { 0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x01, color.red, color.green, color.blue, 0x02 };
+			data = { 0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x01, color.red, color.green, color.blue, 0x02 };
 			break;
 		case NativeEffect::breathing:
 			data = {
-				0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x02,
+				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x02,
 				color.red, color.green, color.blue, speed, 
 				0x10, 0x00, 0x64 
 			};
 			break;
 		case NativeEffect::cycle:
 			data = {
-				0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x03,
+				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x03,
 				0x00, 0x00, 0x00, 0x00, 0x00, speed, 0x00, 0x00, 0x64
 			};
 			break;
@@ -453,7 +469,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 					break;
 				default:
 					data = {
-						0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x04,
+						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
 						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x01, 0x64, speed
 					};
 					break;
@@ -466,7 +482,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 					break;
 				default:
 					data = {
-						0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x04,
+						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
 						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x02, 0x64, speed
 					};
 					break;
@@ -479,7 +495,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 					break;
 				default:
 					data = {
-						0x11, 0xff, 0x0d, 0x3c, (uint8_t)part, 0x04,
+						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
 						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x03, 0x64, speed
 					};
 					break;
