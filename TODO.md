@@ -6,6 +6,7 @@
 * (80%) Send specialized help based on executable name
 * (0%) Improve --help-effects
 * (0%) Improve --help-samples
+* (0%) [Edit arch logitech gaming keyboard wiki](https://wiki.archlinux.org/index.php/Logitech_Gaming_Keyboards)
 * (0%) Add support of multiple keyboards
 * (0%) Add a python sample effects that use stdin
 * (0%) Use a more generic name for config dir and systemd units
