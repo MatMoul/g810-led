@@ -3,9 +3,6 @@
 ## Tasks (Help wanted) :
 * (0%) Code review (memory leak and other...)
 * (0%) Improve INSTALL.md to support more distributions (And CentOS with hidapi)
-* (80%) Send specialized help based on executable name
-* (0%) Improve --help-effects
-* (80%) Improve --help-samples
 * (0%) [Edit arch logitech gaming keyboard wiki](https://wiki.archlinux.org/index.php/Logitech_Gaming_Keyboards)
 * (0%) Add support of multiple keyboards
 * (0%) Add a python sample effects that use stdin
@@ -15,7 +12,9 @@
 ArchLinux (in AUR): g810-led-git
 
 ## Tasks (Assigned to MatMoul but you can participate) :
-* (0%) Avoid sending keys that not supported by a keyboard model
+* (90%) Send specialized help based on executable name
+* (90%) Improve --help-samples
+* (70%) Avoid sending keys that not supported by a keyboard model
 * (0%) Add deamon mode for custom effects
 
 ## Tasks (Assigned to MatMoul) :
