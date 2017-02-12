@@ -266,19 +266,56 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 	for (uint8_t i = 0; i < keyValues.size(); i++) {
 		switch(static_cast<LedKeyboard::KeyAddressGroup>(static_cast<uint16_t>(keyValues[i].key) >> 8 )) {
 			case LedKeyboard::KeyAddressGroup::logo:
-				if (SortedKeys[0].size() <= 2) SortedKeys[0].push_back(keyValues[i]);
+				switch (m_keyboardModel) {
+					case LedKeyboard::KeyboardModel::g410:
+					case LedKeyboard::KeyboardModel::g610:
+					case LedKeyboard::KeyboardModel::g810:
+						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo) SortedKeys[0].push_back(keyValues[i]);
+						break;
+					case LedKeyboard::KeyboardModel::g910:
+						if (SortedKeys[0].size() <= 2) SortedKeys[0].push_back(keyValues[i]);
+						break;
+					default:
+						break;
+				}
 				break;
 			case LedKeyboard::KeyAddressGroup::indicators:
 				if (SortedKeys[1].size() <= 5) SortedKeys[1].push_back(keyValues[i]);
 				break;
 			case LedKeyboard::KeyAddressGroup::multimedia:
-				if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
+				switch (m_keyboardModel) {
+					case LedKeyboard::KeyboardModel::g610:
+					case LedKeyboard::KeyboardModel::g810:
+						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
+						break;
+					default:
+						break;
+				}
 				break;
 			case LedKeyboard::KeyAddressGroup::gkeys:
-				if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
+				switch (m_keyboardModel) {
+					case LedKeyboard::KeyboardModel::g910:
+						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
+						break;
+					default:
+						break;
+				}
 				break;
 			case LedKeyboard::KeyAddressGroup::keys:
-				if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
+				switch (m_keyboardModel) {
+					case LedKeyboard::KeyboardModel::g610:
+					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g910:
+						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
+						break;
+					case LedKeyboard::KeyboardModel::g410:
+						// need filter num pad for G410
+						// if (SortedKeys[4].size() <= 120 && keyValues[i].key > 0x07 && keyValues[i].key < 0x23) SortedKeys[4].push_back(keyValues[i]);
+						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
+						break;
+					default:
+						break;
+				}
 				break;
 		}
 	}
