@@ -548,7 +548,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 }
 
 
-
+// Devil code ...
 bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (! m_isOpen) return false;
 	
