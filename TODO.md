@@ -5,7 +5,7 @@
 * (0%) Improve INSTALL.md to support more distributions (And CentOS with hidapi)
 * (80%) Send specialized help based on executable name
 * (0%) Improve --help-effects
-* (0%) Improve --help-samples
+* (80%) Improve --help-samples
 * (0%) [Edit arch logitech gaming keyboard wiki](https://wiki.archlinux.org/index.php/Logitech_Gaming_Keyboards)
 * (0%) Add support of multiple keyboards
 * (0%) Add a python sample effects that use stdin
