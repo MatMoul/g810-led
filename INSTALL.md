@@ -17,8 +17,8 @@ hidapi is recommended but if you encounter problem on your system, switch to lib
 
 ## Installation by repos :</br>
 ArchLinux (aur) :</br>
-`sudo yaourt -S g810-led-git` # with yaourt</br>
-`sudo pacaur -S g810-led-git` # with pacaur</br>
+`yaourt -S g810-led-git` # with yaourt</br>
+`pacaur -S g810-led-git` # with pacaur</br>
 
 
 ## Installation of dependencies :</br>
