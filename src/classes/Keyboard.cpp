@@ -270,7 +270,8 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					case LedKeyboard::KeyboardModel::g410:
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
-						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo) SortedKeys[0].push_back(keyValues[i]);
+						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
+							SortedKeys[0].push_back(keyValues[i]);
 						break;
 					case LedKeyboard::KeyboardModel::g910:
 						if (SortedKeys[0].size() <= 2) SortedKeys[0].push_back(keyValues[i]);
@@ -310,7 +311,8 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 						break;
 					case LedKeyboard::KeyboardModel::g410:
 						// need filter num pad for G410
-						// if (SortedKeys[4].size() <= 120 && keyValues[i].key > 0x07 && keyValues[i].key < 0x23) SortedKeys[4].push_back(keyValues[i]);
+						// if (SortedKeys[4].size() <= 120 && keyValues[i].key > 0x07 && keyValues[i].key < 0x23) 
+						// 	SortedKeys[4].push_back(keyValues[i]);
 						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
 						break;
 					default:
