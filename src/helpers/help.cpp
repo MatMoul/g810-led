@@ -52,135 +52,135 @@ namespace help {
 	
 	void keys(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
-		cout<<cmdName<<" Keys"<<endl;
+		cout<<cmdName<<"    Keys"<<endl;
 		cout<<"-------------"<<endl;
 		cout<<endl;
 		cout<<"Group List :"<<endl;
 		
-		if (cmdName == "g410-led") cout<<" logo (Need confirmation)"<<endl; 
-		else cout<<" logo"<<endl; 
-		if (cmdName != "g410-led") cout<<" indicators"<<endl;
-		if (cmdName == "g910-led") cout<<" gkeys"<<endl;
-		cout<<" fkeys"<<endl;
-		cout<<" modifiers"<<endl;
-		if (cmdName != "g410-led" && cmdName != "g910-led") cout<<" multimedia"<<endl;
-		cout<<" arrows"<<endl;
-		if (cmdName != "g410-led") cout<<" numeric"<<endl;
-		cout<<" functions"<<endl;
-		cout<<" keys"<<endl;
+		if (cmdName == "g410-led") cout<<"    logo (Need confirmation)"<<endl; 
+		else cout<<"    logo"<<endl; 
+		if (cmdName != "g410-led") cout<<"    indicators"<<endl;
+		if (cmdName == "g910-led") cout<<"    gkeys"<<endl;
+		cout<<"    fkeys"<<endl;
+		cout<<"    modifiers"<<endl;
+		if (cmdName != "g410-led"    && cmdName != "g910-led") cout<<"    multimedia"<<endl;
+		cout<<"    arrows"<<endl;
+		if (cmdName != "g410-led") cout<<"    numeric"<<endl;
+		cout<<"    functions"<<endl;
+		cout<<"    keys"<<endl;
 		cout<<endl;
 		cout<<endl;
 		
 		// need confirmation for g410
 		if (cmdName == "g410-led") {
 			cout<<"Group logo :"<<endl;
-			cout<<" logo (Need confirmation)"<<endl;
-			cout<<" logo2 (Need confirmation)"<<endl;
+			cout<<"    logo (Need confirmation)"<<endl;
+			cout<<"    logo2 (Need confirmation)"<<endl;
 		} else if (cmdName == "g910-led") {
 			cout<<"Group logo :"<<endl;
-			cout<<" logo"<<endl;
-			cout<<" logo2"<<endl;
+			cout<<"    logo"<<endl;
+			cout<<"    logo2"<<endl;
 		} else {
 			cout<<"Group logo :"<<endl;
-			cout<<" logo"<<endl;
+			cout<<"    logo"<<endl;
 		}
 		cout<<""<<endl;
 		
 		if (cmdName != "g410-led") {
 			cout<<"Group indicators :"<<endl;
-			cout<<" num_indicator, numindicator, num"<<endl;
-			cout<<" caps_indicator, capsindicator, caps"<<endl;
-			cout<<" scroll_indicator, scrollindicator, scroll"<<endl;
-			cout<<" game_mode, gamemode, game"<<endl;
-			cout<<" back_light, backlight, light"<<endl;
+			cout<<"    num_indicator, numindicator, num"<<endl;
+			cout<<"    caps_indicator, capsindicator, caps"<<endl;
+			cout<<"    scroll_indicator, scrollindicator, scroll"<<endl;
+			cout<<"    game_mode, gamemode, game"<<endl;
+			cout<<"    back_light, backlight, light"<<endl;
 			cout<<""<<endl;
 		}
 		
 		if (cmdName == "g910-led") {
 			cout<<"Group gkeys :"<<endl;
-			cout<<" g1 - g9"<<endl;
+			cout<<"    g1 - g9"<<endl;
 			cout<<""<<endl;
 		}
 		
 		cout<<"Group fkeys :"<<endl;
-		cout<<" f1 - f12"<<endl;
+		cout<<"    f1 - f12"<<endl;
 		cout<<""<<endl;
 		
 		cout<<"Group modifiers :"<<endl;
-		cout<<" shift_left, shiftleft, shiftl"<<endl;
-		cout<<" ctrl_left, ctrlleft, ctrll"<<endl;
-		cout<<" win_left, winleft, win_left"<<endl;
-		cout<<" alt_left, altleft, altl"<<endl;
-		cout<<" alt_right, altright, altr, altgr"<<endl;
-		cout<<" win_right, winright, winr"<<endl;
-		cout<<" menu"<<endl;
-		cout<<" ctrl_right, ctrlright, ctrlr"<<endl;
-		cout<<" shift_right, shiftright, shiftr"<<endl;
+		cout<<"    shift_left, shiftleft, shiftl"<<endl;
+		cout<<"    ctrl_left, ctrlleft, ctrll"<<endl;
+		cout<<"    win_left, winleft, win_left"<<endl;
+		cout<<"    alt_left, altleft, altl"<<endl;
+		cout<<"    alt_right, altright, altr, altgr"<<endl;
+		cout<<"    win_right, winright, winr"<<endl;
+		cout<<"    menu"<<endl;
+		cout<<"    ctrl_right, ctrlright, ctrlr"<<endl;
+		cout<<"    shift_right, shiftright, shiftr"<<endl;
 		cout<<""<<endl;
 		
-		if (cmdName != "g410-led" && cmdName != "g910-led") {
+		if (cmdName != "g410-led"    && cmdName != "g910-led") {
 			cout<<"Group multimedia :"<<endl;
-			cout<<" mute"<<endl;
-			cout<<" play_pause, playpause, play"<<endl;
-			cout<<" stop"<<endl;
-			cout<<" previous, prev"<<endl;
-			cout<<" next"<<endl;
+			cout<<"    mute"<<endl;
+			cout<<"    play_pause, playpause, play"<<endl;
+			cout<<"    stop"<<endl;
+			cout<<"    previous, prev"<<endl;
+			cout<<"    next"<<endl;
 			cout<<""<<endl;
 		}
 		
 		cout<<"Group arrows :"<<endl;
-		cout<<" arrow_top, arrowtop, top"<<endl;
-		cout<<" arrow_left, arrowleft, left"<<endl;
-		cout<<" arrow_bottom, arrowbottom, bottom"<<endl;
-		cout<<" arrow_right, arrowright, right"<<endl;
+		cout<<"    arrow_top, arrowtop, top"<<endl;
+		cout<<"    arrow_left, arrowleft, left"<<endl;
+		cout<<"    arrow_bottom, arrowbottom, bottom"<<endl;
+		cout<<"    arrow_right, arrowright, right"<<endl;
 		cout<<""<<endl;
 		
 		if (cmdName != "g410-led") {
 			cout<<"Group numeric :"<<endl;
-			cout<<" num_lock, numlock"<<endl;
-			cout<<" num_slash, numslash, num/"<<endl;
-			cout<<" num_asterisk, numasterisk, num*"<<endl;
-			cout<<" num_minus, numminus, num-"<<endl;
-			cout<<" num_plus, numplus, num+"<<endl;
-			cout<<" numenter"<<endl;
-			cout<<" num0 - num9"<<endl;
-			cout<<" num_dot, numdot, num."<<endl;
+			cout<<"    num_lock, numlock"<<endl;
+			cout<<"    num_slash, numslash, num/"<<endl;
+			cout<<"    num_asterisk, numasterisk, num*"<<endl;
+			cout<<"    num_minus, numminus, num-"<<endl;
+			cout<<"    num_plus, numplus, num+"<<endl;
+			cout<<"    numenter"<<endl;
+			cout<<"    num0 - num9"<<endl;
+			cout<<"    num_dot, numdot, num."<<endl;
 			cout<<""<<endl;
 		}
 		
 		cout<<"Group functions :"<<endl;
-		cout<<" escape, esc"<<endl;
-		cout<<" print_screen, printscreen, printscr"<<endl;
-		cout<<" scroll_lock, scrolllock"<<endl;
-		cout<<" pause_break, pausebreak"<<endl;
-		cout<<" insert, ins"<<endl;
-		cout<<" home"<<endl;
-		cout<<" page_up, pageup"<<endl;
-		cout<<" delete, del"<<endl;
-		cout<<" end"<<endl;
-		cout<<" page_down, pagedown"<<endl;
+		cout<<"    escape, esc"<<endl;
+		cout<<"    print_screen, printscreen, printscr"<<endl;
+		cout<<"    scroll_lock, scrolllock"<<endl;
+		cout<<"    pause_break, pausebreak"<<endl;
+		cout<<"    insert, ins"<<endl;
+		cout<<"    home"<<endl;
+		cout<<"    page_up, pageup"<<endl;
+		cout<<"    delete, del"<<endl;
+		cout<<"    end"<<endl;
+		cout<<"    page_down, pagedown"<<endl;
 		cout<<""<<endl;
 		cout<<"Group keys :"<<endl;
-		cout<<" 0 - 9"<<endl;
-		cout<<" a - z"<<endl;
-		cout<<" tab"<<endl;
-		cout<<" caps_lock, capslock"<<endl;
-		cout<<" space"<<endl;
-		cout<<" backspace, back"<<endl;
-		cout<<" enter"<<endl;
-		cout<<" tilde"<<endl;
-		cout<<" minus"<<endl;
-		cout<<" equal"<<endl;
-		cout<<" open_bracket"<<endl;
-		cout<<" close_bracket"<<endl;
-		cout<<" backslash"<<endl;
-		cout<<" semicolon"<<endl;
-		cout<<" dollar"<<endl;
-		cout<<" quote"<<endl;
-		cout<<" intl_backslash"<<endl;
-		cout<<" comma"<<endl;
-		cout<<" period"<<endl;
-		cout<<" slash"<<endl;
+		cout<<"    0 - 9"<<endl;
+		cout<<"    a - z"<<endl;
+		cout<<"    tab"<<endl;
+		cout<<"    caps_lock, capslock"<<endl;
+		cout<<"    space"<<endl;
+		cout<<"    backspace, back"<<endl;
+		cout<<"    enter"<<endl;
+		cout<<"    tilde"<<endl;
+		cout<<"    minus"<<endl;
+		cout<<"    equal"<<endl;
+		cout<<"    open_bracket"<<endl;
+		cout<<"    close_bracket"<<endl;
+		cout<<"    backslash"<<endl;
+		cout<<"    semicolon"<<endl;
+		cout<<"    dollar"<<endl;
+		cout<<"    quote"<<endl;
+		cout<<"    intl_backslash"<<endl;
+		cout<<"    comma"<<endl;
+		cout<<"    period"<<endl;
+		cout<<"    slash"<<endl;
 	}
 	
 	void effects(char *arg0) {
@@ -211,31 +211,31 @@ namespace help {
 		cout<<"----------------"<<endl;
 		cout<<endl;
 		cout<<"Samples :"<<endl;
-		cout<<"g810-led -p /etc/g810/profile # Load a profile"<<endl;
-		cout<<"g810-led -k logo ff0000 # Set color of a key"<<endl;
-		cout<<"g810-led -a 00ff00 # Set color of all keys"<<endl;
-		cout<<"g810-led -g fkeys ff00ff # Set color of a group of keys"<<endl;
-		cout<<"g810-led -s color # Set keyboard power on effect"<<endl;
-		cout<<"g810-led -fx color keys 00ff00 # Set fixed color effect"<<endl;
-		cout<<"g810-led -fx breathing logo 00ff00 0a # Set breathing effect"<<endl;
-		cout<<"g810-led -fx cycle all 0a # Set color cycle effect"<<endl;
-		cout<<"g810-led -fx hwave keys 0a # Set horizontal wave effect"<<endl;
-		cout<<"g810-led -fx vwave keys 0a # Set vertical wave effect"<<endl;
-		cout<<"g810-led -fx cwave keys 0a # Set center wave effect"<<endl;
+		cout<<"g810-led -p /etc/g810/profile          # Load a profile"<<endl;
+		cout<<"g810-led -k logo ff0000                # Set color of a key"<<endl;
+		cout<<"g810-led -a 00ff00                     # Set color of all keys"<<endl;
+		cout<<"g810-led -g fkeys ff00ff               # Set color of a group of keys"<<endl;
+		cout<<"g810-led -s color                      # Set keyboard power on effect"<<endl;
+		cout<<"g810-led -fx color keys 00ff00         # Set fixed color effect"<<endl;
+		cout<<"g810-led -fx breathing logo 00ff00 0a  # Set breathing effect"<<endl;
+		cout<<"g810-led -fx cycle all 0a              # Set color cycle effect"<<endl;
+		cout<<"g810-led -fx hwave keys 0a             # Set horizontal wave effect"<<endl;
+		cout<<"g810-led -fx vwave keys 0a             # Set vertical wave effect"<<endl;
+		cout<<"g810-led -fx cwave keys 0a             # Set center wave effect"<<endl;
 		cout<<endl;
 		cout<<"Samples with no commit :"<<endl;
-		cout<<"g810-led -an 000000 # Set color of all key with no action"<<endl;
-		cout<<"g810-led -gn modifiers ff0000 # Set color of a group with no action"<<endl;
-		cout<<"g810-led -kn w ff0000 # Set color of a key with no action"<<endl;
-		cout<<"g810-led -kn a ff0000 # Set color of a key with no action"<<endl;
-		cout<<"g810-led -kn s ff0000 # Set color of a key with no action"<<endl;
-		cout<<"g810-led -kn d ff0000 # Set color of a key with no action"<<endl;
-		cout<<"g810-led -c # Commit all changes"<<endl;
+		cout<<"g810-led -an 000000            # Set color of all key with no action"<<endl;
+		cout<<"g810-led -gn modifiers ff0000  # Set color of a group with no action"<<endl;
+		cout<<"g810-led -kn w ff0000          # Set color of a key with no action"<<endl;
+		cout<<"g810-led -kn a ff0000          # Set color of a key with no action"<<endl;
+		cout<<"g810-led -kn s ff0000          # Set color of a key with no action"<<endl;
+		cout<<"g810-led -kn d ff0000          # Set color of a key with no action"<<endl;
+		cout<<"g810-led -c                    # Commit all changes"<<endl;
 		cout<<endl;
 		cout<<"Samples for g610 :"<<endl;
-		cout<<"g610-led -a 60 # Set intensity of all keys"<<endl;
-		cout<<"g610-led -k logo ff # Set intensity of a key"<<endl;
-		cout<<"g610-led -g fkeys aa # Set intensity of a group of keys"<<endl;
+		cout<<"g610-led -a 60        # Set intensity of all keys"<<endl;
+		cout<<"g610-led -k logo ff   # Set intensity of a key"<<endl;
+		cout<<"g610-led -g fkeys aa  # Set intensity of a group of keys"<<endl;
 		cout<<endl;
 		cout<<"Samples with pipe (for effects) :"<<endl;
 		cout<<"g810-led -pp < profilefile # Load a profile"<<endl;

@@ -12,8 +12,6 @@
 ArchLinux (in AUR): g810-led-git
 
 ## Tasks (Assigned to MatMoul but you can participate) :
-* (90%) Send specialized help based on executable name
-* (90%) Improve --help-samples
 * (70%) Avoid sending keys that not supported by a keyboard model
 * (0%) Add deamon mode for custom effects
 
