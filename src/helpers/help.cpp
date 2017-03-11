@@ -8,7 +8,7 @@ using namespace std;
 
 namespace help {
 	
-	string version = "0.2.0";
+	string version = "0.1.1";
 	
 	void usage(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
