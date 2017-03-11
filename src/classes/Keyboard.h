@@ -102,7 +102,7 @@ class LedKeyboard {
 			num_1, num_2, num_3, num_4, num_5, num_6, num_7, num_8, num_9, num_0,
 			num_dot, intl_backslash, menu,
 			
-			ctrl_left   = static_cast<uint8_t>(KeyAddressGroup::keys) << 8 | 0xe0,
+			ctrl_left = static_cast<uint8_t>(KeyAddressGroup::keys) << 8 | 0xe0,
 			shift_left, alt_left, win_left,
 			ctrl_right, shift_right, alt_right, win_right
 			
