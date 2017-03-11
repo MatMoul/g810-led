@@ -15,6 +15,7 @@ namespace utils {
 	bool parseKeyGroup(std::string val, LedKeyboard::KeyGroup &keyGroup);
 	bool parseColor(std::string val, LedKeyboard::Color &color);
 	bool parseSpeed(std::string val, uint8_t &speed);
+	bool parseUInt8(std::string val, uint8_t &uint8);
 	
 }
 

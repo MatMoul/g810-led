@@ -209,4 +209,11 @@ namespace utils {
 		return true;
 	}
 	
+	bool parseUInt8(std::string val, uint8_t &uint8) {
+		if (val.length() == 1) val = "0" + val;
+		if (val.length() != 2) return false;
+		uint8 = std::stoul("0x" + val, nullptr, 16);
+		return true;
+	}
+	
 }

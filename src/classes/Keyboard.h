@@ -140,6 +140,9 @@ class LedKeyboard {
 		bool setGroupKeys(KeyGroup keyGroup, Color color);
 		bool setAllKeys(Color color);
 		
+		bool setMRKey(uint8_t value);
+		bool setMNKey(uint8_t value);
+		
 		bool setStartupMode(StartupMode startupMode);
 		
 		bool setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color);
