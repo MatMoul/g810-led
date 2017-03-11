@@ -64,6 +64,15 @@ int setMNKey(LedKeyboard &kbd, std::string arg2, bool commit = true) {
 	return 0;
 }
 
+int setGKeysMode(LedKeyboard &kbd, std::string arg2, bool commit = true) {
+	uint8_t value;
+	if (! utils::parseUInt8(arg2, value)) return 1;
+	if (! kbd.open()) return 1;
+	if (! kbd.setGKeysMode(value)) return 1;
+	//if (commit) if(! kbd.commit()) return 1;
+	return 0;
+}
+
 
 int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4, std::string arg5 = "") {
 	LedKeyboard::NativeEffect effect;
@@ -178,6 +187,8 @@ int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 				if (setMRKey(kbd, args[1], false) == 1) retval = 1;
 			} else if (args[0] == "mn" && args.size() > 1) {
 				if (setMNKey(kbd, args[1], false) == 1) retval = 1;
+			} else if (args[0] == "gkm" && args.size() > 1) {
+				if (setGKeysMode(kbd, args[1], false) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 4) {
 				if (setFX(kbd, args[1], args[2], args[3], args[4]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 3) {
@@ -232,6 +243,8 @@ int main(int argc, char **argv) {
 			else if (argc > 3 && arg == "-kn") return setKey(kbd, argv[2], argv[3], false);
 			else if (argc > 2 && arg == "-mrn") return setMRKey(kbd, argv[2], false);
 			else if (argc > 2 && arg == "-mnn") return setMNKey(kbd, argv[2], false);
+			
+			else if (argc > 2 && arg == "-gkm") return setGKeysMode(kbd, argv[2]);
 			
 			else if (argc > 2 && arg == "-p") return loadProfile(kbd, argv[2]);
 			else if (argc > 1 && arg == "-pp") return pipeProfile(kbd);

@@ -22,6 +22,8 @@ namespace help {
 		if (cmdName == "g910-led") {
 			cout<<"  -mr {value}\t\t\t\tSet MR key (0-1)"<<endl;
 			cout<<"  -mn {value}\t\t\t\tSet MN key (0-7) (M1=1, M2=2, M3=4) (M1+M2=3, M1+M3=5, ...)"<<endl;
+			cout<<endl;
+			cout<<"  -gkm {value}\t\t\t\tSet GKeys mode (0=Mapped to FKeys, 1=Independent)"<<endl;
 		}
 		cout<<endl;
 		cout<<"  -an {color}\t\t\t\tSet all keys color without commit"<<endl;

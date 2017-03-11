@@ -490,6 +490,26 @@ bool LedKeyboard::setMNKey(uint8_t value) {
 	return false;
 }
 
+bool LedKeyboard::setGKeysMode(uint8_t value) {
+	LedKeyboard::byte_buffer_t data;
+	switch (m_keyboardModel) {
+		case KeyboardModel::g910:
+			switch (value) {
+				case 0x00:
+				case 0x01:
+					data = { 0x11, 0xff, 0x08, 0x2e, value };
+					data.resize(20, 0x00);
+					return sendDataInternal(data);
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	return false;
+}
+
 
 bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 	byte_buffer_t data;

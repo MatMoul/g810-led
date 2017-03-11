@@ -142,6 +142,7 @@ class LedKeyboard {
 		
 		bool setMRKey(uint8_t value);
 		bool setMNKey(uint8_t value);
+		bool setGKeysMode(uint8_t value);
 		
 		bool setStartupMode(StartupMode startupMode);
 		
