@@ -51,7 +51,7 @@ int setMRKey(LedKeyboard &kbd, std::string arg2, bool commit = true) {
 	if (! utils::parseUInt8(arg2, value)) return 1;
 	if (! kbd.open()) return 1;
 	if (! kbd.setMRKey(value)) return 1;
-	if (commit) if(! kbd.commit()) return 1;
+	//if (commit) if(! kbd.commit()) return 1;
 	return 0;
 }
 
@@ -60,7 +60,7 @@ int setMNKey(LedKeyboard &kbd, std::string arg2, bool commit = true) {
 	if (! utils::parseUInt8(arg2, value)) return 1;
 	if (! kbd.open()) return 1;
 	if (! kbd.setMNKey(value)) return 1;
-	if (commit) if(! kbd.commit()) return 1;
+	//if (commit) if(! kbd.commit()) return 1;
 	return 0;
 }
 
