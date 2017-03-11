@@ -8,7 +8,7 @@ using namespace std;
 
 namespace help {
 	
-	string version = "0.1.1";
+	string version = "0.2.0";
 	
 	void usage(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
@@ -29,10 +29,6 @@ namespace help {
 		cout<<"  -an {color}\t\t\t\tSet all keys color without commit"<<endl;
 		cout<<"  -gn {keygroup} {color}\t\tSet key group color without commit"<<endl;
 		cout<<"  -kn {key} {color}\t\t\tSet key color without commit"<<endl;
-		if (cmdName == "g910-led") {
-			cout<<"  -mrn {value}\t\t\t\tSet MR key without commit"<<endl;
-			cout<<"  -mnn {value}\t\t\t\tSet MN key without commit"<<endl;
-		}
 		cout<<"  -c\t\t\t\t\tCommit change"<<endl;
 		cout<<endl;
 		cout<<"  -fx ...\t\t\t\tUse --help-effects for more detail"<<endl;
