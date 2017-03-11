@@ -174,6 +174,10 @@ int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 				if (utils::parseKey(args[1], key))
 					if (utils::parseColor(args[2], color))
 						keys.push_back({ key, color });
+			} else if (args[0] == "mr" && args.size() > 1) {
+				if (setMRKey(kbd, args[1], false) == 1) retval = 1;
+			} else if (args[0] == "mn" && args.size() > 1) {
+				if (setMNKey(kbd, args[1], false) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 4) {
 				if (setFX(kbd, args[1], args[2], args[3], args[4]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 3) {
