@@ -627,10 +627,9 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
 				return false;
 			}
-			usleep(500);
 			byte_buffer_t data2;
 			data2.resize(21, 0x00);
-			hid_read_timeout(m_hidHandle, const_cast<unsigned char*>(data2.data()), data2.size(), 0);
+			hid_read_timeout(m_hidHandle, const_cast<unsigned char*>(data2.data()), data2.size(), 1);
 			return true;
 		#elif defined(libusb)
 			if (data.size() > 20) {
