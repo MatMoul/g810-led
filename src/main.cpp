@@ -46,30 +46,27 @@ int setKey(LedKeyboard &kbd, std::string arg2, std::string arg3, bool commit = t
 	return 0;
 }
 
-int setMRKey(LedKeyboard &kbd, std::string arg2, bool commit = true) {
+int setMRKey(LedKeyboard &kbd, std::string arg2) {
 	uint8_t value;
 	if (! utils::parseUInt8(arg2, value)) return 1;
 	if (! kbd.open()) return 1;
 	if (! kbd.setMRKey(value)) return 1;
-	//if (commit) if(! kbd.commit()) return 1;
 	return 0;
 }
 
-int setMNKey(LedKeyboard &kbd, std::string arg2, bool commit = true) {
+int setMNKey(LedKeyboard &kbd, std::string arg2) {
 	uint8_t value;
 	if (! utils::parseUInt8(arg2, value)) return 1;
 	if (! kbd.open()) return 1;
 	if (! kbd.setMNKey(value)) return 1;
-	//if (commit) if(! kbd.commit()) return 1;
 	return 0;
 }
 
-int setGKeysMode(LedKeyboard &kbd, std::string arg2, bool commit = true) {
+int setGKeysMode(LedKeyboard &kbd, std::string arg2) {
 	uint8_t value;
 	if (! utils::parseUInt8(arg2, value)) return 1;
 	if (! kbd.open()) return 1;
 	if (! kbd.setGKeysMode(value)) return 1;
-	//if (commit) if(! kbd.commit()) return 1;
 	return 0;
 }
 
@@ -241,8 +238,6 @@ int main(int argc, char **argv) {
 			else if (argc > 2 && arg == "-an") return setAllKeys(kbd, argv[2], false);
 			else if (argc > 3 && arg == "-gn") return setGroupKeys(kbd, argv[2], argv[3], false);
 			else if (argc > 3 && arg == "-kn") return setKey(kbd, argv[2], argv[3], false);
-			else if (argc > 2 && arg == "-mrn") return setMRKey(kbd, argv[2], false);
-			else if (argc > 2 && arg == "-mnn") return setMNKey(kbd, argv[2], false);
 			
 			else if (argc > 2 && arg == "-gkm") return setGKeysMode(kbd, argv[2]);
 			
