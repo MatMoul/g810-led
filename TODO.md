@@ -12,7 +12,6 @@
 
 ## Tasks (Assigned to MatMoul but you can participate) :
 * (80%) Add MKeys led control support
-* (70%) Avoid sending keys that not supported by a keyboard model
 
 ## Possible enhancements :
 * Add deamon mode for custom effects

@@ -310,11 +310,9 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
 						break;
 					case LedKeyboard::KeyboardModel::g410:
-						// need filter num pad for G410
-						// if (SortedKeys[4].size() <= 120 && keyValues[i].key > 0x07 && 
-						//     keyValues[i].key < 0x23) 
-						// 	SortedKeys[4].push_back(keyValues[i]);
-						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
+						if (SortedKeys[4].size() <= 120)
+							if (keyValues[i].key < LedKeyboard::Key::num_lock || keyValues[i].key > LedKeyboard::Key::num_dot)
+								SortedKeys[4].push_back(keyValues[i]);
 						break;
 					default:
 						break;
