@@ -25,6 +25,9 @@
 ## [jdagerbo](https://github.com/jdagerbo) :
 * Refactor many of the code (very hard work)
 
+## [Landrovan](https://github.com/Landrovan) :
+* Improve support of G410
+
 ## [larsnaesbye](https://github.com/larsnaesbye) :
 * Fix typo
 
