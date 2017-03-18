@@ -267,7 +267,6 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 		switch(static_cast<LedKeyboard::KeyAddressGroup>(static_cast<uint16_t>(keyValues[i].key) >> 8 )) {
 			case LedKeyboard::KeyAddressGroup::logo:
 				switch (m_keyboardModel) {
-					case LedKeyboard::KeyboardModel::g410:
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)

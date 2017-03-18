@@ -65,8 +65,7 @@ namespace help {
 		cout<<endl;
 		cout<<"Group List :"<<endl;
 		
-		if (cmdName == "g410-led") cout<<"    logo (Need confirmation)"<<endl; 
-		else cout<<"    logo"<<endl; 
+		if (cmdName != "g410-led") cout<<"    logo"<<endl;
 		if (cmdName != "g410-led") cout<<"    indicators"<<endl;
 		if (cmdName == "g910-led") cout<<"    gkeys"<<endl;
 		cout<<"    fkeys"<<endl;
@@ -79,16 +78,11 @@ namespace help {
 		cout<<endl;
 		cout<<endl;
 		
-		// need confirmation for g410
-		if (cmdName == "g410-led") {
-			cout<<"Group logo :"<<endl;
-			cout<<"    logo (Need confirmation)"<<endl;
-			cout<<"    logo2 (Need confirmation)"<<endl;
-		} else if (cmdName == "g910-led") {
+		if (cmdName == "g910-led") {
 			cout<<"Group logo :"<<endl;
 			cout<<"    logo"<<endl;
 			cout<<"    logo2"<<endl;
-		} else {
+		} else if (cmdName != "g410-led")  {
 			cout<<"Group logo :"<<endl;
 			cout<<"    logo"<<endl;
 		}
