@@ -2,7 +2,6 @@
 
 ## Tasks (Help wanted) :
 * (0%)  EASY:        [Edit arch logitech gaming keyboard wiki](https://wiki.archlinux.org/index.php/Logitech_Gaming_Keyboards)
-* (0%)  EASY:        Add a python sample effects that use stdin
 * (0%)  AVERAGE:     Add support of multiple keyboards
 * (0%)  AVERAGE:     Improve INSTALL.md to support more distributions (And CentOS with hidapi)
 * (5%)  AVERAGE:     Make distributions ready package
