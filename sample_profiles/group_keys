@@ -9,5 +9,6 @@ g arrows ffff00
 g numeric 00ffff
 g functions ffffff
 g keys 009696
+g gkeys ffffff
 
 c # Commit changes
