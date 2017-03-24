@@ -44,3 +44,6 @@
 ## [noisycat](https://github.com/noisycat) :
 * Add wireshark dump effects
 * Improve makefile
+
+## [wextia](https://github.com/wextia) :
+* Fixed incorrect markdown formatting in README.md
