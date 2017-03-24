@@ -535,7 +535,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 	uint8_t protocolByte = 0;
 	
 	switch (m_keyboardModel) {
-		case KeyboardModel::g410: // Unconfirmed
+		case KeyboardModel::g410:
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
 			protocolByte = 0x0d;

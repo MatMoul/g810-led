@@ -201,7 +201,11 @@ namespace help {
 		cout<<"  -fx vwave {target} {speed}"<<endl;
 		cout<<"  -fx cwave {target} {speed}"<<endl;
 		cout<<endl;
-		cout<<"target value :\t\t\t\tall, keys, logo"<<endl;
+		if (cmdName == "g410-led") {
+			cout<<"target value :\t\t\t\tall, keys (all is for compatibility with other keyboard models)"<<endl;
+		} else {
+			cout<<"target value :\t\t\t\tall, keys, logo"<<endl;
+		}
 		cout<<"color formats :\t\t\t\tRRGGBB (hex value for red, green and blue)"<<endl;
 		cout<<"speed formats :\t\t\t\tSS (hex value for speed 01 to ff)"<<endl;
 		cout<<endl;

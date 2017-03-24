@@ -26,7 +26,7 @@
 * Refactor many of the code (very hard work)
 
 ## [Landrovan](https://github.com/Landrovan) :
-* Improve support of G410
+* Improve support of G410 (two times)
 
 ## [larsnaesbye](https://github.com/larsnaesbye) :
 * Fix typo
