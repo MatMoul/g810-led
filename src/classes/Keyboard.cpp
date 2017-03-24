@@ -310,7 +310,8 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 						break;
 					case LedKeyboard::KeyboardModel::g410:
 						if (SortedKeys[4].size() <= 120)
-							if (keyValues[i].key < LedKeyboard::Key::num_lock || keyValues[i].key > LedKeyboard::Key::num_dot)
+							if (keyValues[i].key < LedKeyboard::Key::num_lock || 
+							    keyValues[i].key > LedKeyboard::Key::num_dot)
 								SortedKeys[4].push_back(keyValues[i]);
 						break;
 					default:
