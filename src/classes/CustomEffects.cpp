@@ -4,6 +4,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <functional>
 #include <thread>
 
 // Global variables to know when a user activate input
@@ -30,10 +31,33 @@ void Test1Effects( LedKeyboard& kbd )
 	}
 }
 
-int StartEffectsAndWaitForUser( LedKeyboard& kbd )
+void Test2Effects( LedKeyboard& kbd )
+{
+	LedKeyboard::Key key = LedKeyboard::Key::t;
+	LedKeyboard::Color color;
+	color.red = 0;
+	color.green = 0;
+	color.blue = 0;
+	
+	while ( !KeyPressed )
+	{
+		++color.blue;
+		LedKeyboard::KeyValue keyValue = { key, color };
+		if (! kbd.open()) return;
+		if (! kbd.setKey(keyValue)) return;
+		if(! kbd.commit()) return;
+		
+		//std::cout << "TEST" << std::endl;
+		std::this_thread::sleep_for ( std::chrono::milliseconds( 10 ) );
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+int StartEffectsAndWaitForUser( LedKeyboard& kbd, std::function< void( LedKeyboard& ) > EffectsFunction )
 {
 	// Start the effects on a thread
-	std::thread lThread( Test1Effects, std::ref( kbd ) );
+	std::thread lThread( EffectsFunction, std::ref( kbd ) );
 	
 	// Wait for user input
 	std::cout << "Press enter to quit";
@@ -57,10 +81,8 @@ int StartCustomEffects( LedKeyboard& kbd, int argc, char** argv )
 	
 	KeyPressed = false;
 	std::string Type = argv[0];
-	if ( Type == "test1" )
-	{
-		return StartEffectsAndWaitForUser( kbd );
-	}
+	if ( Type == "test1" ) return StartEffectsAndWaitForUser( kbd, Test1Effects );
+	else if ( Type == "test2" ) return StartEffectsAndWaitForUser( kbd, Test2Effects );
 	else
 	{
 		// No custom effects of this name
