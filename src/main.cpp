@@ -225,6 +225,7 @@ int main(int argc, char **argv) {
 		else if (arg == "--help-keys") help::keys(argv[0]);
 		else if (arg == "--help-effects") help::effects(argv[0]);
 		else if (arg == "--help-samples") help::samples(argv[0]);
+		else if (arg == "--help-custom-effects") help::custom_effects(argv[0]);
 		
 		else {
 			LedKeyboard kbd;
