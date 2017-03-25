@@ -6,6 +6,7 @@
 #include <chrono>
 #include <functional>
 #include <thread>
+#include <vector>
 
 // Global variables to know when a user activate input
 std::atomic< bool > KeyPressed;
@@ -54,18 +55,31 @@ void Test2Effects( LedKeyboard& kbd )
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-int StartEffectsAndWaitForUser( LedKeyboard& kbd, std::function< void( LedKeyboard& ) > EffectsFunction )
+int StartEffectsAndWaitForUser( LedKeyboard& kbd, std::vector< std::function< void( LedKeyboard& ) > >& EffectFunctions )
 {
-	// Start the effects on a thread
-	std::thread lThread( EffectsFunction, std::ref( kbd ) );
+	if ( EffectFunctions.size() == 0 )
+	{
+		std::cout << "No effects to apply." << std::endl;
+		return 1;
+	}
+	
+	// Start all the effects on a thread
+	std::vector< std::thread > ThreadList;
+	for( unsigned int i = 0; i < EffectFunctions.size(); ++i )
+	{
+		ThreadList.emplace_back( EffectFunctions[i], std::ref( kbd ) );
+	}
 	
 	// Wait for user input
 	std::cout << "Press enter to quit";
 	getchar();
 	
-	// Stop the thread and wait for it to finish
+	// Stop the threads and wait for them to finish
 	KeyPressed = true;
-	lThread.join();
+	for( unsigned int i = 0; i < ThreadList.size(); ++i )
+	{
+		ThreadList[i].join();
+	}
 	
 	return 0;
 }
@@ -78,22 +92,21 @@ int StartCustomEffects( LedKeyboard& kbd, int argc, char** argv )
 		// Not enough parameters
 		return 1;
 	}
-	
 	KeyPressed = false;
-	std::string Type = argv[0];
-	if ( Type == "test1" ) return StartEffectsAndWaitForUser( kbd, Test1Effects );
-	else if ( Type == "test2" ) return StartEffectsAndWaitForUser( kbd, Test2Effects );
-	else
+	
+	// Each arguments is an effects. Check all the arguments to get the list of all wanted effects
+	std::vector< std::function< void( LedKeyboard& ) > > EffectFunctions;
+	for ( int i = 0; i < argc; ++i )
 	{
-		// No custom effects of this name
-		std::cout << "No effects of name: " << Type << std::endl;
+		std::string Type = argv[i];
+		if ( Type == "test1" ) EffectFunctions.emplace_back( Test1Effects );
+		else if ( Type == "test2" ) EffectFunctions.emplace_back( Test2Effects );
+		else
+		{
+			// No custom effects of this name
+			std::cout << "No effects of name: " << Type << std::endl;
+		}
 	}
 	
-	// First param is the custom effects to create. Convert it to an enum
-	
-	/*for ( int i = 0; i < argc; ++i )
-	{
-		std::cout << argv[i] << std::endl;
-	}*/
-	return 0;
+	return StartEffectsAndWaitForUser( kbd, EffectFunctions );
 }

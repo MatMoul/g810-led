@@ -248,7 +248,7 @@ int main(int argc, char **argv) {
 			else if (argc > 5 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4], argv[5]);
 			else if (argc > 4 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4]);
 			
-			else if (argc > 2 && arg == "-cfx") return StartCustomEffects( kbd, argc + 2, argv + 2 );
+			else if (argc > 2 && arg == "-cfx") return StartCustomEffects( kbd, argc - 2, argv + 2 );
 			
 			else if (argc > 2 && arg == "--startup-mode") return setStartupMode(kbd, argv[2]);
 			
