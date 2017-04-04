@@ -9,8 +9,8 @@
 * hidapi or libusb
 
 ## hidapi vs libusb :</br>
-hidapi is the new implementation but need to be tested.</br>
-hidapi is very more speed than libusb (~20ms vs ~150ms).</br>
+hidapi is a newer implementation but needs more testing.</br>
+hidapi is more responsive than libusb (~20ms vs ~150ms).</br>
 hidapi seem not work on CentOS, writing on hidraw is not allowed.</br>
 hidapi is recommended but if you encounter problem on your system, switch to libusb.</br>
 
