@@ -28,9 +28,9 @@ bool LedKeyboard::listKeyboards() {
 		devs = hid_enumerate(0x0, 0x0);
 		dev = devs;
 		while (dev) {
-			for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
-				if (dev->vendor_id == SuportedKeyboards[i][0]) {
-					if (dev->product_id == SuportedKeyboards[i][1]) {
+			for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+				if (dev->vendor_id == SupportedKeyboards[i][0]) {
+					if (dev->product_id == SupportedKeyboards[i][1]) {
 						cout<<"0x"<<std::hex<<dev->vendor_id \
 							<<" 0x"<<std::hex<<dev->product_id \
 							<<" "<<dev->serial_number \
@@ -59,9 +59,9 @@ bool LedKeyboard::listKeyboards() {
 			libusb_device *device = devs[i];
 			libusb_device_descriptor desc;
 			libusb_get_device_descriptor(device, &desc);
-			for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
-				if (desc.idVendor == SuportedKeyboards[i][0]) {
-					if (desc.idProduct == SuportedKeyboards[i][1]) {
+			for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+				if (desc.idVendor == SupportedKeyboards[i][0]) {
+					if (desc.idProduct == SupportedKeyboards[i][1]) {
 						cout<<"0x"<<std::hex<<desc.idVendor \
 							<<" 0x"<<std::hex<<desc.idProduct<<endl;
 						break;
@@ -95,12 +95,12 @@ bool LedKeyboard::open() {
 			dev = devs;
 			m_keyboardModel = KeyboardModel::unknown;
 			while (dev) {
-				for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
-					if (dev->vendor_id == SuportedKeyboards[i][0]) {
-						if (dev->product_id == SuportedKeyboards[i][1]) {
+				for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+					if (dev->vendor_id == SupportedKeyboards[i][0]) {
+						if (dev->product_id == SupportedKeyboards[i][1]) {
 							m_vendorID = dev->vendor_id;
 							m_productID = dev->product_id;
-							m_keyboardModel = (KeyboardModel)SuportedKeyboards[i][2];
+							m_keyboardModel = (KeyboardModel)SupportedKeyboards[i][2];
 							break;
 						}
 					}
@@ -139,12 +139,12 @@ bool LedKeyboard::open() {
 					libusb_device *device = devs[i];
 					libusb_device_descriptor desc;
 					libusb_get_device_descriptor(device, &desc);
-					for (int i=0; i<(int)SuportedKeyboards.size(); i++) {
-						if (desc.idVendor == SuportedKeyboards[i][0]) {
-							if (desc.idProduct == SuportedKeyboards[i][1]) {
+					for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+						if (desc.idVendor == SupportedKeyboards[i][0]) {
+							if (desc.idProduct == SupportedKeyboards[i][1]) {
 								m_vendorID = desc.idVendor;
 								m_productID = desc.idProduct;
-								m_keyboardModel = (KeyboardModel)SuportedKeyboards[i][2];
+								m_keyboardModel = (KeyboardModel)SupportedKeyboards[i][2];
 								break;
 							}
 						}
