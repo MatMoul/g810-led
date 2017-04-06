@@ -16,7 +16,7 @@ class LedKeyboard {
 	
 	private:
 		
-		const std::vector<std::vector<uint16_t>> SuportedKeyboards = {
+		const std::vector<std::vector<uint16_t>> SupportedKeyboards = {
 			{ 0x46d, 0xc330, (u_int16_t)KeyboardModel::g410 },
 			{ 0x46d, 0xc333, (u_int16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc338, (u_int16_t)KeyboardModel::g610 },
