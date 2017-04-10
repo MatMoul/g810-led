@@ -45,5 +45,8 @@
 * Add wireshark dump effects
 * Improve makefile
 
+## [pearsonk](https://github.com/pearsonk) :
+* Implement underlying device IO as a shared library
+
 ## [wextia](https://github.com/wextia) :
 * Fixed incorrect markdown formatting in README.md

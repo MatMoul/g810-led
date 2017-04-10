@@ -8,22 +8,46 @@ else
 	CPPFLAGS=-Dhidapi
 	LDFLAGS=-lhidapi-hidraw
 endif
-PROGN=g810-led
 SYSTEMDDIR?=/usr/lib/systemd
 
-.PHONY: all debug clean setup install uninstall
+prefix?=$(DESTDIR)/usr
+libdir?=$(prefix)/lib
+includedir?=$(prefix)/include
 
-all: bin/$(PROGN)
+# Program & versioning information
+PROGN=g810-led
+MAJOR=0
+MINOR=1
+MICRO=6
 
-bin/$(PROGN): src/main.cpp src/helpers/*.cpp src/helpers/*.h src/classes/*.cpp src/classes/*.h
+APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
+LIBSRCS=src/classes/*.cpp src/classes/*.h
+
+.PHONY: all debug clean setup install uninstall lib install-lib install-dev
+
+all: lib/lib$(PROGN).so bin/$(PROGN)
+
+bin/$(PROGN): $(APPSRCS) $(LIBSRCS)
 	@mkdir -p bin
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 	
 debug: CFLAGS += -g -Wextra -pedantic
 debug: bin/$(PROGN)
-	
+
+lib/lib$(PROGN).so: $(LIBSRCS)
+	@mkdir -p lib
+	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LDFLAGS)
+	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) lib/lib$(PROGN).so
+
+bin-linked: lib/lib$(PROGN).so
+	@mkdir -p bin
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(APPSRCS) -o bin/$(PROGN) $(LDFLAGS) -L./lib -l$(PROGN)
+
+lib: lib/lib$(PROGN).so
+
 clean:
 	@rm -rf bin
+	@rm -rf lib
 
 setup:
 	@install -m 755 -d \
@@ -40,7 +64,16 @@ setup:
 		install -m 755 -d $(DESTDIR)$(SYSTEMDDIR)/system && \
 		cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system && \
 		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
-	
+
+install-lib: lib
+	@install -m 755 -d $(libdir)
+	@install -m 644 lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $(libdir)/
+	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $(libdir)/lib$(PROGN).so
+
+install-dev: install-lib
+	@mkdir -p $(includedir)/$(PROGN)/
+	@install -m 644 src/classes/*.h $(includedir)/$(PROGN)
+
 install: setup
 	@test -s /etc/$(PROGN)/profile || \
 		cp /etc/$(PROGN)/samples/group_keys /etc/$(PROGN)/profile
@@ -52,7 +85,13 @@ install: setup
 		systemctl start $(PROGN) && \
 		systemctl enable $(PROGN) && \
 		systemctl enable $(PROGN)-reboot
-	
+
+uninstall-lib:
+	@rm -f $(libdir)/lib$(PROGN).so*
+
+uninstall-dev:
+	@rm -rf $(includedir)/$(PROGN)
+
 uninstall:
 	@test -s /usr/bin/systemd-run && \
 		systemctl disable $(PROGN) && \
