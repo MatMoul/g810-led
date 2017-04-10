@@ -56,3 +56,13 @@ Linux led controller for Logitech G410, G610, G810 and G910 Keyboards.</br>
 ## Samples with pipe (for effects) :</br>
 `g810-led -pp < profilefile # Load a profile`</br>
 `echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
+
+## Building and linking against the libg810-led library :</br>
+Include in implementing source files.</br>
+```cpp
+#include <g810-led/Keyboard.h>
+```
+To link, simply provide `-lg810-led` to the build flags.</br>
+
+To build the g810-led application as a dynamically-linked variant, run the target:</br>
+`make bin-linked`</br>

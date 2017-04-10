@@ -38,6 +38,14 @@ Fedora :</br>
 `make` # for hidapi</br>
 `make LIB=libusb` # for libusb</br>
 `sudo make install`</br>
+`make install-lib` to install the libg810-led library.</br>
+`make install-dev` to install the libg810-led library and headers for development.</br>
+
+## Building the library :</br>
+The library is built by default when running the `make` (default target "all").</br>
+
+To specifically build the library as a standalone component: </br>
+`make lib`</br>
 
 ## Update :</br>
 Same as install, but your profile and reboot files are preserved.</br>
