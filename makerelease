@@ -39,7 +39,7 @@ sed -i "/MAJOR=/cMAJOR=\"${VPART[0]}\"" makefile
 sed -i "/MINOR=/cMINOR=\"${VPART[1]}\"" makefile
 sed -i "/MICRO=/cMICRO=\"${VPART[2]}\"" makefile
 
-git commit -m "Version $version" src/*
+git commit -m "Version $version" makefile src/*
 git push
 
 git checkout master

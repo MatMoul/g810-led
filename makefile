@@ -62,7 +62,6 @@ setup:
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
 	@test -s /usr/bin/systemd-run && \
 		install -m 755 -d $(DESTDIR)$(SYSTEMDDIR)/system && \
-		cp systemd/$(PROGN).service $(DESTDIR)$(SYSTEMDDIR)/system && \
 		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
 
 install-lib: lib
@@ -80,10 +79,9 @@ install: setup
 	@test -s /etc/$(PROGN)/reboot || \
 		cp /etc/$(PROGN)/samples/all_off /etc/$(PROGN)/reboot
 	@udevadm control --reload-rules
+	@$(PROGN) -p /etc/$(PROGN)/profile
 	@test -s /usr/bin/systemd-run && \
 		systemctl daemon-reload && \
-		systemctl start $(PROGN) && \
-		systemctl enable $(PROGN) && \
 		systemctl enable $(PROGN)-reboot
 
 uninstall-lib:
