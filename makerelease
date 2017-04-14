@@ -34,11 +34,21 @@ esac
 version=$1
 
 sed -i "/string version = /c\\\tstring version = \"$version\";" src/helpers/help.cpp
+IFS='.' read -ra VPART <<< "$version"
+sed -i "/MAJOR=/cMAJOR=\"${VPART[0]}\"" makefile
+sed -i "/MINOR=/cMINOR=\"${VPART[1]}\"" makefile
+sed -i "/MICRO=/cMICRO=\"${VPART[2]}\"" makefile
+
 git commit -m "Version $version" src/*
 git push
 
+git checkout master
+git merge develop
+
 git tag -a "v$version" -m "Version $version"
 git push --tags
+
+git checkout $branch
 
 #wget https://github.com/MatMoul/g810-led/archive/v$version.zip
 #wget https://github.com/MatMoul/g810-led/archive/v$version.tar.gz
