@@ -44,6 +44,7 @@ git push
 
 git checkout master
 git merge develop
+git push
 
 git tag -a "v$version" -m "Version $version"
 git push --tags
