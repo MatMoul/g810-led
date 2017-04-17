@@ -70,6 +70,15 @@ int setGKeysMode(LedKeyboard &kbd, std::string arg2) {
 	return 0;
 }
 
+int setRegion(LedKeyboard &kbd, std::string arg2, std::string arg3) {
+	uint8_t region = 0;
+	LedKeyboard::Color color;
+
+	if (! utils::parseColor(arg3, color)) return 1;
+	if (! utils::parseUInt8(arg2, region)) return 1;
+	if (kbd.setRegion(region,color)) return 0;
+	return 1;
+}
 
 int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4, std::string arg5 = "") {
 	LedKeyboard::NativeEffect effect;
@@ -238,6 +247,7 @@ int main(int argc, char **argv) {
 			else if (argc > 2 && arg == "-an") return setAllKeys(kbd, argv[2], false);
 			else if (argc > 3 && arg == "-gn") return setGroupKeys(kbd, argv[2], argv[3], false);
 			else if (argc > 3 && arg == "-kn") return setKey(kbd, argv[2], argv[3], false);
+			else if (argc > 3 && arg == "-r") return setRegion(kbd, argv[2], argv[3]);
 			
 			else if (argc > 2 && arg == "-gkm") return setGKeysMode(kbd, argv[2]);
 			

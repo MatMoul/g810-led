@@ -19,6 +19,10 @@ namespace help {
 		cout<<"  -a {color}\t\t\t\tSet all keys color"<<endl;
 		cout<<"  -g {keygroup} {color}\t\t\tSet key group color"<<endl;
 		cout<<"  -k {key} {color}\t\t\tSet key color"<<endl;
+		if (cmdName == "g213-led")
+		{
+			cout<<"  -r {region} {color}\t\t\tSet the color of a region for a region-based keyboard"<<endl;
+		}
 		if (cmdName == "g910-led") {
 			cout<<"  -mr {value}\t\t\t\tSet MR key (0-1)"<<endl;
 			cout<<"  -mn {value}\t\t\t\tSet MN key (0-7) (M1=1, M2=2, M3=4) (M1+M2=3, M1+M3=5, ...)"<<endl;
@@ -50,6 +54,10 @@ namespace help {
 			cout<<"color formats :\t\t\t\tII (hex value for intensity)"<<endl;
 		else
 			cout<<"color formats :\t\t\t\tRRGGBB (hex value for red, green and blue)"<<endl;
+		if (cmdName == "g213-led")
+		{
+			cout<<"region formats :\t\t\tRN (integer value for region, 1 to 5)"<<endl;
+		}
 		cout<<"speed formats :\t\t\t\tSS (hex value for speed 01 to ff)"<<endl;
 		cout<<""<<endl;
 		cout<<"key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;

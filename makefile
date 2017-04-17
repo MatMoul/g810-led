@@ -55,6 +55,7 @@ setup:
 		$(DESTDIR)/etc/$(PROGN)/samples \
 		$(DESTDIR)/etc/udev/rules.d
 	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
+	@test -s $(DESTDIR)/usr/bin/g213-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g213-led
 	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
@@ -99,6 +100,7 @@ uninstall:
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
 	
+	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
 	@rm /usr/bin/g610-led
 	@rm /usr/bin/g910-led

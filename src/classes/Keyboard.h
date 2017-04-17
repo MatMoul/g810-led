@@ -17,6 +17,7 @@ class LedKeyboard {
 	private:
 		
 		const std::vector<std::vector<uint16_t>> SupportedKeyboards = {
+			{ 0x46d, 0xc336, (u_int16_t)KeyboardModel::g213 },
 			{ 0x46d, 0xc330, (u_int16_t)KeyboardModel::g410 },
 			{ 0x46d, 0xc333, (u_int16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc338, (u_int16_t)KeyboardModel::g610 },
@@ -40,6 +41,7 @@ class LedKeyboard {
 		
 		enum class KeyboardModel : uint8_t {
 			unknown = 0x00,
+			g213,
 			g410,
 			g610,
 			g810,
@@ -144,6 +146,7 @@ class LedKeyboard {
 		bool setMNKey(uint8_t value);
 		bool setGKeysMode(uint8_t value);
 		
+		bool setRegion(uint8_t region, Color color);
 		bool setStartupMode(StartupMode startupMode);
 		
 		bool setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color);
