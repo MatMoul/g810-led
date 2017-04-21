@@ -1,3 +1,4 @@
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c336", MODE="666" RUN+="/usr/bin/g213-led -p /etc/g810-led/profile"
 ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c330", MODE="666" RUN+="/usr/bin/g410-led -p /etc/g810-led/profile"
 ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c333", MODE="666" RUN+="/usr/bin/g610-led -p /etc/g810-led/profile"
 ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c338", MODE="666" RUN+="/usr/bin/g610-led -p /etc/g810-led/profile"

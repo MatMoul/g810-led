@@ -46,6 +46,8 @@
 * Improve makefile
 
 ## [pearsonk](https://github.com/pearsonk) :
+* Add g213 protocol (very hard work)
+* Add support of g213
 * Implement underlying device IO as a shared library
 
 ## [wextia](https://github.com/wextia) :

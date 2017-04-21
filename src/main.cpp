@@ -73,10 +73,9 @@ int setGKeysMode(LedKeyboard &kbd, std::string arg2) {
 int setRegion(LedKeyboard &kbd, std::string arg2, std::string arg3) {
 	uint8_t region = 0;
 	LedKeyboard::Color color;
-
 	if (! utils::parseColor(arg3, color)) return 1;
 	if (! utils::parseUInt8(arg2, region)) return 1;
-	if (kbd.setRegion(region,color)) return 0;
+	if (kbd.setRegion(region, color)) return 0;
 	return 1;
 }
 
@@ -189,6 +188,8 @@ int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 				if (utils::parseKey(args[1], key))
 					if (utils::parseColor(args[2], color))
 						keys.push_back({ key, color });
+			} else if (args[0] == "r" && args.size() > 2) {
+				if (setRegion(kbd, args[1], args[2]) == 1) retval = 1;
 			} else if (args[0] == "mr" && args.size() > 1) {
 				if (setMRKey(kbd, args[1]) == 1) retval = 1;
 			} else if (args[0] == "mn" && args.size() > 1) {

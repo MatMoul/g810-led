@@ -435,9 +435,7 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 
 	switch (m_keyboardModel) {
 		case KeyboardModel::g213:
-			for (uint8_t rIndex=0x01; rIndex <= 0x05; rIndex++) {
-				if (! setRegion(rIndex,color)) return false;
-			}
+			for (uint8_t rIndex=0x01; rIndex <= 0x05; rIndex++) if (! setRegion(rIndex, color)) return false;
 			return true;
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
@@ -531,7 +529,7 @@ bool LedKeyboard::setRegion(uint8_t region, LedKeyboard::Color color) {
 	LedKeyboard::byte_buffer_t data;
 	switch (m_keyboardModel) {
 		case KeyboardModel::g213:
-			data = {0x11, 0xff, 0x0c, 0x3a, region, 0x01, color.red, color.green, color.blue };
+			data = { 0x11, 0xff, 0x0c, 0x3a, region, 0x01, color.red, color.green, color.blue };
 			data.resize(20,0x00);
 			return sendDataInternal(data);
 			break;
@@ -569,7 +567,6 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 	switch (m_keyboardModel) {
 		case KeyboardModel::g213:
 			protocolByte = 0x0c;
-
 			if (part == NativeEffectPart::logo) return false; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
