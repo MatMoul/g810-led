@@ -9,6 +9,7 @@ namespace help {
 	void keys(char *arg0);
 	void effects(char *arg0);
 	void samples(char *arg0);
+	void custom_effects(char *arg0);
 	
 }
 

@@ -36,6 +36,8 @@ namespace help {
 		cout<<endl;
 		cout<<"  -fx ...\t\t\t\tUse --help-effects for more detail"<<endl;
 		cout<<endl;
+		cout<<"  -cfx ...\t\t\t\tUse --help-custom-effects for more detail"<<endl;
+		cout<<endl;
 		cout<<"  < {profile}\t\t\t\tSet a profile from a file (use --help-samples for more detail)"<<endl;
 		cout<<"  |\t\t\t\t\tSet a profile from stdin (for scripting) (use --help-samples for more detail)"<<endl;
 		cout<<endl;
@@ -252,6 +254,19 @@ namespace help {
 		cout<<"Samples with pipe (for effects) :"<<endl;
 		cout<<"g810-led -pp < profilefile # Load a profile"<<endl;
 		cout<<"echo -e \"k w ff0000\\nk a ff0000\\nk s ff0000\\nk d ff0000\\nc\" | g810-led -pp # Set multiple keys"<<endl;
+	}
+	
+	void custom_effects(char *arg0)
+	{
+		string cmdName = utils::getCmdName(arg0);
+		cout<<cmdName<<" Custom Effects"<<endl;
+		cout<<"----------------"<<endl;
+		cout<<endl;
+		cout<<"  -cfx {effect1} [{effect2} ...]"<<endl;
+		cout<<endl;
+		cout<<"  One effect can be used, or multiple."<<endl;
+		cout<<"  Valid custom effects: test1, test2"<<endl;
+		cout<<endl;
 	}
 	
 }

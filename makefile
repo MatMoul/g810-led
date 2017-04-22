@@ -2,10 +2,10 @@ CC=g++
 CFLAGS=-Wall -O2 -std=gnu++11
 LIB?=hidapi
 ifeq ($(LIB),libusb)
-	CPPFLAGS=-Dlibusb
+	CPPFLAGS=-Dlibusb -lpthread
 	LDFLAGS=-lusb-1.0
 else
-	CPPFLAGS=-Dhidapi
+	CPPFLAGS=-Dhidapi -lpthread
 	LDFLAGS=-lhidapi-hidraw
 endif
 SYSTEMDDIR?=/usr/lib/systemd

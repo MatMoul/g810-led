@@ -6,6 +6,7 @@
 #include "helpers/help.h"
 #include "helpers/utils.h"
 #include "classes/Keyboard.h"
+#include "classes/CustomEffects.h"
 
 
 int commit(LedKeyboard &kbd) {
@@ -234,6 +235,7 @@ int main(int argc, char **argv) {
 		else if (arg == "--help-keys") help::keys(argv[0]);
 		else if (arg == "--help-effects") help::effects(argv[0]);
 		else if (arg == "--help-samples") help::samples(argv[0]);
+		else if (arg == "--help-custom-effects") help::custom_effects(argv[0]);
 		
 		else {
 			LedKeyboard kbd;
@@ -257,6 +259,8 @@ int main(int argc, char **argv) {
 			
 			else if (argc > 5 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4], argv[5]);
 			else if (argc > 4 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4]);
+			
+			else if (argc > 2 && arg == "-cfx") return StartCustomEffects( kbd, argc - 2, argv + 2 );
 			
 			else if (argc > 2 && arg == "--startup-mode") return setStartupMode(kbd, argv[2]);
 			
