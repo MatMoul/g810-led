@@ -12,4 +12,8 @@ namespace help {
 	
 }
 
+#ifndef VERSION
+#define VERSION "unspecified"
+#endif
+
 #endif

@@ -8,13 +8,11 @@ using namespace std;
 
 namespace help {
 	
-	string version = "0.2.0";
-	
 	void usage(char *arg0) {
 		string cmdName = utils::getCmdName(arg0);
 		cout<<cmdName<<endl;
 		cout<<"--------"<<endl;
-		cout<<"Version : "<<version<<endl;
+		cout<<"Version : "<<VERSION<<endl;
 		cout<<endl;
 		cout<<"  -a {color}\t\t\t\tSet all keys color"<<endl;
 		cout<<"  -g {keygroup} {color}\t\t\tSet key group color"<<endl;
