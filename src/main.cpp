@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <unistd.h>
 #include <fstream>
@@ -12,6 +13,27 @@ int commit(LedKeyboard &kbd) {
 	if (! kbd.open()) return 1;
 	if (kbd.commit()) return 0;
 	return 1;
+}
+
+void printDeviceInfo(LedKeyboard::DeviceInfo device)
+{
+	std::cout<<"Device: "<<device.manufacturer<<" - "<<device.product<<std::endl;
+	std::cout<<"\tVendor ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.vendorID<<std::endl;
+	std::cout<<"\tProduct ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.productID<<std::endl;
+	std::cout<<"\tSerial Number: "<<device.serialNumber<<std::endl;
+}
+
+int listKeyboards(LedKeyboard &kbd) {
+	std::vector<LedKeyboard::DeviceInfo> deviceList = kbd.listKeyboards();
+	if (deviceList.empty()) return 1;
+
+	std::vector<LedKeyboard::DeviceInfo>::iterator iterator;
+	for (iterator = deviceList.begin(); iterator != deviceList.end(); iterator++) {
+		LedKeyboard::DeviceInfo device = *iterator;
+		printDeviceInfo(device);
+	}
+
+	return 0;
 }
 
 int setAllKeys(LedKeyboard &kbd, std::string arg2, bool commit = true) {
@@ -226,47 +248,68 @@ int pipeProfile(LedKeyboard &kbd) {
 
 
 int main(int argc, char **argv) {
-	if (argc > 1) {
-		
-		std::string arg = argv[1];
-		
-		if (arg == "--help" || arg == "-h") help::usage(argv[0]);
-		else if (arg == "--help-keys") help::keys(argv[0]);
-		else if (arg == "--help-effects") help::effects(argv[0]);
-		else if (arg == "--help-samples") help::samples(argv[0]);
-		
-		else {
-			LedKeyboard kbd;
-			if (arg == "--list-keyboards") kbd.listKeyboards();
-			else if (arg == "-c") return commit(kbd);
-			
-			else if (argc > 2 && arg == "-a") return setAllKeys(kbd, argv[2]);
-			else if (argc > 3 && arg == "-g") return setGroupKeys(kbd, argv[2], argv[3]);
-			else if (argc > 3 && arg == "-k") return setKey(kbd, argv[2], argv[3]);
-			else if (argc > 2 && arg == "-mr") return setMRKey(kbd, argv[2]);
-			else if (argc > 2 && arg == "-mn") return setMNKey(kbd, argv[2]);
-			else if (argc > 2 && arg == "-an") return setAllKeys(kbd, argv[2], false);
-			else if (argc > 3 && arg == "-gn") return setGroupKeys(kbd, argv[2], argv[3], false);
-			else if (argc > 3 && arg == "-kn") return setKey(kbd, argv[2], argv[3], false);
-			else if (argc > 3 && arg == "-r") return setRegion(kbd, argv[2], argv[3]);
-			
-			else if (argc > 2 && arg == "-gkm") return setGKeysMode(kbd, argv[2]);
-			
-			else if (argc > 2 && arg == "-p") return loadProfile(kbd, argv[2]);
-			else if (argc > 1 && arg == "-pp") return pipeProfile(kbd);
-			
-			else if (argc > 5 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4], argv[5]);
-			else if (argc > 4 && arg == "-fx") return setFX(kbd, argv[2], argv[3], argv[4]);
-			
-			else if (argc > 2 && arg == "--startup-mode") return setStartupMode(kbd, argv[2]);
-			
-			else { help::usage(argv[0]); return 1; }
-		}
-		
-		return 0;
-		
+	if (argc < 2) {
+		help::usage(argv[0]);
+		return 1;
 	}
-	
-	help::usage(argv[0]);
-	return 1;
+		
+	LedKeyboard kbd;
+	std::string serial;
+	uint16_t vendorID = 0x0;
+	uint16_t productID = 0x0;
+
+	int argIndex = 1;
+	while (argIndex < argc)
+	{
+		std::string arg = argv[argIndex];
+
+		// Non-Command arguments
+		if (argc > (argIndex + 1) && arg == "-ds") {
+			serial = argv[argIndex + 1];
+			argIndex += 2;
+			continue;
+		}
+		else if (argc > (argIndex + 1) && arg == "-dv"){
+			if (! utils::parseUInt16(argv[argIndex + 1], vendorID)) return 1;
+			argIndex += 2;
+			continue;
+		}
+		else if (argc > (argIndex + 1) && arg == "-dp"){
+			if (! utils::parseUInt16(argv[argIndex + 1], productID)) return 1;
+			argIndex += 2;
+			continue;
+		}
+
+		if (!kbd.open(vendorID, productID, serial)) {
+			std::cout << "Matching or compatible device not found" << std::endl;
+			return 2;
+		}
+		// Command arguments, these will cause parsing to ignore anything beyond the command and its arguments
+		if (arg == "-c") return commit(kbd);
+		else if (arg == "--help" || arg == "-h") {help::usage(argv[0]); return 0;}
+		else if (arg == "--help-keys") {help::keys(argv[0]); return 0;}
+		else if (arg == "--help-effects") {help::effects(argv[0]); return 0;}
+		else if (arg == "--help-samples") {help::samples(argv[0]); return 0;}
+		else if (arg == "--list-keyboards") return listKeyboards(kbd);
+		else if (arg == "--print-device") {printDeviceInfo(kbd.getCurrentDevice()); return 0;}
+
+		else if (argc > (argIndex + 1) && arg == "-a") return setAllKeys(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 2) && arg == "-g") return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 2) && arg == "-k") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 1) && arg == "-mr") return setMRKey(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-mn") return setMNKey(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-an") return setAllKeys(kbd, argv[argIndex + 1], false);
+		else if (argc > (argIndex + 2) && arg == "-gn") return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
+		else if (argc > (argIndex + 2) && arg == "-kn") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
+		else if (argc > (argIndex + 2) && arg == "-r") return setRegion(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 1) && arg == "-gkm") return setGKeysMode(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-p") return loadProfile(kbd, argv[argIndex + 1]);
+		else if (arg == "-pp") return pipeProfile(kbd);
+		else if (argc > (argIndex + 4) && arg == "-fx") return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
+		else if (argc > (argIndex + 3) && arg == "-fx") return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
+		else if (argc > (argIndex + 1) && arg == "--startup-mode") return setStartupMode(kbd, argv[argIndex + 1]);
+		else { help::usage(argv[0]); return 1; }
+	}
+
+	return 0;
 }

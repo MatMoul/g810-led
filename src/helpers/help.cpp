@@ -16,6 +16,8 @@ namespace help {
 		cout<<"--------"<<endl;
 		cout<<"Version : "<<version<<endl;
 		cout<<endl;
+		cout<<"Usage: "<<cmdName<<" [OPTIONS...] [command] (command arguments)"<<endl;
+		cout<<"Commands:"<<endl;
 		cout<<"  -a {color}\t\t\t\tSet all keys color"<<endl;
 		cout<<"  -g {keygroup} {color}\t\t\tSet key group color"<<endl;
 		cout<<"  -k {key} {color}\t\t\tSet key color"<<endl;
@@ -42,13 +44,18 @@ namespace help {
 		cout<<"  --startup-mode {startup mode}\t\tSet startup mode"<<endl;
 		cout<<endl;
 		cout<<"  --list-keyboards \t\t\tList connected keyboards"<<endl;
+		cout<<"  --print-device\t\t\tPrint device information for the keyboard"<<endl;
 		cout<<endl;
 		cout<<"  --help\t\t\t\tThis help"<<endl;
 		cout<<"  --help-keys\t\t\t\tHelp for keys in groups"<<endl;
 		cout<<"  --help-effects\t\t\tHelp for native effects"<<endl;
 		cout<<"  --help-samples\t\t\tUsage samples"<<endl;
-		cout<<""<<endl;
-		cout<<""<<endl;
+		cout<<endl;
+		cout<<"Options:"<<endl;
+		cout<<"  -dv\t\t\t\t\tDevice vendor ID, such as 046d for Logitech. Can be omitted to match any vendor ID"<<endl;
+		cout<<"  -dp\t\t\t\t\tDevice product ID, such as c337 for Logitech G810. Can be omitted to match any product ID"<<endl;
+		cout<<"  -ds\t\t\t\t\tDevice serial number, Can be omitted to match the first device found"<<endl;
+		cout<<"--------"<<endl;
 		if (cmdName == "g610-led")
 			cout<<"color formats :\t\t\t\tII (hex value for intensity)"<<endl;
 		else
@@ -61,7 +68,7 @@ namespace help {
 		cout<<"key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
 		cout<<"group values :\t\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
 		cout<<"startup mode :\t\t\t\twave, color"<<endl;
-		cout<<""<<endl;
+		cout<<endl;
 	}
 	
 	void keys(char *arg0) {
