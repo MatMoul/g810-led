@@ -109,7 +109,15 @@ class LedKeyboard {
 			ctrl_right, shift_right, alt_right, win_right
 			
 		};
-		
+
+		typedef struct {
+			uint16_t vendorID = 0x0;
+			uint16_t productID = 0x0;
+			std::string manufacturer = "";
+			std::string product = "";
+			std::string serialNumber = "";
+			KeyboardModel model;
+		} DeviceInfo;
 		
 		struct Color {
 			uint8_t red;
@@ -127,10 +135,12 @@ class LedKeyboard {
 		~LedKeyboard();
 		
 		
-		bool listKeyboards();
+		std::vector<DeviceInfo> listKeyboards();
 		
 		bool isOpen();
 		bool open();
+		bool open(uint16_t vendorID, uint16_t productID, std::string serial);
+		DeviceInfo getCurrentDevice();
 		bool close();
 		
 		KeyboardModel getKeyboardModel();
@@ -150,7 +160,6 @@ class LedKeyboard {
 		bool setStartupMode(StartupMode startupMode);
 		
 		bool setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color);
-		
 		
 		
 	private:
@@ -191,9 +200,7 @@ class LedKeyboard {
 		};
 		
 		bool m_isOpen = false;
-		uint16_t m_vendorID = 0;
-		uint16_t m_productID = 0;
-		KeyboardModel m_keyboardModel = KeyboardModel::unknown;
+		DeviceInfo currentDevice;
 		
 		#if defined(hidapi)
 			hid_device *m_hidHandle;
