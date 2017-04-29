@@ -216,4 +216,12 @@ namespace utils {
 		return true;
 	}
 	
+	bool parseUInt16(std::string val, uint16_t &uint16) {
+		if (val.length() == 1) val = "0" + val;
+		if (val.length() == 2) val = "0" + val;
+		if (val.length() == 3) val = "0" + val;
+		if (val.length() != 4) return false;
+		uint16 = std::stoul("0x" + val, nullptr, 16);
+		return true;
+	}
 }
