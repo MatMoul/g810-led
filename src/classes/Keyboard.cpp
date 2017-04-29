@@ -31,30 +31,30 @@ vector<LedKeyboard::DeviceInfo> LedKeyboard::listKeyboards() {
 		devs = hid_enumerate(0x0, 0x0);
 		dev = devs;
 		while (dev) {
-			for (size_t i=0; i<SupportedKeyboards.size(); i++) {
+			for (size_t i = 0; i < SupportedKeyboards.size(); i++) {
 				if (dev->vendor_id == SupportedKeyboards[i][0]) {
 					if (dev->product_id == SupportedKeyboards[i][1]) {
 						DeviceInfo deviceInfo;
-							deviceInfo.vendorID=dev->vendor_id;
-							deviceInfo.productID=dev->product_id;
+						deviceInfo.vendorID=dev->vendor_id;
+						deviceInfo.productID=dev->product_id;
 
 						if (dev->serial_number != NULL) {
 							char buf[256];
-							wcstombs(buf,dev->serial_number,256);
+							wcstombs(buf, dev->serial_number, 256);
 							deviceInfo.serialNumber = string(buf);
 						}
 
 						if (dev->manufacturer_string != NULL)
 						{
 							char buf[256];
-							wcstombs(buf,dev->manufacturer_string,256);
+							wcstombs(buf, dev->manufacturer_string, 256);
 							deviceInfo.manufacturer = string(buf);
 						}
 
 						if (dev->product_string != NULL)
 						{
 							char buf[256];
-							wcstombs(buf,dev->product_string,256);
+							wcstombs(buf, dev->product_string, 256);
 							deviceInfo.product = string(buf);
 						}
 
@@ -84,8 +84,8 @@ vector<LedKeyboard::DeviceInfo> LedKeyboard::listKeyboards() {
 					if (desc.idProduct == SupportedKeyboards[i][1]) {
 					  unsigned char buf[256];
 						DeviceInfo deviceInfo;
-							deviceInfo.vendorID=desc.idVendor;
-							deviceInfo.productID=desc.idProduct;
+						deviceInfo.vendorID=desc.idVendor;
+						deviceInfo.productID=desc.idProduct;
 
 						if (libusb_open(device, &m_hidHandle) != 0)	continue;
 
@@ -123,7 +123,7 @@ bool LedKeyboard::isOpen() {
 bool LedKeyboard::open() {
 	if (m_isOpen) return true;
 	
-	return open(0x0,0x0,"");
+	return open(0x0, 0x0, "");
 }
 
 bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
@@ -131,23 +131,22 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 	currentDevice.model = KeyboardModel::unknown;
 
 	#if defined(hidapi)
-	if (hid_init() < 0) return false;
+		if (hid_init() < 0) return false;
 
-	struct hid_device_info *devs, *dev;
-	devs = hid_enumerate(vendorID, productID);
-	dev = devs;
-	wstring wideSerial;
+		struct hid_device_info *devs, *dev;
+		devs = hid_enumerate(vendorID, productID);
+		dev = devs;
+		wstring wideSerial;
 
-	if (!serial.empty()) {
-		wchar_t tempSerial[256];
-		if (mbstowcs(tempSerial, serial.c_str(), 256) < 1) return false;
-		wideSerial = wstring(tempSerial);
-	}
+		if (!serial.empty()) {
+			wchar_t tempSerial[256];
+			if (mbstowcs(tempSerial, serial.c_str(), 256) < 1) return false;
+			wideSerial = wstring(tempSerial);
+		}
 
-	while (dev) {
-		for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
-			if (dev->vendor_id == SupportedKeyboards[i][0]) {
-				if (dev->product_id == SupportedKeyboards[i][1]) {
+		while (dev) {
+			for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+				if (dev->vendor_id == SupportedKeyboards[i][0] && dev->product_id == SupportedKeyboards[i][1]) {
 					if (!serial.empty() && dev->serial_number != NULL && wideSerial.compare(dev->serial_number) != 0) break; //Serial didn't match
 
 					if (dev->serial_number != NULL) {
@@ -176,150 +175,148 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 					break;
 				}
 			}
+			if (currentDevice.model != KeyboardModel::unknown) break;
+			dev = dev->next;
 		}
-		if (currentDevice.model != KeyboardModel::unknown) break;
-		dev = dev->next;
-	}
 
-	hid_free_enumeration(devs);
+		hid_free_enumeration(devs);
 
-	if (! dev) {
-		currentDevice.model = KeyboardModel::unknown;
-		hid_exit();
-		return false;
-	}
+		if (! dev) {
+			currentDevice.model = KeyboardModel::unknown;
+			hid_exit();
+			return false;
+		}
 
-	if (wideSerial.empty()) m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, NULL);
-	else m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, wideSerial.c_str());
+		if (wideSerial.empty()) m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, NULL);
+		else m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, wideSerial.c_str());
 
-	if(m_hidHandle == 0) {
-		hid_exit();
-		return false;
-	}
+		if(m_hidHandle == 0) {
+			hid_exit();
+			return false;
+		}
 
-	m_isOpen = true;
-	return true;
+		m_isOpen = true;
+		return true;
 
 	#elif defined(libusb)
-	if (libusb_init(&m_ctx) < 0) return false;
-		
-	libusb_device **devs;
-	libusb_device *dev = NULL;
-	ssize_t cnt = libusb_get_device_list(m_ctx, &devs);
-	if(cnt >= 0) {
-		for(ssize_t i = 0; i < cnt; i++) {
-			libusb_device *device = devs[i];
-			libusb_device_descriptor desc;
-			libusb_get_device_descriptor(device, &desc);
+		if (libusb_init(&m_ctx) < 0) return false;
+			
+		libusb_device **devs;
+		libusb_device *dev = NULL;
+		ssize_t cnt = libusb_get_device_list(m_ctx, &devs);
+		if(cnt >= 0) {
+			for(ssize_t i = 0; i < cnt; i++) {
+				libusb_device *device = devs[i];
+				libusb_device_descriptor desc;
+				libusb_get_device_descriptor(device, &desc);
 
-			if (vendorID != 0x0 && desc.idVendor != vendorID) continue;
-			else if (productID != 0x0 && desc.idProduct != productID) continue;
-			else if (! serial.empty()) {
-				if (desc.iSerialNumber <= 0) continue; //Device does not populate serial number
+				if (vendorID != 0x0 && desc.idVendor != vendorID) continue;
+				else if (productID != 0x0 && desc.idProduct != productID) continue;
+				else if (! serial.empty()) {
+					if (desc.iSerialNumber <= 0) continue; //Device does not populate serial number
 
-				unsigned char buf[256];
-				if (libusb_open(device, &m_hidHandle) != 0){
-					m_hidHandle = NULL;
-					continue;
-				}
+					unsigned char buf[256];
+					if (libusb_open(device, &m_hidHandle) != 0){
+						m_hidHandle = NULL;
+						continue;
+					}
 
-				if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iSerialNumber, buf, 256) >= 1 && serial.compare((char*)buf) == 0) {
-					//Make sure entry is a supported keyboard and get model
-					for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
-						if (desc.idVendor == SupportedKeyboards[i][0]) {
-							if (desc.idProduct == SupportedKeyboards[i][1]) {
-								if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iManufacturer, buf, 256) >= 1) currentDevice.manufacturer = string((char*)buf);
-								if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iProduct, buf, 256) >= 1) currentDevice.product = string((char*)buf);
-								currentDevice.serialNumber = serial;
-								currentDevice.vendorID = desc.idVendor;
-								currentDevice.productID = desc.idProduct;
-								currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
+					if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iSerialNumber, buf, 256) >= 1 && serial.compare((char*)buf) == 0) {
+						//Make sure entry is a supported keyboard and get model
+						for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+							if (desc.idVendor == SupportedKeyboards[i][0]) {
+								if (desc.idProduct == SupportedKeyboards[i][1]) {
+									if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iManufacturer, buf, 256) >= 1) currentDevice.manufacturer = string((char*)buf);
+									if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iProduct, buf, 256) >= 1) currentDevice.product = string((char*)buf);
+									currentDevice.serialNumber = serial;
+									currentDevice.vendorID = desc.idVendor;
+									currentDevice.productID = desc.idProduct;
+									currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
 
-								dev = device;
-								libusb_close(m_hidHandle);
-								m_hidHandle = NULL;
-								break;
+									dev = device;
+									libusb_close(m_hidHandle);
+									m_hidHandle = NULL;
+									break;
+								}
 							}
 						}
 					}
-				}
-				else {
-					libusb_close(m_hidHandle);
-					m_hidHandle = NULL;
-					continue; //Serial number set but doesn't match
-				}
-			}
-
-			//For the case where serial is not specified, find first supported device
-			for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
-				if (desc.idVendor == SupportedKeyboards[i][0]) {
-					if (desc.idProduct == SupportedKeyboards[i][1]) {
-						unsigned char buf[256];
-						if (libusb_open(device, &m_hidHandle) != 0){
-							m_hidHandle = NULL;
-							continue;
-						}
-						currentDevice.vendorID = desc.idVendor;
-						currentDevice.productID = desc.idProduct;
-						currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
-						if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iManufacturer, buf, 256) >= 1) currentDevice.manufacturer = string((char*)buf);
-						if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iProduct, buf, 256) >= 1) currentDevice.product = string((char*)buf);
-						if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iSerialNumber, buf, 256) >= 1) currentDevice.serialNumber = string((char*)buf);
-
+					else {
 						libusb_close(m_hidHandle);
-						m_hidHandle=NULL;
-						break;
+						m_hidHandle = NULL;
+						continue; //Serial number set but doesn't match
 					}
 				}
+
+				//For the case where serial is not specified, find first supported device
+				for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
+					if (desc.idVendor == SupportedKeyboards[i][0]) {
+						if (desc.idProduct == SupportedKeyboards[i][1]) {
+							unsigned char buf[256];
+							if (libusb_open(device, &m_hidHandle) != 0){
+								m_hidHandle = NULL;
+								continue;
+							}
+							currentDevice.vendorID = desc.idVendor;
+							currentDevice.productID = desc.idProduct;
+							currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
+							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iManufacturer, buf, 256) >= 1) currentDevice.manufacturer = string((char*)buf);
+							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iProduct, buf, 256) >= 1) currentDevice.product = string((char*)buf);
+							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iSerialNumber, buf, 256) >= 1) currentDevice.serialNumber = string((char*)buf);
+
+							libusb_close(m_hidHandle);
+							m_hidHandle=NULL;
+							break;
+						}
+					}
+				}
+				if (currentDevice.model != KeyboardModel::unknown) break;
 			}
-			if (currentDevice.model != KeyboardModel::unknown) break;
+			libusb_free_device_list(devs, 1);
 		}
-		libusb_free_device_list(devs, 1);
-	}
 
-	if (currentDevice.model == KeyboardModel::unknown) {
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-		
-	if (dev == NULL) m_hidHandle = libusb_open_device_with_vid_pid(m_ctx, currentDevice.vendorID, currentDevice.productID);
-	else libusb_open(dev, &m_hidHandle);
-
-	if(m_hidHandle == NULL) {
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-		
-	if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
-		if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
+		if (currentDevice.model == KeyboardModel::unknown) {
 			libusb_exit(m_ctx);
 			m_ctx = NULL;
 			return false;
 		}
-		m_isKernellDetached = true;
-	}
-		
-	if(libusb_claim_interface(m_hidHandle, 1) < 0) {
-		if(m_isKernellDetached==true) {
-			libusb_attach_kernel_driver(m_hidHandle, 1);
-			m_isKernellDetached = false;
+			
+		if (dev == NULL) m_hidHandle = libusb_open_device_with_vid_pid(m_ctx, currentDevice.vendorID, currentDevice.productID);
+		else libusb_open(dev, &m_hidHandle);
+
+		if(m_hidHandle == NULL) {
+			libusb_exit(m_ctx);
+			m_ctx = NULL;
+			return false;
 		}
-		libusb_exit(m_ctx);
-		m_ctx = NULL;
-		return false;
-	}
-		
-	m_isOpen = true;
-	return true;
+			
+		if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
+			if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
+				libusb_exit(m_ctx);
+				m_ctx = NULL;
+				return false;
+			}
+			m_isKernellDetached = true;
+		}
+			
+		if(libusb_claim_interface(m_hidHandle, 1) < 0) {
+			if(m_isKernellDetached==true) {
+				libusb_attach_kernel_driver(m_hidHandle, 1);
+				m_isKernellDetached = false;
+			}
+			libusb_exit(m_ctx);
+			m_ctx = NULL;
+			return false;
+		}
+			
+		m_isOpen = true;
+		return true;
 	#endif
 
 	return false; //In case neither is defined
 }
 
-LedKeyboard::DeviceInfo LedKeyboard::getCurrentDevice()
-{
+LedKeyboard::DeviceInfo LedKeyboard::getCurrentDevice() {
 	return currentDevice;
 }
 
@@ -332,7 +329,6 @@ bool LedKeyboard::close() {
 		m_hidHandle = NULL;
 		hid_exit();
 		return true;
-		
 	#elif defined(libusb)
 		if (m_hidHandle == NULL) return true;
 		if(libusb_release_interface(m_hidHandle, 1) != 0) return false;

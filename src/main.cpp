@@ -15,8 +15,7 @@ int commit(LedKeyboard &kbd) {
 	return 1;
 }
 
-void printDeviceInfo(LedKeyboard::DeviceInfo device)
-{
+void printDeviceInfo(LedKeyboard::DeviceInfo device) {
 	std::cout<<"Device: "<<device.manufacturer<<" - "<<device.product<<std::endl;
 	std::cout<<"\tVendor ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.vendorID<<std::endl;
 	std::cout<<"\tProduct ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.productID<<std::endl;
@@ -302,14 +301,17 @@ int main(int argc, char **argv) {
 		else if (argc > (argIndex + 1) && arg == "-mr") return setMRKey(kbd, argv[argIndex + 1]);
 		else if (argc > (argIndex + 1) && arg == "-mn") return setMNKey(kbd, argv[argIndex + 1]);
 		else if (argc > (argIndex + 1) && arg == "-an") return setAllKeys(kbd, argv[argIndex + 1], false);
-		else if (argc > (argIndex + 2) && arg == "-gn") return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
+		else if (argc > (argIndex + 2) && arg == "-gn")
+			return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
 		else if (argc > (argIndex + 2) && arg == "-kn") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
 		else if (argc > (argIndex + 2) && arg == "-r") return setRegion(kbd, argv[argIndex + 1], argv[argIndex + 2]);
 		else if (argc > (argIndex + 1) && arg == "-gkm") return setGKeysMode(kbd, argv[argIndex + 1]);
 		else if (argc > (argIndex + 1) && arg == "-p") return loadProfile(kbd, argv[argIndex + 1]);
 		else if (arg == "-pp") return pipeProfile(kbd);
-		else if (argc > (argIndex + 4) && arg == "-fx") return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
-		else if (argc > (argIndex + 3) && arg == "-fx") return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
+		else if (argc > (argIndex + 4) && arg == "-fx")
+			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
+		else if (argc > (argIndex + 3) && arg == "-fx")
+			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
 		else if (argc > (argIndex + 1) && arg == "--startup-mode") return setStartupMode(kbd, argv[argIndex + 1]);
 		else { help::usage(argv[0]); return 1; }
 	}

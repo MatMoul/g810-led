@@ -224,4 +224,5 @@ namespace utils {
 		uint16 = std::stoul("0x" + val, nullptr, 16);
 		return true;
 	}
+	
 }
