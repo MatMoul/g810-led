@@ -1,12 +1,10 @@
 # g810-led TODO
 
 ## Tasks (Help wanted) :
-* (40%) EASY:        [Edit arch logitech gaming keyboard wiki](https://wiki.archlinux.org/index.php/Logitech_Gaming_Keyboards)
 * (0%)  EASY:        Add more sample profiles
-* (0%)  AVERAGE:     Add support of multiple keyboards
+* (80%) AVERAGE:     Add support of multiple keyboards
 * (0%)  AVERAGE:     Improve INSTALL.md to support more distributions (And CentOS with hidapi)
-* (5%)  AVERAGE:     Make distributions ready package
-* (80%) HARD:        Code review (memory leak and other...)
+* (10%) AVERAGE:     Make distributions ready package
 * (0%)  IMAGINATION: Use a more generic name for project, config dir and systemd units
 
 ## Possible enhancements :
