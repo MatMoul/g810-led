@@ -280,19 +280,22 @@ int main(int argc, char **argv) {
 			continue;
 		}
 
+		//Commands that do not need to initialize a specific device
+		if (arg == "--help" || arg == "-h") {help::usage(argv[0]); return 0;}
+		else if (arg == "--list-keyboards") return listKeyboards(kbd);
+		else if (arg == "--help-keys") {help::keys(argv[0]); return 0;}
+		else if (arg == "--help-effects") {help::effects(argv[0]); return 0;}
+		else if (arg == "--help-samples") {help::samples(argv[0]); return 0;}
+
+		//Initialize the device for use
 		if (!kbd.open(vendorID, productID, serial)) {
 			std::cout << "Matching or compatible device not found" << std::endl;
 			return 2;
 		}
+
 		// Command arguments, these will cause parsing to ignore anything beyond the command and its arguments
 		if (arg == "-c") return commit(kbd);
-		else if (arg == "--help" || arg == "-h") {help::usage(argv[0]); return 0;}
-		else if (arg == "--help-keys") {help::keys(argv[0]); return 0;}
-		else if (arg == "--help-effects") {help::effects(argv[0]); return 0;}
-		else if (arg == "--help-samples") {help::samples(argv[0]); return 0;}
-		else if (arg == "--list-keyboards") return listKeyboards(kbd);
 		else if (arg == "--print-device") {printDeviceInfo(kbd.getCurrentDevice()); return 0;}
-
 		else if (argc > (argIndex + 1) && arg == "-a") return setAllKeys(kbd, argv[argIndex + 1]);
 		else if (argc > (argIndex + 2) && arg == "-g") return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2]);
 		else if (argc > (argIndex + 2) && arg == "-k") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2]);
