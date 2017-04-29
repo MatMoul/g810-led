@@ -72,3 +72,7 @@ To link, simply provide `-lg810-led` to the build flags.</br>
 
 To build the g810-led application as a dynamically-linked variant, run the target:</br>
 `make bin-linked`</br>
+
+## Dumps :
+Dumps of keyboards are now stored in a separate project to preserve a small download size of this project.
+You can find them here : [https://github.com/MatMoul/g810-led-resources](https://github.com/MatMoul/g810-led-resources)
