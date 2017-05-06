@@ -53,19 +53,21 @@ namespace help {
 		cout<<"  -dv\t\t\t\t\tDevice vendor ID, such as 046d for Logitech. Can be omitted to match any vendor ID"<<endl;
 		cout<<"  -dp\t\t\t\t\tDevice product ID, such as c337 for Logitech G810. Can be omitted to match any product ID"<<endl;
 		cout<<"  -ds\t\t\t\t\tDevice serial number, Can be omitted to match the first device found"<<endl;
-		cout<<"--------"<<endl;
+		cout<<"  -tuk\t\t\t\t\tTest unsuported keyboard with one of supported protocol (1-3) -dv and -dp are required"<<endl;
+		cout<<endl;
+		cout<<"Values:"<<endl;
 		if (cmdName == "g610-led")
-			cout<<"color formats :\t\t\t\tII (hex value for intensity)"<<endl;
+			cout<<"  color formats :\t\t\tII (hex value for intensity)"<<endl;
 		else
-			cout<<"color formats :\t\t\t\tRRGGBB (hex value for red, green and blue)"<<endl;
+			cout<<"  color formats :\t\t\tRRGGBB (hex value for red, green and blue)"<<endl;
 		if (cmdName == "g213-led") {
-			cout<<"region formats :\t\t\tRN (integer value for region, 1 to 5)"<<endl;
+			cout<<"  region formats :\t\tRN (integer value for region, 1 to 5)"<<endl;
 		}
-		cout<<"speed formats :\t\t\t\tSS (hex value for speed 01 to ff)"<<endl;
-		cout<<""<<endl;
-		cout<<"key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
-		cout<<"group values :\t\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
-		cout<<"startup mode :\t\t\t\twave, color"<<endl;
+		cout<<"  speed formats :\t\t\tSS (hex value for speed 01 to ff)"<<endl;
+		cout<<endl;
+		cout<<"  key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
+		cout<<"  group values :\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
+		cout<<"  startup mode :\t\t\twave, color"<<endl;
 		cout<<endl;
 	}
 	
@@ -254,9 +256,21 @@ namespace help {
 		cout<<"g610-led -k logo ff   # Set intensity of a key"<<endl;
 		cout<<"g610-led -g fkeys aa  # Set intensity of a group of keys"<<endl;
 		cout<<endl;
+		cout<<"Samples for g213 :"<<endl;
+		cout<<"g213-led -a 00ff00    # Set color of all keys"<<endl;
+		cout<<"g213-led -r 1 ff0000  # Set region 1 red"<<endl;
+		cout<<endl;
 		cout<<"Samples with pipe (for effects) :"<<endl;
 		cout<<"g810-led -pp < profilefile # Load a profile"<<endl;
 		cout<<"echo -e \"k w ff0000\\nk a ff0000\\nk s ff0000\\nk d ff0000\\nc\" | g810-led -pp # Set multiple keys"<<endl;
+		cout<<endl;
+		cout<<"Testing an unsuported keyboard :"<<endl;
+		cout<<"lsusb"<<endl;
+		cout<<"#Sample result of lsusb : ID 046d:c331 Logitech, Inc. (dv=046d and dp=c331)"<<endl;
+		cout<<"g810-led -dv 046d -dp c331 -tuk 1 -a 000000"<<endl;
+		cout<<"g810-led -dv 046d -dp c331 -tuk 2 -a 000000"<<endl;
+		cout<<"g810-led -dv 046d -dp c331 -tuk 3 -a 000000"<<endl;
+		cout<<""<<endl;
 	}
 	
 }

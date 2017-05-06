@@ -16,7 +16,7 @@ class LedKeyboard {
 	
 	private:
 		
-		const std::vector<std::vector<uint16_t>> SupportedKeyboards = {
+		std::vector<std::vector<uint16_t>> SupportedKeyboards = {
 			{ 0x46d, 0xc336, (u_int16_t)KeyboardModel::g213 },
 			{ 0x46d, 0xc330, (u_int16_t)KeyboardModel::g410 },
 			{ 0x46d, 0xc333, (u_int16_t)KeyboardModel::g610 },
@@ -26,7 +26,6 @@ class LedKeyboard {
 			{ 0x46d, 0xc32b, (u_int16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc335, (u_int16_t)KeyboardModel::g910 }
 		};
-		
 		
 		enum class KeyAddressGroup : uint8_t {
 			logo = 0x00,
@@ -134,6 +133,8 @@ class LedKeyboard {
 		
 		~LedKeyboard();
 		
+		
+		bool overrideKeyboard(uint16_t vendorID, uint16_t productID, KeyboardModel model);
 		
 		std::vector<DeviceInfo> listKeyboards();
 		

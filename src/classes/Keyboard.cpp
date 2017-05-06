@@ -21,6 +21,15 @@ LedKeyboard::~LedKeyboard() {
 }
 
 
+bool LedKeyboard::overrideKeyboard(uint16_t vendorID, uint16_t productID, KeyboardModel model) {
+	if(model==KeyboardModel::unknown) return false;
+	SupportedKeyboards = {
+		{ vendorID, productID, (u_int16_t)model }
+	};
+	return true;
+}
+
+
 vector<LedKeyboard::DeviceInfo> LedKeyboard::listKeyboards() {
 	vector<LedKeyboard::DeviceInfo> deviceList;
 

@@ -63,6 +63,19 @@ Linux led controller for Logitech G213, G410, G610, G810 and G910 Keyboards.</br
 `g810-led -pp < profilefile # Load a profile`</br>
 `echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
 
+## Testing unsuported keyboards :</br>
+Start by retrieve the VendorID and the ProductID of your keyboard with lsusb.</br>
+`lsusb`</br>
+Sample return :<br>
+`Bus 001 Device 001: ID 046d:c331 Logitech, Inc.`</br>
+In this sample VendorID is 046d and ProductID is c331. Now test your keyboard with all supported protocol :</br>
+`g810-led -dv 046d -dp c331 -tuk 1 -a 000000`</br>
+If your keyboard set all key to off you have found the protocol (1), if not continue.</br>
+`g810-led -dv 046d -dp c331 -tuk 2 -a 000000`</br>
+If your keyboard set all key to off you have found the protocol (2), if not continue.</br>
+`g810-led -dv 046d -dp c331 -tuk 3 -a 000000`</br>
+If your keyboard set all key to off you have found the protocol (3), if not, need new dump.</br>
+
 ## Building and linking against the libg810-led library :</br>
 Include in implementing source files.</br>
 ```cpp

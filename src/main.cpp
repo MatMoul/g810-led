@@ -24,7 +24,10 @@ void printDeviceInfo(LedKeyboard::DeviceInfo device) {
 
 int listKeyboards(LedKeyboard &kbd) {
 	std::vector<LedKeyboard::DeviceInfo> deviceList = kbd.listKeyboards();
-	if (deviceList.empty()) return 1;
+	if (deviceList.empty()) {
+		std::cout<<"Matching or compatible device not found !"<<std::endl;
+		return 1;
+	}
 
 	std::vector<LedKeyboard::DeviceInfo>::iterator iterator;
 	for (iterator = deviceList.begin(); iterator != deviceList.end(); iterator++) {
@@ -267,17 +270,34 @@ int main(int argc, char **argv) {
 			serial = argv[argIndex + 1];
 			argIndex += 2;
 			continue;
-		}
-		else if (argc > (argIndex + 1) && arg == "-dv"){
+		} else if (argc > (argIndex + 1) && arg == "-dv"){
 			if (! utils::parseUInt16(argv[argIndex + 1], vendorID)) return 1;
 			argIndex += 2;
 			continue;
-		}
-		else if (argc > (argIndex + 1) && arg == "-dp"){
+		} else if (argc > (argIndex + 1) && arg == "-dp"){
 			if (! utils::parseUInt16(argv[argIndex + 1], productID)) return 1;
 			argIndex += 2;
 			continue;
+		} else if (argc > (argIndex + 1) && arg == "-tuk"){
+			uint8_t kbdProtocol = 0;
+			if (! utils::parseUInt8(argv[argIndex + 1], kbdProtocol)) return 1;
+			switch(kbdProtocol) {
+				case 1:
+					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g810);
+					break;
+				case 2:
+					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g910);
+					break;
+				case 3:
+					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g213);
+					break;
+				default:
+					break;
+			}
+			argIndex += 2;
+			continue;
 		}
+		
 
 		//Commands that do not need to initialize a specific device
 		if (arg == "--help" || arg == "-h") {help::usage(argv[0]); return 0;}
@@ -288,10 +308,10 @@ int main(int argc, char **argv) {
 
 		//Initialize the device for use
 		if (!kbd.open(vendorID, productID, serial)) {
-			std::cout << "Matching or compatible device not found" << std::endl;
+			std::cout << "Matching or compatible device not found !" << std::endl;
 			return 2;
 		}
-
+		
 		// Command arguments, these will cause parsing to ignore anything beyond the command and its arguments
 		if (arg == "-c") return commit(kbd);
 		else if (arg == "--print-device") {printDeviceInfo(kbd.getCurrentDevice()); return 0;}
