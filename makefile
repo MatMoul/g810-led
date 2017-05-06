@@ -24,9 +24,11 @@ CFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
 LIBSRCS=src/classes/*.cpp src/classes/*.h
 
-.PHONY: all debug clean setup install uninstall lib install-lib install-dev
+.PHONY: all bin debug clean setup install uninstall lib install-lib install-dev
 
 all: lib/lib$(PROGN).so bin/$(PROGN)
+
+bin: bin/$(PROGN)
 
 bin/$(PROGN): $(APPSRCS) $(LIBSRCS)
 	@mkdir -p bin
