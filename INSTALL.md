@@ -35,17 +35,15 @@ Fedora :</br>
 ## Installation :</br>
 `git clone https://github.com/MatMoul/g810-led.git`</br>
 `cd g810-led`</br>
-`make` # for hidapi</br>
-`make LIB=libusb` # for libusb</br>
+`make bin` # for hidapi</br>
+`make bin LIB=libusb` # for libusb</br>
 `sudo make install`</br>
-`make install-lib` to install the libg810-led library.</br>
-`make install-dev` to install the libg810-led library and headers for development.</br>
 
-## Building the library :</br>
-The library is built by default when running the `make` (default target "all").</br>
-
-To specifically build the library as a standalone component: </br>
-`make lib`</br>
+## Installation of the library (For developpers) :</br>
+`make lib` # for hidapi</br>
+`make lib LIB=libusb` # for libusb</br>
+`sudo make install-lib` to install the libg810-led library.</br>
+`sudo make install-dev` to install the libg810-led library and headers for development.</br>
 
 ## Update :</br>
 Same as install, but your profile and reboot files are preserved.</br>
@@ -54,10 +52,9 @@ Same as install, but your profile and reboot files are preserved.</br>
 `sudo make uninstall`</br>
 
 ## Boot profiles :</br>
-If your system use systemd, g810-led has 2 systemd units (g810-led and g810-led-reboot).</br>
-These 2 units set the keyboard profile on boot and reboot.</br>
-Profiles are stored in /etc/g810-led :</br>
-* /etc/g810-led/profile
-* /etc/g810-led/reboot
+On boot, the keyboard is set with the udev file /etc/udev/rules.d/g810-led.rules</br>
+This file launch the profile stored in /etc/g810-led/profile</br>
+To prevent your keyboard to flash 3 time when you reboot, a systemd unit (g810-led-reboot) is available for this.</br>
+It launch the profile stored in /etc/g810-led/reboot</br>
 
 Samples can be found in /etc/g810-led/samples.</br>
