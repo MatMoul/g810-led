@@ -283,13 +283,13 @@ int main(int argc, char **argv) {
 			if (! utils::parseUInt8(argv[argIndex + 1], kbdProtocol)) return 1;
 			switch(kbdProtocol) {
 				case 1:
-					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g810);
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g810 } };
 					break;
 				case 2:
-					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g910);
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g910 } };
 					break;
 				case 3:
-					kbd.overrideKeyboard(vendorID, productID, LedKeyboard::KeyboardModel::g213);
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g213 } };
 					break;
 				default:
 					break;
