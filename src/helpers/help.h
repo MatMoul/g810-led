@@ -30,8 +30,8 @@ namespace help {
 		g410 = rgb | commit | setall | setgroup | setkey | poweronfx,
 		g610 = intensity | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
-		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx
-		
+		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx,
+		gpro = rgb | commit | logo1 | multimedia | setall | setgroup | setkey | setindicators | poweronfx	
 	};
 	inline KeyboardFeatures operator|(KeyboardFeatures a, KeyboardFeatures b);
 	

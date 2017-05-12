@@ -1,6 +1,6 @@
 # g810-led</br>
 
-Linux led controller for Logitech G213, G410, G610, G810 and G910 Keyboards.</br>
+Linux led controller for Logitech G213, G410, G610, G810, G910 and G PRO Keyboards.</br>
 
 ## Compatible keyboards :</br>
 - **G213 Prodigy**</br>
@@ -10,6 +10,7 @@ Linux led controller for Logitech G213, G410, G610, G810 and G910 Keyboards.</br
 - **G810 Orion Spectrum**</br>
 - **G910 Orion Spark**</br>
 - **G910 Orion Spectrum**</br>
+- **G PRO**</br>
 
 ## Contribute and evolution :</br>
 * [CONTRIBUTING.md](https://github.com/MatMoul/g810-led/blob/master/CONTRIBUTING.md)

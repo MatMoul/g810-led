@@ -35,7 +35,8 @@ class LedKeyboard {
 			{ 0x46d, 0xc331, (u_int16_t)KeyboardModel::g810 },
 			{ 0x46d, 0xc337, (u_int16_t)KeyboardModel::g810 },
 			{ 0x46d, 0xc32b, (u_int16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc335, (u_int16_t)KeyboardModel::g910 }
+			{ 0x46d, 0xc335, (u_int16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc339, (u_int16_t)KeyboardModel::gpro }
 		};
 		
 		enum class KeyboardModel : uint8_t {
@@ -44,7 +45,8 @@ class LedKeyboard {
 			g410,
 			g610,
 			g810,
-			g910
+			g910,
+			gpro
 		};
 		enum class StartupMode : uint8_t {
 			wave = 0x01,

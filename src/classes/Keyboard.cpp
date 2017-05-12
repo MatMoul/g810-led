@@ -359,6 +359,7 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0c, 0x5a };
 			break;
 		case KeyboardModel::g910:
@@ -394,6 +395,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
 							SortedKeys[0].push_back(keyValues[i]);
 						break;
@@ -411,6 +413,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
 						break;
 					default:
@@ -431,6 +434,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
 					case LedKeyboard::KeyboardModel::g910:
+					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
 						break;
 					case LedKeyboard::KeyboardModel::g410:
@@ -564,6 +568,7 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
 		case KeyboardModel::g910:
+		case KeyboardModel::gpro:
 			for (uint8_t i = 0; i < keyGroupLogo.size(); i++) keyValues.push_back({keyGroupLogo[i], color});
 			for (uint8_t i = 0; i < keyGroupIndicators.size(); i++) keyValues.push_back({keyGroupIndicators[i], color});
 			for (uint8_t i = 0; i < keyGroupMultimedia.size(); i++) keyValues.push_back({keyGroupMultimedia[i], color});
@@ -670,6 +675,7 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0d, 0x5a, 0x00, 0x01 };
 			break;
 		case KeyboardModel::g910:
@@ -695,6 +701,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 		case KeyboardModel::g410:
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
+		case KeyboardModel::gpro:
 			protocolByte = 0x0d;
 			break;
 		case KeyboardModel::g910:
@@ -815,6 +822,7 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::gpro:
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
 					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
