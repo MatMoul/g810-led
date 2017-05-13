@@ -1,0 +1,11 @@
+[Unit]
+Description=Logitech G810 Led Scenarios
+
+[Service]
+#ExecStart=/usr/bin/g810-led --daemon /etc/g810-led/scenario
+#ExecSop=kill -2 pid
+#Type=oneshot
+#RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
