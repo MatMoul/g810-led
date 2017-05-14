@@ -1,0 +1,148 @@
+var color1 ff0000
+var color2 cc0096
+var color3 960096
+var waittime 50
+
+k f1 $color1
+c
+w $waittime
+
+k f1 $color2
+k f2 $color1
+c
+w $waittime
+
+k f1 $color3
+k f2 $color2
+k f3 $color1
+c
+w $waittime
+
+k f2 $color3
+k f3 $color2
+k f4 $color1
+c
+w $waittime
+
+k f3 $color3
+k f4 $color2
+k f5 $color1
+c
+w $waittime
+
+k f4 $color3
+k f5 $color2
+k f6 $color1
+c
+w $waittime
+
+k f5 $color3
+k f6 $color2
+k f7 $color1
+c
+w $waittime
+
+k f6 $color3
+k f7 $color2
+k f8 $color1
+c
+w $waittime
+
+k f7 $color3
+k f8 $color2
+k f9 $color1
+c
+w $waittime
+
+k f8 $color3
+k f9 $color2
+k f10 $color1
+c
+w $waittime
+
+k f9 $color3
+k f10 $color2
+k f11 $color1
+c
+w $waittime
+
+k f10 $color3
+k f11 $color2
+k f12 $color1
+c
+w $waittime
+
+k f12 $color2
+k f11 $color1
+c
+w $waittime
+
+k f12 $color3
+k f11 $color2
+k f10 $color1
+c
+w $waittime
+
+k f11 $color3
+k f10 $color2
+k f9 $color1
+c
+w $waittime
+
+k f10 $color3
+k f9 $color2
+k f8 $color1
+c
+w $waittime
+
+k f9 $color3
+k f8 $color2
+k f7 $color1
+c
+w $waittime
+
+k f8 $color3
+k f7 $color2
+k f6 $color1
+c
+w $waittime
+
+k f7 $color3
+k f6 $color2
+k f5 $color1
+c
+w $waittime
+
+k f6 $color3
+k f5 $color2
+k f4 $color1
+c
+w $waittime
+
+k f5 $color3
+k f4 $color2
+k f3 $color1
+c
+w $waittime
+
+k f4 $color3
+k f3 $color2
+k f2 $color1
+c
+w $waittime
+
+k f3 $color3
+k f2 $color2
+k f1 $color1
+c
+w $waittime
+
+k f2 $color3
+k f1 $color2
+c
+w $waittime
+
+k f1 $color3
+c
+
+w 500
