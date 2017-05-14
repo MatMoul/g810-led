@@ -97,9 +97,7 @@ uninstall-dev:
 
 uninstall:
 	@test -s /usr/bin/systemd-run && \
-		systemctl disable $(PROGN) && \
 		systemctl disable $(PROGN)-reboot && \
-		rm $(SYSTEMDDIR)/system/$(PROGN).service && \
 		rm $(SYSTEMDDIR)/system/$(PROGN)-reboot.service && \
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
