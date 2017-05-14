@@ -1,6 +1,6 @@
-p sample_profiles/all_blue
+p /etc/g810-led/sample_profiles/all_blue
 w 1000
-p sample_profiles/all_green
+p /etc/g810-led/sample_profiles/all_green
 w 1000
-p sample_profiles/all_red
+p /etc/g810-led/sample_profiles/all_red
 w 1000

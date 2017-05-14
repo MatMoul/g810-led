@@ -2,10 +2,11 @@
 Description=Logitech G810 Led Scenarios
 
 [Service]
-#ExecStart=/usr/bin/g810-led --daemon /etc/g810-led/scenario
-#ExecSop=kill -2 pid
-#Type=oneshot
-#RemainAfterExit=yes
+ExecStartPre=/usr/bin/cp /etc/g810-led/scenario /tmp/g810-led-scenario
+ExecStartPre=/usr/bin/chmod 666 /tmp/g810-led-scenario
+ExecStart=/usr/bin/g810-led --daemon /tmp/g810-led-scenario
+ExecStopPost=/usr/bin/rm /tmp/g810-led-scenario
+Type=forking
 
 [Install]
 WantedBy=multi-user.target

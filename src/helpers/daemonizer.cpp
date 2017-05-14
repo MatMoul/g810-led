@@ -17,15 +17,34 @@ namespace daemonizer {
 	
 	void start(char *arg0, std::string scenarioFile) {
 		pid_t pid, sid;
+		
+		pid = fork();
+		if (pid < 0) exit(EXIT_FAILURE);
+		if (pid > 0) exit(EXIT_SUCCESS);
+		sid = setsid();
+		if (sid < 0) exit(EXIT_FAILURE);
+		signal(SIGCHLD,SIG_IGN); /* ignore child */
+		signal(SIGHUP,SIG_IGN); /* ignore child */
+		
+		
 		pid = fork();
 		if (pid < 0) exit(EXIT_FAILURE);
 		if (pid > 0) exit(EXIT_SUCCESS);
 		umask(0);
-		sid = setsid();
-		if (sid < 0) exit(EXIT_FAILURE);
+		if (chdir("/") < 0) exit(EXIT_FAILURE);
 		
-		//signal(SIGINT, stop);
 		std::cout<<getpid()<<std::endl;
+		
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+		
+		signal(SIGCHLD,SIG_IGN); /* ignore child */
+		signal(SIGHUP,SIG_IGN); /* ignore child */
+		signal(SIGTSTP,SIG_IGN); /* ignore tty signals */
+		signal(SIGTTOU,SIG_IGN);
+		signal(SIGTTIN,SIG_IGN);		
+		//signal(SIGINT, stop);
 		
 		LedKeyboard kbd;
 		kbd.open();
