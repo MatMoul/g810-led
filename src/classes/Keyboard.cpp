@@ -787,12 +787,10 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 		#if defined(hidapi)
 			data.insert(data.begin(), 0x00);
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
-				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
-				return false;
+				std::cout<<"Error: Can not write to device. Exiting..."<<std::endl;
+				exit(1);
 			}
-			byte_buffer_t data2;
-			data2.resize(21, 0x00);
-			hid_read_timeout(m_hidHandle, const_cast<unsigned char*>(data2.data()), data2.size(), 1);
+			usleep(1100); // Do not remove or decrease this value below 1100 or there will be firmware crashes on G910.
 			return true;
 		#elif defined(libusb)
 			if (data.size() > 20) {
