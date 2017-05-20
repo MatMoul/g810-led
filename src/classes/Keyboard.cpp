@@ -781,20 +781,23 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 
 
 bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
-	if (! m_isOpen) return false;
-	
 	if (data.size() > 0) {
 		#if defined(hidapi)
+			if (! open()) return false;
 			data.insert(data.begin(), 0x00);
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
 				return false;
 			}
+			close();
+			/*
 			byte_buffer_t data2;
 			data2.resize(21, 0x00);
 			hid_read_timeout(m_hidHandle, const_cast<unsigned char*>(data2.data()), data2.size(), 1);
+			*/
 			return true;
 		#elif defined(libusb)
+			if (! m_isOpen) return false;
 			if (data.size() > 20) {
 				if(libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0212, 1, 
 						const_cast<unsigned char*>(data.data()), data.size(), 2000) < 0)

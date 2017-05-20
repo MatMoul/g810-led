@@ -1,0 +1,28 @@
+# Sample profile using Groups of Keys and Single Characters.
+
+g logo 000096       # Blue
+g indicators ffffff # White
+g multimedia 009600 # Green
+g fkeys ff7700      # Orange
+g modifiers ff7700  # Orange
+g arrows 0000ff     # Red
+g numeric 00ff00    # Green
+g functions ffffff  # White
+g keys ff00ff       # Purple
+g gkeys ffffff      # White
+k tilde ff0000      # Red
+k W 0000ff          # Blue {
+k A 0000ff
+k S 0000ff
+k D 0000ff          # }         
+k 1 ff0000          # Red {
+k 2 ff0000
+k 3 ff0000
+k 4 ff0000
+k 5 ff0000
+k 6 ff0000
+k 7 ff0000
+k 8 ff0000
+k 9 ff0000
+k 0 ff0000          # }
+c                   # Commit changes
