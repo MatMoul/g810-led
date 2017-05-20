@@ -16,9 +16,9 @@ includedir?=$(prefix)/include
 
 # Program & versioning information
 PROGN=g810-led
-MAJOR=0
-MINOR=2
-MICRO=4
+MAJOR=1
+MINOR=
+MICRO=
 
 CFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
