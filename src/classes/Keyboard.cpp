@@ -692,7 +692,34 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color) {
 	uint8_t protocolByte = 0;
-	
+
+	// NativeEffectPart::all is not in the device protocol, but an alias for both keys and logo, plus indicators
+	if (part == LedKeyboard::NativeEffectPart::all) {
+		switch (effect) {
+			case LedKeyboard::NativeEffect::color:
+				if (! setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) return false;
+				if (! commit()) return false;
+				break;
+			case LedKeyboard::NativeEffect::breathing:
+				if (! setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) return false;;
+				if (! commit()) return false;;
+				break;
+			case LedKeyboard::NativeEffect::cycle:
+			case LedKeyboard::NativeEffect::hwave:
+			case LedKeyboard::NativeEffect::vwave:
+			case LedKeyboard::NativeEffect::cwave:
+				if (! setGroupKeys(
+					LedKeyboard::KeyGroup::indicators,
+					LedKeyboard::Color({0xff, 0xff, 0xff}))
+				) return false;
+				if (! commit()) return false;
+				break;
+		}
+		return (
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, speed, color) &&
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, speed, color));
+	}
+
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
 			protocolByte = 0x0c;
@@ -710,11 +737,11 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 		default:
 			return false;
 	}
-	
+
 	byte_buffer_t data;
-	
+
 	switch (effect) {
-		
+
 		case NativeEffect::color:
 			data = { 0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x01, color.red, color.green, color.blue, 0x02 };
 			break;
@@ -783,7 +810,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (data.size() > 0) {
 		#if defined(hidapi)
-			if (! open()) return false;
+			if (! open(currentDevice.vendorID, currentDevice.productID, currentDevice.serialNumber)) return false;
 			data.insert(data.begin(), 0x00);
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
