@@ -110,7 +110,7 @@ int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4
 	LedKeyboard::Color color;
 	if (! utils::parseNativeEffect(arg2, effect)) return 1;
 	if (! utils::parseNativeEffectPart(arg3, effectPart)) return 1;
-	
+
 	switch (effect) {
 		case LedKeyboard::NativeEffect::color:
 			if (! utils::parseColor(arg4, color)) return 1;
@@ -127,42 +127,12 @@ int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4
 			if (! utils::parseSpeed(arg4, speed)) return 1;
 			break;
 	}
-	
+
 	if (! kbd.open()) return 1;
-	
-	int retval = 0;
-	
-	switch (effectPart) {
-		case LedKeyboard::NativeEffectPart::all:
-			switch (effect) {
-				case LedKeyboard::NativeEffect::color:
-					if (! kbd.setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) retval = 1;
-					if (! kbd.commit()) retval = 1;
-					break;
-				case LedKeyboard::NativeEffect::breathing:
-					if (! kbd.setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) retval = 1;
-					if (! kbd.commit()) retval = 1;
-					break;
-				case LedKeyboard::NativeEffect::cycle:
-				case LedKeyboard::NativeEffect::hwave:
-				case LedKeyboard::NativeEffect::vwave:
-				case LedKeyboard::NativeEffect::cwave:
-					if (! kbd.setGroupKeys(
-						LedKeyboard::KeyGroup::indicators, 
-						LedKeyboard::Color({0xff, 0xff, 0xff}))
-					) retval = 1;
-					if (! kbd.commit()) retval = 1;
-					break;
-			}
-			if (! kbd.setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, speed, color)) retval = 1;
-			if (! kbd.setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, speed, color)) retval = 1;
-			break;
-		default:
-			if (! kbd.setNativeEffect(effect, effectPart, speed, color)) retval = 1;
-			break;
-	}
-	
-	return retval;
+
+	if (! kbd.setNativeEffect(effect, effectPart, speed, color)) return 1;
+
+	return 0;
 }
 
 
