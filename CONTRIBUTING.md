@@ -11,7 +11,7 @@
 * (0%)  AVERAGE:     Add selection of multiple keyboards by index
 * (0%)  AVERAGE:     Improve INSTALL.md to support more distributions (And CentOS with hidapi)
 * (10%) AVERAGE:     Make distributions ready package
-* (0%)  IMAGINATION: Use a more generic name for project, config dir and systemd units
+* (0%)  IMAGINATION: Use a more generic name for project, config dir and systemd units ([issue 29](https://github.com/MatMoul/g810-led/issues/29))
 
 ## Possible enhancements :
 * Add deamon mode for custom effects (Add G Keys handler [issue 39](https://github.com/MatMoul/g810-led/issues/39), [CReimer](https://github.com/CReimer/g910-gkey-uinput)))
