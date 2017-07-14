@@ -1,0 +1,73 @@
+# Sample profile by kewix
+
+# Vars
+var red ff0000
+var green 00ff00
+var blue 0000ff
+var white ffccaa
+var purple ff00ff
+var pink ff0069
+var orange ff7700
+var yellow ffff00
+var lightblue 000096
+var lightgreen 009600
+var lightcyan 009696
+
+# Group keys
+g logo $lightblue
+g indicators $blue
+g multimedia $lightgreen
+g fkeys $purple
+g modifiers $red
+g arrows $lightblue
+g numeric $yellow
+g functions $white
+g keys $lightcyan
+g gkeys $white
+
+# Numbers
+k 1 $yellow
+k 2 $yellow
+k 3 $yellow
+k 4 $yellow
+k 5 $yellow
+k 6 $yellow
+k 7 $yellow
+k 8 $yellow
+k 9 $yellow
+k 0 $yellow
+
+# Additionnal modifiers
+k escape $red
+k tab $red
+k caps_lock $red
+k capslock $red
+k space $red
+k enter $red
+k backspace $red
+k back $red
+k num_lock $red
+k numenter $red
+
+# Others keys
+k tilde $orange
+k minus $orange
+k equal $orange
+k open_bracket $orange
+k close_bracket $orange
+k backslash $orange
+k dollar $orange
+k quote $orange
+k intl_backslash $orange
+k comma $orange
+k period $orange
+k intl_backslash $orange
+k slash $orange
+k m $orange
+k num_slash $orange
+k num_asterisk $orange
+k num_minus $orange
+k num_plus $orange
+k num_period $orange
+
+c # Commit changes
