@@ -28,6 +28,7 @@ namespace help {
 		
 		g213 = rgb | logo1 | numpad | multimedia | setall | setregion | setindicators | poweronfx,
 		g410 = rgb | commit | setall | setgroup | setkey | poweronfx,
+		g413 = intensity | setall,
 		g610 = intensity | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
 		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx,

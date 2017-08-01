@@ -564,6 +564,9 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 		case KeyboardModel::g213:
 			for (uint8_t rIndex=0x01; rIndex <= 0x05; rIndex++) if (! setRegion(rIndex, color)) return false;
 			return true;
+		case KeyboardModel::g413:
+			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, 0, color);
+			return true;
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
@@ -722,6 +725,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
+		case KeyboardModel::g413:
 			protocolByte = 0x0c;
 			if (part == NativeEffectPart::logo) return false; //Does not have logo component
 			break;
@@ -848,6 +852,7 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddressGroup keyAddressGroup) {
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
+		case KeyboardModel::g413:
 		  return {}; // Device doesn't support per-key setting
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:

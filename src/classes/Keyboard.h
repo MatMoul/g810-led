@@ -30,6 +30,7 @@ class LedKeyboard {
 		std::vector<std::vector<uint16_t>> SupportedKeyboards = {
 			{ 0x46d, 0xc336, (u_int16_t)KeyboardModel::g213 },
 			{ 0x46d, 0xc330, (u_int16_t)KeyboardModel::g410 },
+			{ 0x46d, 0xc33a, (u_int16_t)KeyboardModel::g413 },
 			{ 0x46d, 0xc333, (u_int16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc338, (u_int16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc331, (u_int16_t)KeyboardModel::g810 },
@@ -43,6 +44,7 @@ class LedKeyboard {
 			unknown = 0x00,
 			g213,
 			g410,
+			g413,
 			g610,
 			g810,
 			g910,
