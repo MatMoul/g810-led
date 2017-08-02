@@ -60,6 +60,7 @@ setup:
 	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
 	@test -s $(DESTDIR)/usr/bin/g213-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g213-led
 	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
+	@test -s $(DESTDIR)/usr/bin/g413-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g413-led
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
 	@test -s $(DESTDIR)/usr/bin/gpro-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/gpro-led
@@ -104,6 +105,7 @@ uninstall:
 	
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
+	@rm /usr/bin/g413-led
 	@rm /usr/bin/g610-led
 	@rm /usr/bin/g910-led
 	@rm /usr/bin/gpro-led

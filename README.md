@@ -5,6 +5,7 @@ Linux led controller for Logitech G213, G410, G610, G810, G910 and GPRO Keyboard
 ## Compatible keyboards :</br>
 - **G213 Prodigy**</br>
 - **G410 Atlas Spectrum**</br>
+- **G413 Carbon**</br>
 - **G610 Orion Brown**</br>
 - **G610 Orion Red**</br>
 - **G810 Orion Spectrum**</br>

@@ -355,7 +355,8 @@ bool LedKeyboard::commit() {
 	byte_buffer_t data;
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
-			break; // Keyboard is non-transactional
+		case KeyboardModel::g413:
+			return true; // Keyboard is non-transactional
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
@@ -727,7 +728,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 		case KeyboardModel::g213:
 		case KeyboardModel::g413:
 			protocolByte = 0x0c;
-			if (part == NativeEffectPart::logo) return false; //Does not have logo component
+			if (part == NativeEffectPart::logo) return true; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
 		case KeyboardModel::g610: // Unconfirmed
