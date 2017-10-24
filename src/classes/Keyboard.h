@@ -37,7 +37,9 @@ class LedKeyboard {
 			{ 0x46d, 0xc337, (u_int16_t)KeyboardModel::g810 },
 			{ 0x46d, 0xc32b, (u_int16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc335, (u_int16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc339, (u_int16_t)KeyboardModel::gpro }
+			{ 0x46d, 0xc339, (u_int16_t)KeyboardModel::gpro },
+			{ 0x46d, 0xc082, (u_int16_t)KeyboardModel::g403 },
+			{ 0x46d, 0xc539, (u_int16_t)KeyboardModel::g403 }
 		};
 		
 		enum class KeyboardModel : uint8_t {
@@ -48,7 +50,8 @@ class LedKeyboard {
 			g610,
 			g810,
 			g910,
-			gpro
+			gpro,
+			g403
 		};
 		enum class StartupMode : uint8_t {
 			wave = 0x01,
@@ -206,11 +209,12 @@ class LedKeyboard {
 		DeviceInfo currentDevice;
 		
 		#if defined(hidapi)
-			hid_device *m_hidHandle;
+			hid_device *m_hidHandle = NULL;
 		#elif defined(libusb)
 			bool m_isKernellDetached = false;
-			libusb_device_handle *m_hidHandle;
+			libusb_device_handle *m_hidHandle = NULL;
 			libusb_context *m_ctx = NULL;
+			int m_Interface;
 		#endif
 		
 		

@@ -289,9 +289,14 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 			m_ctx = NULL;
 			return false;
 		}
-			
-		if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
-			if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
+
+		if (currentDevice.model == KeyboardModel::g403)
+			m_Interface = 2;
+		else
+			m_Interface = 1;
+
+		if(libusb_kernel_driver_active(m_hidHandle, m_Interface) == 1) {
+			if(libusb_detach_kernel_driver(m_hidHandle, m_Interface) != 0) {
 				libusb_exit(m_ctx);
 				m_ctx = NULL;
 				return false;
@@ -299,9 +304,9 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 			m_isKernellDetached = true;
 		}
 			
-		if(libusb_claim_interface(m_hidHandle, 1) < 0) {
+		if(libusb_claim_interface(m_hidHandle, m_Interface) < 0) {
 			if(m_isKernellDetached==true) {
-				libusb_attach_kernel_driver(m_hidHandle, 1);
+				libusb_attach_kernel_driver(m_hidHandle, m_Interface);
 				m_isKernellDetached = false;
 			}
 			libusb_exit(m_ctx);
@@ -331,9 +336,9 @@ bool LedKeyboard::close() {
 		return true;
 	#elif defined(libusb)
 		if (m_hidHandle == NULL) return true;
-		if(libusb_release_interface(m_hidHandle, 1) != 0) return false;
+		if(libusb_release_interface(m_hidHandle, m_Interface) != 0) return false;
 		if(m_isKernellDetached==true) {
-			libusb_attach_kernel_driver(m_hidHandle, 1);
+			libusb_attach_kernel_driver(m_hidHandle, m_Interface);
 			m_isKernellDetached = false;
 		}
 		libusb_close(m_hidHandle);
@@ -356,7 +361,8 @@ bool LedKeyboard::commit() {
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
 		case KeyboardModel::g413:
-			return true; // Keyboard is non-transactional
+		case KeyboardModel::g403:
+			return true; // Device is non-transactional
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
@@ -397,6 +403,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
 					case LedKeyboard::KeyboardModel::gpro:
+					case LedKeyboard::KeyboardModel::g403:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
 							SortedKeys[0].push_back(keyValues[i]);
 						break;
@@ -490,11 +497,21 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					
 					for (uint8_t i = 0; i < maxKeyCount; i++) {
 						if (gi + i < SortedKeys[kag].size()) {
-							data.push_back(static_cast<uint8_t>(
-								static_cast<uint16_t>(SortedKeys[kag][gi+i].key) & 0x00ff));
-							data.push_back(SortedKeys[kag][gi+i].color.red);
-							data.push_back(SortedKeys[kag][gi+i].color.green);
-							data.push_back(SortedKeys[kag][gi+i].color.blue);
+							if (currentDevice.model == LedKeyboard::KeyboardModel::g403) {
+								data.push_back(static_cast<uint8_t>(
+									static_cast<uint16_t>(SortedKeys[kag][gi+i].key) & 0x00ff) - 1);
+								data.push_back(0x01);
+								data.push_back(SortedKeys[kag][gi+i].color.red);
+								data.push_back(SortedKeys[kag][gi+i].color.green);
+								data.push_back(SortedKeys[kag][gi+i].color.blue);
+								data.push_back(0x02);
+							} else {
+								data.push_back(static_cast<uint8_t>(
+									static_cast<uint16_t>(SortedKeys[kag][gi+i].key) & 0x00ff));
+								data.push_back(SortedKeys[kag][gi+i].color.red);
+								data.push_back(SortedKeys[kag][gi+i].color.green);
+								data.push_back(SortedKeys[kag][gi+i].color.blue);
+							}
 						}
 					}
 					
@@ -830,19 +847,25 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 			return true;
 		#elif defined(libusb)
 			if (! m_isOpen) return false;
-			if (data.size() > 20) {
-				if(libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0212, 1, 
-						const_cast<unsigned char*>(data.data()), data.size(), 2000) < 0)
-					return false;
-			} else {
-				if(libusb_control_transfer(m_hidHandle, 0x21, 0x09, 0x0211, 1, 
-						const_cast<unsigned char*>(data.data()), data.size(), 2000) < 0)
-					return false;
-			}
+
+			uint16_t wValue;
+			unsigned char endpoint = 0x82;
+
+			if (data.size() > 20)
+				wValue = 0x0212;
+			else if (data.size() < 20) {
+				wValue = 0x0210;
+				endpoint = 0x83;
+			} else
+				wValue = 0x0211;
+
+			if(libusb_control_transfer(m_hidHandle, 0x21, 0x09, wValue, m_Interface,
+					const_cast<unsigned char*>(data.data()), data.size(), 2000) < 0)
+				return false;
 			usleep(1000);
 			unsigned char buffer[64];
 			int len = 0;
-			libusb_interrupt_transfer(m_hidHandle, 0x82, buffer, sizeof(buffer), &len, 1);
+			libusb_interrupt_transfer(m_hidHandle, endpoint, buffer, sizeof(buffer), &len, 1);
 			return true;
 		#endif
 	}
@@ -886,6 +909,8 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 					return { 0x12, 0xff, 0x0f, 0x3d, 0x00, 0x01, 0x00, 0x0e };
 			}
 			break;
+		case KeyboardModel::g403:
+			return { 0x11, 0x01, 0x18, 0x3a };
 		default:
 			break;
 	}
