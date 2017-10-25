@@ -54,12 +54,12 @@ Linux led controller for Logitech G213, G410, G413, G610, G810, G910 and GPRO Ke
 `g810-led -kn d ff0000 # Set color of a key with no action`</br>
 `g810-led -c # Commit all changes`</br>
 
-## Samples for g610 :</br>
+## Samples for G610 :</br>
 `g610-led -a 60 # Set intensity of all keys`</br>
 `g610-led -k logo ff # Set intensity of a key`</br>
 `g610-led -g fkeys aa # Set intensity of a group of keys`</br>
 
-## Samples for g213 :</br>
+## Samples for G213 :</br>
 `g213-led -a 00ff00 # Set all keys green`</br>
 `g213-led -r 1 ff0000 # Set region 1 red`</br>
 
