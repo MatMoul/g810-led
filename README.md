@@ -1,6 +1,6 @@
 # g810-led</br>
 
-Linux led controller for Logitech G213, G410, g413, G610, G810, G910 and GPRO Keyboards.</br>
+Linux led controller for Logitech G213, G410, G413, G610, G810, G910 and GPRO Keyboards.</br>
 
 ## Compatible keyboards :</br>
 - **G213 Prodigy**</br>
@@ -68,7 +68,7 @@ Linux led controller for Logitech G213, G410, g413, G610, G810, G910 and GPRO Ke
 `echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
 
 ## Testing unsuported keyboards :</br>
-Start by retrieve the VendorID and the ProductID of your keyboard with lsusb.</br>
+Start by retrieving the VendorID and the ProductID of your keyboard using lsusb.</br>
 `lsusb`</br>
 Sample return :<br>
 `Bus 001 Device 001: ID 046d:c331 Logitech, Inc.`</br>
