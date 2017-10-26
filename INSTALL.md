@@ -11,11 +11,11 @@
 ## hidapi vs libusb :</br>
 hidapi is a newer implementation but needs more testing.</br>
 hidapi is more responsive than libusb (~20ms vs ~150ms).</br>
-hidapi seem not work on CentOS, writing on hidraw is not allowed.</br>
-hidapi is recommended but if you encounter problem on your system, switch to libusb.</br>
+hidapi seems to not work on CentOS, writing to hidraw is not allowed.</br>
+hidapi is recommended but if you encounter a problem on your system, switch to libusb.</br>
 
 
-## Installation by repos :</br>
+## Installation using repos :</br>
 ArchLinux (aur) :</br>
 `yaourt -S g810-led-git` # with yaourt</br>
 `pacaur -S g810-led-git` # with pacaur</br>
@@ -39,7 +39,7 @@ Fedora :</br>
 `make bin LIB=libusb` # for libusb</br>
 `sudo make install`</br>
 
-## Installation of the library (For developpers) :</br>
+## Installation of the library (For developers) :</br>
 `make lib` # for hidapi</br>
 `make lib LIB=libusb` # for libusb</br>
 `sudo make install-lib` to install the libg810-led library.</br>
@@ -53,8 +53,7 @@ Same as install, but your profile and reboot files are preserved.</br>
 
 ## Boot profiles :</br>
 On boot, the keyboard is set with the udev file /etc/udev/rules.d/g810-led.rules</br>
-This file launch the profile stored in /etc/g810-led/profile</br>
-To prevent your keyboard to flash 3 time when you reboot, a systemd unit (g810-led-reboot) is available for this.</br>
-It launch the profile stored in /etc/g810-led/reboot</br>
+This file launches the profile stored in /etc/g810-led/profile</br>
+To prevent your keyboard flashing 3 times when you reboot use the systemd unit (g810-led-reboot).</br>
 
 Samples can be found in /etc/g810-led/samples.</br>
