@@ -2,7 +2,7 @@
 #define UTILS_HELPER
 
 #include <iostream>
-#include "../classes/Keyboard.h"
+#include "Keyboard.h"
 
 namespace utils {
 	

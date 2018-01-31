@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "../classes/Keyboard.h"
+#include "Keyboard.h"
 
 
 namespace utils {

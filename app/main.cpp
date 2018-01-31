@@ -4,9 +4,9 @@
 #include <fstream>
 #include <map>
 
-#include "helpers/help.h"
-#include "helpers/utils.h"
-#include "classes/Keyboard.h"
+#include "help.h"
+#include "utils.h"
+#include "Keyboard.h"
 
 
 int commit(LedKeyboard &kbd) {
