@@ -21,8 +21,8 @@ MINOR=2
 MICRO=7
 
 CFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
-APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
-LIBSRCS=src/classes/*.cpp src/classes/*.h
+APPSRCS=app/main.cpp app/*.cpp app/*.h
+LIBSRCS=src/*.cpp include/*.h
 
 .PHONY: all bin debug clean setup install uninstall lib install-lib install-dev
 
