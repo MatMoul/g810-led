@@ -1,8 +1,6 @@
 set(SOURCES
     main.cpp
-#    utils.h
     utils.cpp
-#    help.h
     help.cpp    
     )
 
@@ -15,6 +13,6 @@ if(CMAKE_EXTRA_GENERATOR OR MSVC_IDE)
     list(APPEND SOURCES ${HEADERS})
 endif()
 
-add_executable(g810-led ${SOURCES})
+add_executable(ledkeyboard ${SOURCES})
+target_link_libraries(ledkeyboard PUBLIC libledkeyboard)
 
-target_link_libraries(g810-led PUBLIC libledkeyboard)
