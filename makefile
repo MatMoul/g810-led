@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -O2 -std=gnu++11
+CFLAGS=-Wall -O2 -std=gnu++11 -Iinclude
 LIB?=hidapi
 ifeq ($(LIB),libusb)
 	CPPFLAGS=-Dlibusb
@@ -15,7 +15,7 @@ libdir?=$(prefix)/lib
 includedir?=$(prefix)/include
 
 # Program & versioning information
-PROGN=g810-led
+PROGN=ledkeyboard
 MAJOR=0
 MINOR=2
 MICRO=7
@@ -58,12 +58,6 @@ setup:
 		$(DESTDIR)/etc/$(PROGN)/samples \
 		$(DESTDIR)/etc/udev/rules.d
 	@cp bin/$(PROGN) $(DESTDIR)/usr/bin
-	@test -s $(DESTDIR)/usr/bin/g213-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g213-led
-	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
-	@test -s $(DESTDIR)/usr/bin/g413-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g413-led
-	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
-	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
-	@test -s $(DESTDIR)/usr/bin/gpro-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/gpro-led
 	@cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
 	@test -s /usr/bin/systemd-run && \
