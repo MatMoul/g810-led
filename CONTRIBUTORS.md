@@ -1,4 +1,4 @@
-# g810-led - CONTRIBUTORS (alpha order) :</br>
+# g810-led - CONTRIBUTORS (alpha order):
 
 ## [andreast1990](https://github.com/andreast1990) :
 * Add Wireshark dump for g910
@@ -24,6 +24,9 @@
 
 ## [jdagerbo](https://github.com/jdagerbo) :
 * Refactor many of the code (very hard work)
+
+## [konserw](https://github.com/konserw) :
+* CMake cupport
 
 ## [Landrovan](https://github.com/Landrovan) :
 * Improve support of G410 (two times)
