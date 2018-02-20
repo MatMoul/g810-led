@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+case $1 in
+  post)
+    # For now, restart used due to oneshot startup
+    systemctl restart g810-led
+    ;;
+  pre)
+    # For now, restart used due to oneshot startup
+    systemctl restart g810-led-reboot
+    ;;
+esac

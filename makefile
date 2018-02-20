@@ -9,6 +9,7 @@ else
 	LDFLAGS=-lhidapi-hidraw
 endif
 SYSTEMDDIR?=/usr/lib/systemd
+SYSTEMD_SLEEP_DIR?=/lib/systemd/system-sleep
 
 prefix?=$(DESTDIR)/usr
 libdir?=$(prefix)/lib
@@ -18,7 +19,7 @@ includedir?=$(prefix)/include
 PROGN=g810-led
 MAJOR=0
 MINOR=2
-MICRO=7
+MICRO=8
 
 CFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
@@ -89,6 +90,9 @@ install: setup
 	@test -s /usr/bin/systemd-run && \
 		systemctl daemon-reload && \
 		systemctl enable $(PROGN)-reboot
+	@test -d $(SYSTEMD_SLEEP) && \
+		install -m 755 -d $(SYSTEMD_SLEEP_DIR) && \
+		install -m 755 systemd/lib/systemd/system-sleep/g810-led.systemd.system-sleep $(SYSTEMD_SLEEP_DIR)/
 
 uninstall-lib:
 	@rm -f $(libdir)/lib$(PROGN).so*
@@ -103,6 +107,7 @@ uninstall:
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
 	
+	@rm $(SYSTEMD_SLEEP_DIR)/g810-led.systemd.system-sleep
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
 	@rm /usr/bin/g413-led
