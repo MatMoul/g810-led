@@ -1,12 +1,12 @@
 CXX?=g++
-CXXFLAGS?=-Wall -O2 -std=gnu++11
+CXXFLAGS?=-Wall -O2
 LIB?=hidapi
 ifeq ($(LIB),libusb)
 	CPPFLAGS=-Dlibusb
-	LDFLAGS+=-lusb-1.0
+	LIBS=-lusb-1.0
 else
 	CPPFLAGS=-Dhidapi
-	LDFLAGS+=-lhidapi-hidraw
+	LIBS=-lhidapi-hidraw
 endif
 SYSTEMDDIR?=/usr/lib/systemd
 
@@ -20,7 +20,7 @@ MAJOR=0
 MINOR=2
 MICRO=7
 
-CXXFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
+CXXFLAGS+=-std=gnu++11 -DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
 LIBSRCS=src/classes/*.cpp src/classes/*.h
 
@@ -32,19 +32,19 @@ bin: bin/$(PROGN)
 
 bin/$(PROGN): $(APPSRCS) $(LIBSRCS)
 	@mkdir -p bin
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LIBS)
 	
 debug: CXXFLAGS += -g -Wextra -pedantic
 debug: bin/$(PROGN)
 
 lib/lib$(PROGN).so: $(LIBSRCS)
 	@mkdir -p lib
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
 	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) lib/lib$(PROGN).so
 
 bin-linked: lib/lib$(PROGN).so
 	@mkdir -p bin
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(APPSRCS) -o bin/$(PROGN) $(LDFLAGS) -L./lib -l$(PROGN)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(APPSRCS) -o bin/$(PROGN) $(LIBS) -L./lib -l$(PROGN)
 
 lib: lib/lib$(PROGN).so
 
