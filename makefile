@@ -1,19 +1,19 @@
-CC=g++
-CFLAGS=-Wall -O2 -std=gnu++11
+CXX?=g++
+CXXFLAGS?=-Wall -O2
 LIB?=hidapi
 ifeq ($(LIB),libusb)
 	CPPFLAGS=-Dlibusb
-	LDFLAGS=-lusb-1.0
+	LIBS=-lusb-1.0
 else
 	CPPFLAGS=-Dhidapi
-	LDFLAGS=-lhidapi-hidraw
+	LIBS=-lhidapi-hidraw
 endif
 SYSTEMDDIR?=/usr/lib/systemd
 SYSTEMD_SLEEP_DIR?=/lib/systemd/system-sleep
 
-prefix?=$(DESTDIR)/usr
-libdir?=$(prefix)/lib
-includedir?=$(prefix)/include
+PREFIX?=$(DESTDIR)/usr
+libdir?=$(PREFIX)/lib
+includedir?=$(PREFIX)/include
 
 # Program & versioning information
 PROGN=g810-led
@@ -21,7 +21,7 @@ MAJOR=0
 MINOR=2
 MICRO=8
 
-CFLAGS+=-DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
+CXXFLAGS+=-std=gnu++11 -DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
 LIBSRCS=src/classes/*.cpp src/classes/*.h
 
@@ -33,19 +33,19 @@ bin: bin/$(PROGN)
 
 bin/$(PROGN): $(APPSRCS) $(LIBSRCS)
 	@mkdir -p bin
-	$(CC) $(CPPFLAGS) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LIBS)
 	
-debug: CFLAGS += -g -Wextra -pedantic
+debug: CXXFLAGS += -g -Wextra -pedantic
 debug: bin/$(PROGN)
 
 lib/lib$(PROGN).so: $(LIBSRCS)
 	@mkdir -p lib
-	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
 	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) lib/lib$(PROGN).so
 
 bin-linked: lib/lib$(PROGN).so
 	@mkdir -p bin
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(APPSRCS) -o bin/$(PROGN) $(LDFLAGS) -L./lib -l$(PROGN)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(APPSRCS) -o bin/$(PROGN) $(LIBS) -L./lib -l$(PROGN)
 
 lib: lib/lib$(PROGN).so
 
@@ -62,6 +62,8 @@ setup:
 	@test -s $(DESTDIR)/usr/bin/g213-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g213-led
 	@test -s $(DESTDIR)/usr/bin/g410-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g410-led
 	@test -s $(DESTDIR)/usr/bin/g413-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g413-led
+	@test -s $(DESTDIR)/usr/bin/g512-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g512-led
+	@test -s $(DESTDIR)/usr/bin/g513-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g513-led
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
 	@test -s $(DESTDIR)/usr/bin/gpro-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/gpro-led
@@ -111,6 +113,9 @@ uninstall:
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
 	@rm /usr/bin/g413-led
+	@rm /usr/bin/g413-led
+	@rm /usr/bin/g512-led
+	@rm /usr/bin/g513-led
 	@rm /usr/bin/g610-led
 	@rm /usr/bin/g910-led
 	@rm /usr/bin/gpro-led

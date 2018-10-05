@@ -1,11 +1,13 @@
 # g810-led</br>
 
-Linux led controller for Logitech G213, G410, G610, G810, G910 and GPRO Keyboards.</br>
+Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G910 and GPRO Keyboards.</br>
 
 ## Compatible keyboards :</br>
 - **G213 Prodigy**</br>
 - **G410 Atlas Spectrum**</br>
 - **G413 Carbon**</br>
+- **G512 Carbon**</br>
+- **G513 Carbon**</br>
 - **G610 Orion Brown**</br>
 - **G610 Orion Red**</br>
 - **G810 Orion Spectrum**</br>
@@ -22,6 +24,9 @@ Linux led controller for Logitech G213, G410, G610, G810, G910 and GPRO Keyboard
 ## Help :</br>
 `g213-led --help`</br>
 `g410-led --help`</br>
+`g413-led --help`</br>
+`g512-led --help`</br>
+`g513-led --help`</br>
 `g610-led --help`</br>
 `g810-led --help`</br>
 `g910-led --help`</br>
@@ -53,12 +58,12 @@ Linux led controller for Logitech G213, G410, G610, G810, G910 and GPRO Keyboard
 `g810-led -kn d ff0000 # Set color of a key with no action`</br>
 `g810-led -c # Commit all changes`</br>
 
-## Samples for g610 :</br>
+## Samples for G610 :</br>
 `g610-led -a 60 # Set intensity of all keys`</br>
 `g610-led -k logo ff # Set intensity of a key`</br>
 `g610-led -g fkeys aa # Set intensity of a group of keys`</br>
 
-## Samples for g213 :</br>
+## Samples for G213 :</br>
 `g213-led -a 00ff00 # Set all keys green`</br>
 `g213-led -r 1 ff0000 # Set region 1 red`</br>
 
@@ -67,7 +72,7 @@ Linux led controller for Logitech G213, G410, G610, G810, G910 and GPRO Keyboard
 `echo -e "k w ff0000\nk a ff0000\nk s ff0000\nk d ff0000\nc" | g810-led -pp # Set multiple keys`</br>
 
 ## Testing unsuported keyboards :</br>
-Start by retrieve the VendorID and the ProductID of your keyboard with lsusb.</br>
+Start by retrieving the VendorID and the ProductID of your keyboard using lsusb.</br>
 `lsusb`</br>
 Sample return :<br>
 `Bus 001 Device 001: ID 046d:c331 Logitech, Inc.`</br>

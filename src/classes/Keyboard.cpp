@@ -358,6 +358,7 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g413:
 			return true; // Keyboard is non-transactional
 		case KeyboardModel::g410:
+    case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
@@ -569,6 +570,7 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, 0, color);
 			return true;
 		case KeyboardModel::g410:
+    case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
 		case KeyboardModel::g910:
@@ -731,6 +733,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 			if (part == NativeEffectPart::logo) return true; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
+    case KeyboardModel::g513:
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
@@ -856,6 +859,7 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 		case KeyboardModel::g413:
 		  return {}; // Device doesn't support per-key setting
 		case KeyboardModel::g410:
+    case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
