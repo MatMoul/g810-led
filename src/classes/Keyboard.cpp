@@ -433,6 +433,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				break;
 			case LedKeyboard::KeyAddressGroup::keys:
 				switch (currentDevice.model) {
+					case LedKeyboard::KeyboardModel::g513:
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
 					case LedKeyboard::KeyboardModel::g910:
