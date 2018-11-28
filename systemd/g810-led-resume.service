@@ -1,0 +1,12 @@
+[Unit]
+Description=Set G810 profile on resume
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStop=/usr/bin/g810-led -p /etc/g810-led/profile
+
+[Install]
+WantedBy=sleep.target
