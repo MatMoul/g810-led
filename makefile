@@ -108,7 +108,6 @@ uninstall:
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
 	@rm /usr/bin/g413-led
-	@rm /usr/bin/g413-led
 	@rm /usr/bin/g512-led
 	@rm /usr/bin/g513-led
 	@rm /usr/bin/g610-led
