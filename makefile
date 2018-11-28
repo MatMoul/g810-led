@@ -70,7 +70,8 @@ setup:
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
 	@test -s /usr/bin/systemd-run && \
 		install -m 755 -d $(DESTDIR)$(SYSTEMDDIR)/system && \
-		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
+		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system && \
+		cp systemd/$(PROGN)-resume.service $(DESTDIR)$(SYSTEMDDIR)/system
 
 install-lib: lib
 	@install -m 755 -d $(libdir)
@@ -90,7 +91,8 @@ install: setup
 	@$(PROGN) -p /etc/$(PROGN)/profile
 	@test -s /usr/bin/systemd-run && \
 		systemctl daemon-reload && \
-		systemctl enable $(PROGN)-reboot
+		systemctl enable $(PROGN)-reboot && \
+		systemctl enable $(PROGN)-resume
 
 uninstall-lib:
 	@rm -f $(libdir)/lib$(PROGN).so*
@@ -102,6 +104,8 @@ uninstall:
 	@test -s /usr/bin/systemd-run && \
 		systemctl disable $(PROGN)-reboot && \
 		rm $(SYSTEMDDIR)/system/$(PROGN)-reboot.service && \
+		systemctl disable $(PROGN)-resume && \
+		rm $(SYSTEMDDIR)/system/$(PROGN)-resume.service && \
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
 	
