@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [ "$1" == "" ]; then
+	echo "Error: No version provided"
+	echo "./makerelease 0.0.1"
+	exit 1
+fi
+
+ssh -T git@github.com
+if [ ! "$?" = "1" ]; then
+  echo "No Github ssh key loaded exiting..."
+  exit 1
+fi
+
+clear
+branch=$(git rev-parse --abbrev-ref HEAD)
+read -p "Current branch is $branch. Continue ? (y/N)" choice
+case "$choice" in 
+  n|N|'' )
+    echo "Cancel !"
+    exit 1
+  ;;
+  y|Y ) echo "Make release...";;
+  * )
+    echo "Cancel !"
+    exit 1
+  ;;
+esac
+
+
+
+# Ready to update :
+
+version=$1
+
+sed -i "/string version = /c\\\tstring version = \"$version\";" src/helpers/help.cpp
+IFS='.' read -ra VPART <<< "$version"
+sed -i "/MAJOR=/cMAJOR=${VPART[0]}" makefile
+sed -i "/MINOR=/cMINOR=${VPART[1]}" makefile
+sed -i "/MICRO=/cMICRO=${VPART[2]}" makefile
+
+git commit -m "Version $version" makefile src/*
+git push
+
+git checkout master
+git merge develop
+git push
+
+git tag -a "v$version" -m "Version $version"
+git push --tags
+
+git checkout $branch
+
+#wget https://github.com/MatMoul/g810-led/archive/v$version.zip
+#wget https://github.com/MatMoul/g810-led/archive/v$version.tar.gz
+
+#Publish to aur...

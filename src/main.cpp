@@ -1,310 +1,310 @@
-#include <map>
-#include <vector>
+#include <iomanip>
+#include <iostream>
+#include <unistd.h>
 #include <fstream>
+#include <map>
+
+#include "helpers/help.h"
+#include "helpers/utils.h"
 #include "classes/Keyboard.h"
 
-using namespace std;
 
-void usage() {
-	string appname = "g810-led";
-	cout<<appname<<" Usages :\n";
-	cout<<"-----------------\n";
-	cout<<"\n";
-	cout<<"  -s  effect :\t\tSet keyboard startup effect\n";
-	cout<<"\n";
-	cout<<"  -a  color :\t\tSet all keys\n";
-	cout<<"  -g  group, color :\tSet a group of keys\n";
-	cout<<"  -k  key, color :\tSet a key\n";
-	cout<<"\n";
-	cout<<"  -an color :\t\tSet all keys without commit\n";
-	cout<<"  -gn group, color :\tSet a group of keys without commit\n";
-	cout<<"  -kn key, color :\tSet a key without commit\n";
-	cout<<"\n";
-	cout<<"  -c :\t\t\tCommit changes\n";
-	cout<<"\n";
-	cout<<"  -p  profilefile :\tLoad a profile\n";
-	cout<<"\n";
-	cout<<"  -h | --help :\t\tthis help message\n";
-	cout<<"  -lk | --list-keys :\tList keys in groups\n";
-	cout<<"\n";
-	cout<<"color formats :\t\tRRGGBB (hex value for red, green and blue)\n";
-	cout<<"\n";
-	cout<<"effect values :\t\trainbow, color\n";
-	cout<<"key values :\t\tabc... 123... and other\n";
-	cout<<"group values :\t\tlogo, indicators, fkeys, modifiers, multimedia, arrows, numeric, functions, keys\n";
-	cout<<"\n";
-	cout<<"sample :\n";
-	cout<<appname<<" -k logo ff0000\n";
-	cout<<appname<<" -a 00ff00\n";
-	cout<<appname<<" -g fkeys ff00ff\n";
-	cout<<appname<<" -s color\n";
+int commit(LedKeyboard &kbd) {
+	if (! kbd.open()) return 1;
+	if (kbd.commit()) return 0;
+	return 1;
 }
 
-void listkeys() {
-	string appname = "g810-led";
-	cout<<appname<<" Keys in groups :\n";
-	cout<<"-------------------------\n";
-	cout<<"\n";
-	cout<<"Group logo :\n";
-	cout<<" logo\n";
-	cout<<" logo2\n";
-	cout<<"\n";
-	cout<<"Group indicators :\n";
-	cout<<" num_indicator, numindicator, num\n";
-	cout<<" caps_indicator, capsindicator, caps\n";
-	cout<<" scroll_indicator, scrollindicator, scroll\n";
-	cout<<" game_mode, gamemode, game\n";
-	cout<<" back_light, backlight, light\n";
-	cout<<"\n";
-	cout<<"Group fkeys :\n";
-	cout<<" f1 - f12\n";
-	cout<<"\n";
-	cout<<"Group modifiers :\n";
-	cout<<" shift_left, shiftleft, shiftl\n";
-	cout<<" ctrl_left, ctrlleft, ctrll\n";
-	cout<<" win_left, winleft, win_left\n";
-	cout<<" alt_left, altleft, altl\n";
-	cout<<" alt_right, altright, altr, altgr\n";
-	cout<<" win_right, winright, winr\n";
-	cout<<" menu\n";
-	cout<<" ctrl_right, ctrlright, ctrlr\n";
-	cout<<" shift_right, shiftright, shiftr\n";
-	cout<<"\n";
-	cout<<"Group multimedia :\n";
-	cout<<" mute\n";
-	cout<<" play_pause, playpause, play\n";
-	cout<<" stop\n";
-	cout<<" previous, prev\n";
-	cout<<" next\n";
-	cout<<"\n";
-	cout<<"Group arrows :\n";
-	cout<<" arrow_top, arrowtop, top\n";
-	cout<<" arrow_left, arrowleft, left\n";
-	cout<<" arrow_bottom, arrowbottom, bottom\n";
-	cout<<" arrow_right, arrowright, right\n";
-	cout<<"\n";
-	cout<<"Group numeric :\n";
-	cout<<" num_lock, numlock\n";
-	cout<<" num_slash, numslash, num/\n";
-	cout<<" num_asterisk, numasterisk, num*\n";
-	cout<<" num_minus, numminus, num-\n";
-	cout<<" num_plus, numplus, num+\n";
-	cout<<" numenter\n";
-	cout<<" num0 - num9\n";
-	cout<<" num_dot, numdot, num.\n";
-	cout<<"\n";
-	cout<<"Group functions :\n";
-	cout<<" escape, esc\n";
-	cout<<" print_screen, printscreen, printscr\n";
-	cout<<" scroll_lock, scrolllock\n";
-	cout<<" pause_break, pausebreak\n";
-	cout<<" insert, ins\n";
-	cout<<" home\n";
-	cout<<" page_up, pageup\n";
-	cout<<" delete, del\n";
-	cout<<" end\n";
-	cout<<" page_down, pagedown\n";
-	cout<<"\n";
-	cout<<"Group keys :\n";
-	cout<<" 0 - 9\n";
-	cout<<" a - z\n";
-	cout<<" tab\n";
-	cout<<" caps_lock, capslock\n";
-	cout<<" space\n";
-	cout<<" backspace, back\n";
-	cout<<" enter\n";
-	cout<<" tilde\n";
-	cout<<" minus\n";
-	cout<<" equal\n";
-	cout<<" open_bracket\n";
-	cout<<" close_bracket\n";
-	cout<<" backslash\n";
-	cout<<" semicolon\n";
-	cout<<" dollar\n";
-	cout<<" quote\n";
-	cout<<" intl_backslash\n";
-	cout<<" comma\n";
-	cout<<" period\n";
-	cout<<" slash\n";
-	cout<<"Group gkeys :\n";
-	cout<<" g1 - g9\n";
+void printDeviceInfo(LedKeyboard::DeviceInfo device) {
+	std::cout<<"Device: "<<device.manufacturer<<" - "<<device.product<<std::endl;
+	std::cout<<"\tVendor ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.vendorID<<std::endl;
+	std::cout<<"\tProduct ID: "<<std::hex<<std::setw(4)<<std::setfill('0')<<device.productID<<std::endl;
+	std::cout<<"\tSerial Number: "<<device.serialNumber<<std::endl;
 }
 
-int commit() {
-	Keyboard lg_kbd;
-	lg_kbd.attach();
-	lg_kbd.commit();
-	lg_kbd.detach();
-	
+int listKeyboards(LedKeyboard &kbd) {
+	std::vector<LedKeyboard::DeviceInfo> deviceList = kbd.listKeyboards();
+	if (deviceList.empty()) {
+		std::cout<<"Matching or compatible device not found !"<<std::endl;
+		return 1;
+	}
+
+	std::vector<LedKeyboard::DeviceInfo>::iterator iterator;
+	for (iterator = deviceList.begin(); iterator != deviceList.end(); iterator++) {
+		LedKeyboard::DeviceInfo device = *iterator;
+		printDeviceInfo(device);
+	}
+
 	return 0;
 }
 
-int setStartupEffect(string effect) {
-	Keyboard lg_kbd;
-	Keyboard::PowerOnEffect powerOnEffect;
-	if (lg_kbd.parsePowerOnEffect(effect, powerOnEffect) == true) {
-		lg_kbd.attach();
-		lg_kbd.setPowerOnEffect(powerOnEffect);
-		lg_kbd.commit();
-		lg_kbd.detach();
-		return 0;
-	}
+int setAllKeys(LedKeyboard &kbd, std::string arg2, bool commit = true) {
+	LedKeyboard::Color color;
+	if (! utils::parseColor(arg2, color)) return 1;
+	if (! kbd.open()) return 1;
+	if(! kbd.setAllKeys(color)) return 1;
+	if (commit) if(! kbd.commit()) return 1;
+	return 0;
+}
+
+int setGroupKeys(LedKeyboard &kbd, std::string arg2, std::string arg3, bool commit = true) {
+	LedKeyboard::KeyGroup keyGroup;
+	LedKeyboard::Color color;
+	if (! utils::parseKeyGroup(arg2, keyGroup)) return 1;
+	if (! utils::parseColor(arg3, color)) return 1;
+	if (! kbd.open()) return 1;
+	if (! kbd.setGroupKeys(keyGroup, color)) return 1;
+	if (commit) if(! kbd.commit()) return 1;
+	return 0;
+}
+
+int setKey(LedKeyboard &kbd, std::string arg2, std::string arg3, bool commit = true) {
+	LedKeyboard::Key key;
+	LedKeyboard::Color color;
+	if (! utils::parseKey(arg2, key)) return 1;
+	if (! utils::parseColor(arg3, color)) return 1;
+	LedKeyboard::KeyValue keyValue = { key, color };
+	if (! kbd.open()) return 1;
+	if (! kbd.setKey(keyValue)) return 1;
+	if (commit) if(! kbd.commit()) return 1;
+	return 0;
+}
+
+int setMRKey(LedKeyboard &kbd, std::string arg2) {
+	uint8_t value;
+	if (! utils::parseUInt8(arg2, value)) return 1;
+	if (! kbd.open()) return 1;
+	if (! kbd.setMRKey(value)) return 1;
+	return 0;
+}
+
+int setMNKey(LedKeyboard &kbd, std::string arg2) {
+	uint8_t value;
+	if (! utils::parseUInt8(arg2, value)) return 1;
+	if (! kbd.open()) return 1;
+	if (! kbd.setMNKey(value)) return 1;
+	return 0;
+}
+
+int setGKeysMode(LedKeyboard &kbd, std::string arg2) {
+	uint8_t value;
+	if (! utils::parseUInt8(arg2, value)) return 1;
+	if (! kbd.open()) return 1;
+	if (! kbd.setGKeysMode(value)) return 1;
+	return 0;
+}
+
+int setRegion(LedKeyboard &kbd, std::string arg2, std::string arg3) {
+	uint8_t region = 0;
+	LedKeyboard::Color color;
+	if (! utils::parseColor(arg3, color)) return 1;
+	if (! utils::parseUInt8(arg2, region)) return 1;
+	if (kbd.setRegion(region, color)) return 0;
 	return 1;
 }
 
-int setKey(string key, string color, bool commit) {
-	Keyboard lg_kbd;
-	Keyboard::KeyAddress keyAddress;
-	if (lg_kbd.parseKey(key, keyAddress) == true) {
-		Keyboard::KeyColors colors;
-		if (lg_kbd.parseColor(color, colors) == true) {
-			Keyboard::KeyValue keyValue;
-			keyValue.key = keyAddress;
-			keyValue.colors = colors;
-			lg_kbd.attach();
-			lg_kbd.setKey(keyValue);
-			if (commit == true) lg_kbd.commit();
-			lg_kbd.detach();
-			return 0;
-		}
+int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4, std::string arg5 = "") {
+	LedKeyboard::NativeEffect effect;
+	LedKeyboard::NativeEffectPart effectPart;
+	uint8_t speed = 0;
+	LedKeyboard::Color color;
+	if (! utils::parseNativeEffect(arg2, effect)) return 1;
+	if (! utils::parseNativeEffectPart(arg3, effectPart)) return 1;
+
+	switch (effect) {
+		case LedKeyboard::NativeEffect::color:
+			if (! utils::parseColor(arg4, color)) return 1;
+			break;
+		case LedKeyboard::NativeEffect::breathing:
+			if (! utils::parseColor(arg4, color)) return 1;
+			if (arg5 == "") return 1;
+			if (! utils::parseSpeed(arg5, speed)) return 1;
+			break;
+		case LedKeyboard::NativeEffect::cycle:
+		case LedKeyboard::NativeEffect::hwave:
+		case LedKeyboard::NativeEffect::vwave:
+		case LedKeyboard::NativeEffect::cwave:
+			if (! utils::parseSpeed(arg4, speed)) return 1;
+			break;
 	}
+
+	if (! kbd.open()) return 1;
+
+	if (! kbd.setNativeEffect(effect, effectPart, speed, color)) return 1;
+
+	return 0;
+}
+
+
+int setStartupMode(LedKeyboard &kbd, std::string arg2) {
+	LedKeyboard::StartupMode startupMode;
+	if (! utils::parseStartupMode(arg2, startupMode)) return 1;
+	if (! kbd.open()) return 1;
+	if (kbd.setStartupMode(startupMode)) return 0;
 	return 1;
 }
 
-int setAllKeys(string color, bool commit) {
-	Keyboard lg_kbd;
-	Keyboard::KeyColors colors;
-	if (lg_kbd.parseColor(color, colors) == true) {
-		lg_kbd.attach();
-		lg_kbd.setAllKeys(colors);
-		if (commit == true) lg_kbd.commit();
-		lg_kbd.detach();
-		return 0;
-	}
-	return 1;
-}
 
-int setGroupKeys(string groupKeys, string color, bool commit) {
-	Keyboard lg_kbd;
-	Keyboard::KeyGroup keyGroup;
-	if (lg_kbd.parseKeyGroup(groupKeys, keyGroup) == true) {
-		Keyboard::KeyColors colors;
-		if (lg_kbd.parseColor(color, colors) == true) {
-			lg_kbd.attach();
-			lg_kbd.setGroupKeys(keyGroup, colors);
-			if (commit == true) lg_kbd.commit();
-			lg_kbd.detach();
-			return 0;
-		}
-	}
-	return 1;
-}
-
-int loadProfile(string profileFile) {
-	ifstream file;
-	
-	file.open(profileFile);
-	if (file.is_open()) {
-		
-		string line;
-		int lineCount = 1;
-		int ind;
-		
-		Keyboard lg_kbd;
-		Keyboard::KeyGroup keyGroup;
-		Keyboard::KeyAddress keyAddress;
-		Keyboard::KeyValue keyValue;
-		Keyboard::KeyColors colors;
-		
-		map<string, string> var;
-		vector<Keyboard::KeyValue> keys;
-		
-		lg_kbd.attach();
-		
-		while (!file.eof()) {
-			getline(file, line);
-			
-			if (line.substr(0, 3) == "var") {
-				line = line.substr(4);
-				ind = line.find(" ");
-				var[line.substr(0, ind)] = line.substr(ind + 1, 6);
-			} else if (line.substr(0, 1) == "a") {
-				line = line.substr(2);
-				if (line.substr(0, 1) == "$") {
-					ind = line.find(" ");
-					line = var[line.substr(1, ind - 1)];
-				} else line = line.substr(0, 6);
-				if (lg_kbd.parseColor(line, colors) == true) {
-					keys.clear();
-					lg_kbd.setAllKeys(colors);
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "g") {
-				line = line.substr(2);
-				ind = line.find(" ");
-				if (lg_kbd.parseKeyGroup(line.substr(0, ind), keyGroup) == true) {
-					line = line.substr(ind + 1);
-					if (line.substr(0, 1) == "$") {
-						ind = line.find(" ");
-						line = var[line.substr(1, ind - 1)];
-					};
-					if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-						lg_kbd.setGroupKeys(keyGroup, colors);
-					} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "k") {
-				line = line.substr(2);
-				ind = line.find(" ");
-				if (lg_kbd.parseKey(line.substr(0, ind), keyAddress) == true) {
-					line = line.substr(ind + 1);
-					if (line.substr(0, 1) == "$") {
-						ind = line.find(" ");
-						line = var[line.substr(1, ind - 1)];
-					}
-					if (lg_kbd.parseColor(line.substr(0, 6), colors) == true) {
-						keyValue.key = keyAddress;
-						keyValue.colors = colors;
-						keys.push_back(keyValue);
-					} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-				} else cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
-			} else if (line.substr(0,1) == "c") {
-				lg_kbd.commit();
-				lg_kbd.setKeys(&keys[0], keys.size());
-				keys.clear();
-				lg_kbd.commit();
-			} else if ((line.substr(0, 1) != "#") && (line.substr(0, 1) != "")) {
-				cout<<"Error on line "<<lineCount<<" : "<<line<<"\n";
+int parseProfile(LedKeyboard &kbd, std::istream &stream) {
+	std::string line;
+	std::map<std::string, std::string> vars;
+	LedKeyboard::KeyValueArray keys = {};
+	int retval = 0;
+	while (!stream.eof()) {
+		getline(stream, line);
+		if (line.size() > 0 && line.substr(0, 1) != "#") {
+			std::vector<std::string> args = {};
+			while (line.size() > 0) {
+				uint32_t ind = line.find(" ");
+				std::string argValue = line.substr(0, ind);
+				if (argValue.substr(0, 1) == "$") argValue = vars[argValue.substr(1)];
+				args.push_back(argValue);
+				if (line.substr(0, ind) == line) line.clear();
+				else line = line.substr(ind + 1);
 			}
-		
-			lineCount++;
+			if (args[0] == "var" && args.size() > 2) {
+				vars[args[1]] = args[2];
+			} else if (args[0] == "c") {
+				if (kbd.open()) {
+					if (keys.size() > 0) {
+						if (! kbd.setKeys(keys)) retval = 1;
+						keys.clear();
+					}
+					if(! kbd.commit()) retval = 1;
+				} else retval = 1;
+			} else if (args[0] == "a" && args.size() > 1) {
+				if (setAllKeys(kbd, args[1], false) == 1) retval = 1;
+			} else if (args[0] == "g" && args.size() > 2) {
+				if (setGroupKeys(kbd, args[1], args[2], false) == 1) retval = 1;
+			} else if (args[0] == "k" && args.size() > 2) {
+				LedKeyboard::Key key;
+				LedKeyboard::Color color;
+				if (utils::parseKey(args[1], key))
+					if (utils::parseColor(args[2], color))
+						keys.push_back({ key, color });
+			} else if (args[0] == "r" && args.size() > 2) {
+				if (setRegion(kbd, args[1], args[2]) == 1) retval = 1;
+			} else if (args[0] == "mr" && args.size() > 1) {
+				if (setMRKey(kbd, args[1]) == 1) retval = 1;
+			} else if (args[0] == "mn" && args.size() > 1) {
+				if (setMNKey(kbd, args[1]) == 1) retval = 1;
+			} else if (args[0] == "gkm" && args.size() > 1) {
+				if (setGKeysMode(kbd, args[1]) == 1) retval = 1;
+			} else if (args[0] == "fx" && args.size() > 4) {
+				if (setFX(kbd, args[1], args[2], args[3], args[4]) == 1) retval = 1;
+			} else if (args[0] == "fx" && args.size() > 3) {
+				if (setFX(kbd, args[1], args[2], args[3]) == 1) retval = 1;
+			}
 		}
-		
-		lg_kbd.detach();
-		
+	}
+	return retval;
+}
+	
+int loadProfile(LedKeyboard &kbd, char *arg2) {
+	std::ifstream file;
+	file.open(arg2);
+	if (file.is_open()) {
+		int retval = 0;
+		retval = parseProfile(kbd, file);
 		file.close();
-		
-		return 0;
+		return retval;
 	}
 	return 1;
 }
 
-int main(int argc, char *argv[]) {
-	string str = argv[0];
-	size_t split = str.find_last_of("/\\");
-	str = str.substr(split + 1);
-	if (argc > 1) {
-		string argCmd = argv[1];
-		if (argCmd == "-h" || argCmd == "--help")             { usage(); return 0; }
-		else if (argCmd == "-lk" || argCmd == "--list-keys")  { listkeys(); return 0; }
-		else if (argCmd == "-s" && argc == 3)                 return setStartupEffect(argv[2]);
-		else if (argCmd == "-a" && argc == 3)                 return setAllKeys(argv[2], true);
-		else if (argCmd == "-an" && argc == 3)                return setAllKeys(argv[2], false);
-		else if (argCmd == "-g" && argc == 4)                 return setGroupKeys(argv[2], argv[3], true);
-		else if (argCmd == "-gn" && argc == 4)                return setGroupKeys(argv[2], argv[3], false);
-		else if (argCmd == "-k" && argc == 4)                 return setKey(argv[2], argv[3], true);
-		else if (argCmd == "-kn" && argc == 4)                return setKey(argv[2], argv[3], false);
-		else if (argCmd == "-c" && argc == 2)                 return commit();
-		else if (argCmd == "-p" && argc == 3)                 return loadProfile(argv[2]);
+int pipeProfile(LedKeyboard &kbd) {
+	if (isatty(fileno(stdin))) return 1;
+	return parseProfile(kbd, std::cin);
+}
+
+
+
+int main(int argc, char **argv) {
+	if (argc < 2) {
+		help::usage(argv[0]);
+		return 1;
 	}
-	usage();
-	return 1;
+		
+	LedKeyboard kbd;
+	std::string serial;
+	uint16_t vendorID = 0x0;
+	uint16_t productID = 0x0;
+
+	int argIndex = 1;
+	while (argIndex < argc)
+	{
+		std::string arg = argv[argIndex];
+
+		// Non-Command arguments
+		if (argc > (argIndex + 1) && arg == "-ds") {
+			serial = argv[argIndex + 1];
+			argIndex += 2;
+			continue;
+		} else if (argc > (argIndex + 1) && arg == "-dv"){
+			if (! utils::parseUInt16(argv[argIndex + 1], vendorID)) return 1;
+			argIndex += 2;
+			continue;
+		} else if (argc > (argIndex + 1) && arg == "-dp"){
+			if (! utils::parseUInt16(argv[argIndex + 1], productID)) return 1;
+			argIndex += 2;
+			continue;
+		} else if (argc > (argIndex + 1) && arg == "-tuk"){
+			uint8_t kbdProtocol = 0;
+			if (! utils::parseUInt8(argv[argIndex + 1], kbdProtocol)) return 1;
+			switch(kbdProtocol) {
+				case 1:
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g810 } };
+					break;
+				case 2:
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g910 } };
+					break;
+				case 3:
+					kbd.SupportedKeyboards = { { vendorID, productID, (u_int16_t)LedKeyboard::KeyboardModel::g213 } };
+					break;
+				default:
+					break;
+			}
+			argIndex += 2;
+			continue;
+		}
+		
+
+		//Commands that do not need to initialize a specific device
+		if (arg == "--help" || arg == "-h") {help::usage(argv[0]); return 0;}
+		else if (arg == "--list-keyboards") return listKeyboards(kbd);
+		else if (arg == "--help-keys") {help::keys(argv[0]); return 0;}
+		else if (arg == "--help-effects") {help::effects(argv[0]); return 0;}
+		else if (arg == "--help-samples") {help::samples(argv[0]); return 0;}
+
+		//Initialize the device for use
+		if (!kbd.open(vendorID, productID, serial)) {
+			std::cout << "Matching or compatible device not found !" << std::endl;
+			return 2;
+		}
+		
+		// Command arguments, these will cause parsing to ignore anything beyond the command and its arguments
+		if (arg == "-c") return commit(kbd);
+		else if (arg == "--print-device") {printDeviceInfo(kbd.getCurrentDevice()); return 0;}
+		else if (argc > (argIndex + 1) && arg == "-a") return setAllKeys(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 2) && arg == "-g") return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 2) && arg == "-k") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 1) && arg == "-mr") return setMRKey(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-mn") return setMNKey(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-an") return setAllKeys(kbd, argv[argIndex + 1], false);
+		else if (argc > (argIndex + 2) && arg == "-gn")
+			return setGroupKeys(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
+		else if (argc > (argIndex + 2) && arg == "-kn") return setKey(kbd, argv[argIndex + 1], argv[argIndex + 2], false);
+		else if (argc > (argIndex + 2) && arg == "-r") return setRegion(kbd, argv[argIndex + 1], argv[argIndex + 2]);
+		else if (argc > (argIndex + 1) && arg == "-gkm") return setGKeysMode(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "-p") return loadProfile(kbd, argv[argIndex + 1]);
+		else if (arg == "-pp") return pipeProfile(kbd);
+		else if (argc > (argIndex + 4) && arg == "-fx")
+			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
+		else if (argc > (argIndex + 3) && arg == "-fx")
+			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
+		else if (argc > (argIndex + 1) && arg == "--startup-mode") return setStartupMode(kbd, argv[argIndex + 1]);
+		else { help::usage(argv[0]); return 1; }
+	}
+
+	return 0;
 }
