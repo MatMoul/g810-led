@@ -19,7 +19,7 @@ includedir?=$(PREFIX)/include
 PROGN=g810-led
 MAJOR=0
 MINOR=2
-MICRO=8
+MICRO=9
 
 CXXFLAGS+=-std=gnu++11 -DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
@@ -112,7 +112,6 @@ uninstall:
 	@rm $(SYSTEMD_SLEEP_DIR)/g810-led.systemd.system-sleep
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
-	@rm /usr/bin/g413-led
 	@rm /usr/bin/g413-led
 	@rm /usr/bin/g512-led
 	@rm /usr/bin/g513-led

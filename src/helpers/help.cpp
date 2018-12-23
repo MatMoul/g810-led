@@ -240,7 +240,7 @@ namespace help {
 		cout<<cmdName<<" Effects"<<endl;
 		cout<<"----------------"<<endl;
 		cout<<endl;
-		cout<<"At this time, FX are only tested on g810 !"<<endl;
+		cout<<"At this time, FX are only tested on g810 and g512 !"<<endl;
 		cout<<endl;
 		cout<<"  -fx {effect} {target}"<<endl;
 		cout<<endl;
