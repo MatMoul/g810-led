@@ -860,10 +860,23 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 		case KeyboardModel::g413:
 		  return {}; // Device doesn't support per-key setting
 		case KeyboardModel::g410:
-    case KeyboardModel::g513:
+		case KeyboardModel::g513:
+		case KeyboardModel::gpro:
+			switch (keyAddressGroup) {
+				case LedKeyboard::KeyAddressGroup::logo:
+					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
+				case LedKeyboard::KeyAddressGroup::indicators:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x40, 0x00, 0x05 };
+				case LedKeyboard::KeyAddressGroup::gkeys:
+					return {};
+				case LedKeyboard::KeyAddressGroup::multimedia:
+					return {};
+				case LedKeyboard::KeyAddressGroup::keys:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x01, 0x00, 0x0e };
+			}
+			break;
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
-		case KeyboardModel::gpro:
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
 					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
