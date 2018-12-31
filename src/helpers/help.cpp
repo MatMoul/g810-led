@@ -248,6 +248,7 @@ namespace help {
 		cout<<"  -fx color {target} {color}"<<endl;
 		cout<<"  -fx breathing {target} {color} {speed}"<<endl;
 		cout<<"  -fx cycle {target} {speed}"<<endl;
+		cout<<"  -fx waves {target} {speed}"<<endl;
 		cout<<"  -fx hwave {target} {speed}"<<endl;
 		cout<<"  -fx vwave {target} {speed}"<<endl;
 		cout<<"  -fx cwave {target} {speed}"<<endl;
