@@ -121,6 +121,7 @@ int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4
 			if (! utils::parseSpeed(arg5, speed)) return 1;
 			break;
 		case LedKeyboard::NativeEffect::cycle:
+		case LedKeyboard::NativeEffect::waves:
 		case LedKeyboard::NativeEffect::hwave:
 		case LedKeyboard::NativeEffect::vwave:
 		case LedKeyboard::NativeEffect::cwave:

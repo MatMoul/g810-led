@@ -25,6 +25,7 @@ namespace utils {
 		if (val == "color") nativeEffect = LedKeyboard::NativeEffect::color;
 		else if (val == "cycle") nativeEffect = LedKeyboard::NativeEffect::cycle;
 		else if (val == "breathing") nativeEffect = LedKeyboard::NativeEffect::breathing;
+		else if (val == "waves") nativeEffect = LedKeyboard::NativeEffect::waves;
 		else if (val == "hwave") nativeEffect = LedKeyboard::NativeEffect::hwave;
 		else if (val == "vwave") nativeEffect = LedKeyboard::NativeEffect::vwave;
 		else if (val == "cwave") nativeEffect = LedKeyboard::NativeEffect::cwave;

@@ -699,22 +699,21 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color) {
 	uint8_t protocolByte = 0;
+	NativeEffectGroup effectGroup = static_cast<NativeEffectGroup>(static_cast<uint16_t>(effect) >> 8);
 
 	// NativeEffectPart::all is not in the device protocol, but an alias for both keys and logo, plus indicators
 	if (part == LedKeyboard::NativeEffectPart::all) {
-		switch (effect) {
-			case LedKeyboard::NativeEffect::color:
+		switch (effectGroup) {
+			case NativeEffectGroup::color:
 				if (! setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) return false;
 				if (! commit()) return false;
 				break;
-			case LedKeyboard::NativeEffect::breathing:
+			case NativeEffectGroup::breathing:
 				if (! setGroupKeys(LedKeyboard::KeyGroup::indicators, color)) return false;;
 				if (! commit()) return false;;
 				break;
-			case LedKeyboard::NativeEffect::cycle:
-			case LedKeyboard::NativeEffect::hwave:
-			case LedKeyboard::NativeEffect::vwave:
-			case LedKeyboard::NativeEffect::cwave:
+			case NativeEffectGroup::cycle:
+			case NativeEffectGroup::waves:
 				if (! setGroupKeys(
 					LedKeyboard::KeyGroup::indicators,
 					LedKeyboard::Color({0xff, 0xff, 0xff}))
@@ -749,25 +748,25 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 
 	byte_buffer_t data;
 
-	switch (effect) {
+	switch (effectGroup) {
 
-		case NativeEffect::color:
+		case NativeEffectGroup::color:
 			data = { 0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x01, color.red, color.green, color.blue, 0x02 };
 			break;
-		case NativeEffect::breathing:
+		case NativeEffectGroup::breathing:
 			data = {
 				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x02,
 				color.red, color.green, color.blue, speed, 
 				0x10, 0x00, 0x64 
 			};
 			break;
-		case NativeEffect::cycle:
+		case NativeEffectGroup::cycle:
 			data = {
 				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x03,
 				0x00, 0x00, 0x00, 0x00, 0x00, speed, 0x00, 0x00, 0x64
 			};
 			break;
-		case NativeEffect::hwave:
+		case NativeEffectGroup::waves:
 			switch (part) {
 				case NativeEffectPart::logo:
 					setNativeEffect(NativeEffect::color, part, 0, Color({0x00, 0xff, 0xff}));
@@ -775,33 +774,9 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 				default:
 					data = {
 						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
-						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x01, 0x64, speed
-					};
-					break;
-			}
-			break;
-		case NativeEffect::vwave:
-			switch (part) {
-				case NativeEffectPart::logo:
-					setNativeEffect(NativeEffect::color, part, 0, Color({0x00, 0xff, 0xff}));
-					break;
-				default:
-					data = {
-						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
-						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x02, 0x64, speed
-					};
-					break;
-			}
-			break;
-		case NativeEffect::cwave:
-			switch (part) {
-				case NativeEffectPart::logo:
-					setNativeEffect(NativeEffect::color, part, 0, Color({0x00, 0xff, 0xff}));
-					break;
-				default:
-					data = {
-						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
-						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88, 0x03, 0x64, speed
+						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88,
+						static_cast<uint8_t>(static_cast<uint16_t>(effect) & 0xff),
+						0x64, speed
 					};
 					break;
 			}
