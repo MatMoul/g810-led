@@ -89,7 +89,9 @@ namespace help {
 			cout<<"  color formats :\t\t\tII (hex value for intensity)"<<endl;
 		if((features | KeyboardFeatures::setregion) == features)
 			cout<<"  region formats :\t\t\tRN (integer value for region, 1 to 5)"<<endl;
-		cout<<"  speed formats :\t\t\tSS (hex value for speed 01 to ff)"<<endl;
+		cout<<"  period formats :\t\t\tDms (decimal integer; units of milliseconds)"<<endl;
+		cout<<"                  \t\t\tDs  (decimal integer; units of seconds)"<<endl;
+		cout<<"                  \t\t\tSS  (hex value 01 to ff; units of 256ms)"<<endl;
 		cout<<endl;
 		if((features | KeyboardFeatures::setkey) == features)
 			cout<<"  key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
@@ -241,17 +243,17 @@ namespace help {
 		cout<<cmdName<<" Effects"<<endl;
 		cout<<"----------------"<<endl;
 		cout<<endl;
-		cout<<"At this time, FX are only tested on g810 and g512 !"<<endl;
+		cout<<"At this time, FX are only tested on g512, g810, and gpro !"<<endl;
 		cout<<endl;
 		cout<<"  -fx {effect} {target}"<<endl;
 		cout<<endl;
 		cout<<"  -fx color {target} {color}"<<endl;
-		cout<<"  -fx breathing {target} {color} {speed}"<<endl;
-		cout<<"  -fx cycle {target} {speed}"<<endl;
-		cout<<"  -fx waves {target} {speed}"<<endl;
-		cout<<"  -fx hwave {target} {speed}"<<endl;
-		cout<<"  -fx vwave {target} {speed}"<<endl;
-		cout<<"  -fx cwave {target} {speed}"<<endl;
+		cout<<"  -fx breathing {target} {color} {period}"<<endl;
+		cout<<"  -fx cycle {target} {period}"<<endl;
+		cout<<"  -fx waves {target} {period}"<<endl;
+		cout<<"  -fx hwave {target} {period}"<<endl;
+		cout<<"  -fx vwave {target} {period}"<<endl;
+		cout<<"  -fx cwave {target} {period}"<<endl;
 		cout<<endl;
 		if((features | KeyboardFeatures::logo1) == features)
 			cout<<"target value :\t\t\t\tall, keys, logo"<<endl;
@@ -261,7 +263,9 @@ namespace help {
 			cout<<"color formats :\t\t\t\tRRGGBB (hex value for red, green and blue)"<<endl;
 		else if((features | KeyboardFeatures::rgb) == features)
 			cout<<"color formats :\t\t\t\tII (hex value for intensity)"<<endl;
-		cout<<"speed formats :\t\t\t\tSS (hex value for speed 01 to ff)"<<endl;
+		cout<<"period formats :\t\t\tDms (decimal integer; units of milliseconds)"<<endl;
+		cout<<"                \t\t\tDs  (decimal integer; units of seconds)"<<endl;
+		cout<<"                \t\t\tSS  (hex value 01 to ff; units of 256ms)"<<endl;
 		cout<<endl;
 	}
 	
