@@ -203,10 +203,17 @@ namespace utils {
 		return true;
 	}
 	
-	bool parseSpeed(std::string val, uint8_t &speed) {
-		if (val.length() == 1) val = "0" + val;
-		if (val.length() != 2) return false;
-		speed = std::stoul("0x" + val, nullptr, 16);
+	bool parsePeriod(std::string val, std::chrono::duration<uint16_t, std::milli> &period) {
+		if (!val.empty() && val.back() == 's') {
+			if ((val.length() >= 2) && (val[val.length()-2] == 'm'))
+				period = std::chrono::milliseconds(std::stoul(val, nullptr));
+			else
+				period = std::chrono::seconds(std::stoul(val, nullptr));
+		} else {
+			if (val.length() == 1) val = "0" + val;
+			if (val.length() != 2) return false;
+			period = std::chrono::milliseconds(std::stoul("0x" + val, nullptr, 16) << 8);
+		}
 		return true;
 	}
 	

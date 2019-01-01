@@ -568,7 +568,7 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 			for (uint8_t rIndex=0x01; rIndex <= 0x05; rIndex++) if (! setRegion(rIndex, color)) return false;
 			return true;
 		case KeyboardModel::g413:
-			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, 0, color);
+			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, std::chrono::seconds(0), color);
 			return true;
 		case KeyboardModel::g410:
     case KeyboardModel::g513:
@@ -697,7 +697,7 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 }
 
 
-bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color) {
+bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, std::chrono::duration<uint16_t, std::milli> period, Color color) {
 	uint8_t protocolByte = 0;
 	NativeEffectGroup effectGroup = static_cast<NativeEffectGroup>(static_cast<uint16_t>(effect) >> 8);
 
@@ -722,8 +722,8 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 				break;
 		}
 		return (
-			setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, speed, color) &&
-			setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, speed, color));
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, period, color) &&
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, period, color));
 	}
 
 	switch (currentDevice.model) {
@@ -746,47 +746,28 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, ui
 			return false;
 	}
 
-	byte_buffer_t data;
-
-	switch (effectGroup) {
-
-		case NativeEffectGroup::color:
-			data = { 0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x01, color.red, color.green, color.blue, 0x02 };
-			break;
-		case NativeEffectGroup::breathing:
-			data = {
-				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x02,
-				color.red, color.green, color.blue, speed, 
-				0x10, 0x00, 0x64 
-			};
-			break;
-		case NativeEffectGroup::cycle:
-			data = {
-				0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x03,
-				0x00, 0x00, 0x00, 0x00, 0x00, speed, 0x00, 0x00, 0x64
-			};
-			break;
-		case NativeEffectGroup::waves:
-			switch (part) {
-				case NativeEffectPart::logo:
-					setNativeEffect(NativeEffect::color, part, 0, Color({0x00, 0xff, 0xff}));
-					break;
-				default:
-					data = {
-						0x11, 0xff, protocolByte, 0x3c, (uint8_t)part, 0x04,
-						0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x88,
-						static_cast<uint8_t>(static_cast<uint16_t>(effect) & 0xff),
-						0x64, speed
-					};
-					break;
-			}
-			break;
-		
-		default:
-			return false;
+	if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
+		return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}));
 	}
-	
-	data.resize(20, 0x00);
+
+	byte_buffer_t data = {
+		0x11, 0xff, protocolByte, 0x3c,
+		(uint8_t)part, static_cast<uint8_t>(effectGroup),
+		// color of static-color and breathing effects
+		color.red, color.green, color.blue,
+		// period of breathing effect (ms)
+		static_cast<uint8_t>(period.count() >> 8), static_cast<uint8_t>(period.count() & 0xff),
+		// period of cycle effect (ms)
+		static_cast<uint8_t>(period.count() >> 8), static_cast<uint8_t>(period.count() & 0xff),
+		static_cast<uint8_t>(static_cast<uint16_t>(effect) & 0xff), // wave variation (e.g. horizontal)
+		0x64, // unused?
+		// period of wave effect (ms)
+		static_cast<uint8_t>(period.count() >> 8), // LSB is shared with cycle effect above
+		0, // change to 1 to store this effect as the user effect (issue #157)
+		0, // unused?
+		0, // unused?
+		0, // unused?
+	};
 	return sendDataInternal(data);
 }
 
