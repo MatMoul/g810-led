@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_CLASS
 #define KEYBOARD_CLASS
 
+#include <chrono>
 #include <iostream>
 #include <vector>
 
@@ -170,8 +171,9 @@ class LedKeyboard {
 		
 		bool setRegion(uint8_t region, Color color);
 		bool setStartupMode(StartupMode startupMode);
-		
-		bool setNativeEffect(NativeEffect effect, NativeEffectPart part, uint8_t speed, Color color);
+
+		bool setNativeEffect(NativeEffect effect, NativeEffectPart part,
+				     std::chrono::duration<uint16_t, std::milli> period, Color color);
 		
 		
 	private:
