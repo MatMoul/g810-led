@@ -59,7 +59,10 @@ namespace help {
 			cout<<"  -c\t\t\t\t\tCommit change"<<endl;
 			cout<<endl;
 		}
-		cout<<"  -fx ...\t\t\t\tUse --help-effects for more detail"<<endl;
+		cout<<"  -fx ...\t\t\t\tActivate an on-board lighting effect"<<endl;
+		if((features | KeyboardFeatures::userstoredlighting) == features)
+			cout<<"  -fx-store ...\t\t\t\tSet an on-board effect as user-stored lighting"<<endl;
+		cout<<"               \t\t\t\tUse --help-effects for more detail"<<endl;
 		cout<<endl;
 		cout<<"  < {profile}\t\t\t\tSet a profile from a file (use --help-samples for more detail)"<<endl;
 		cout<<"  |\t\t\t\t\tSet a profile from stdin (for scripting) (use --help-samples for more detail)"<<endl;
@@ -245,15 +248,22 @@ namespace help {
 		cout<<endl;
 		cout<<"At this time, FX are only tested on g512, g810, and gpro !"<<endl;
 		cout<<endl;
-		cout<<"  -fx {effect} {target}"<<endl;
+		cout<<"  -fx ...      \t\t\t\tActivate an on-board lighting effect"<<endl;
+		string optionalStore;
+		if((features | KeyboardFeatures::userstoredlighting) == features) {
+			cout<<"  -fx-store ...\t\t\t\tSet an on-board effect as user-stored lighting"<<endl;
+			optionalStore = "[-store]";
+		}
 		cout<<endl;
-		cout<<"  -fx color {target} {color}"<<endl;
-		cout<<"  -fx breathing {target} {color} {period}"<<endl;
-		cout<<"  -fx cycle {target} {period}"<<endl;
-		cout<<"  -fx waves {target} {period}"<<endl;
-		cout<<"  -fx hwave {target} {period}"<<endl;
-		cout<<"  -fx vwave {target} {period}"<<endl;
-		cout<<"  -fx cwave {target} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " {effect} {target}"<<endl;
+		cout<<endl;
+		cout<<"  -fx" << optionalStore << " color {target} {color}"<<endl;
+		cout<<"  -fx" << optionalStore << " breathing {target} {color} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " cycle {target} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " waves {target} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " hwave {target} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " vwave {target} {period}"<<endl;
+		cout<<"  -fx" << optionalStore << " cwave {target} {period}"<<endl;
 		cout<<endl;
 		if((features | KeyboardFeatures::logo1) == features)
 			cout<<"target value :\t\t\t\tall, keys, logo"<<endl;

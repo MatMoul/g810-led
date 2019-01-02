@@ -103,7 +103,8 @@ int setRegion(LedKeyboard &kbd, std::string arg2, std::string arg3) {
 	return 1;
 }
 
-int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4, std::string arg5 = "") {
+int setFX(LedKeyboard &kbd, LedKeyboard::NativeEffectStorage storage,
+	  const std::string &arg2, const std::string &arg3, const std::string &arg4, const std::string &arg5) {
 	LedKeyboard::NativeEffect effect;
 	LedKeyboard::NativeEffectPart effectPart;
 	std::chrono::duration<uint16_t, std::milli> period(0);
@@ -131,11 +132,20 @@ int setFX(LedKeyboard &kbd, std::string arg2, std::string arg3, std::string arg4
 
 	if (! kbd.open()) return 1;
 
-	if (! kbd.setNativeEffect(effect, effectPart, period, color)) return 1;
+	if (! kbd.setNativeEffect(effect, effectPart, period, color, storage)) return 1;
 
 	return 0;
 }
 
+int setFX(LedKeyboard &kbd, const std::string &arg2, const std::string &arg3, const std::string &arg4 = std::string(),
+	  const std::string &arg5 = std::string()) {
+	return setFX(kbd, LedKeyboard::NativeEffectStorage::none, arg2, arg3, arg4, arg5);
+}
+
+int storeFX(LedKeyboard &kbd, const std::string &arg2, const std::string &arg3, const std::string &arg4 = std::string(),
+	  const std::string &arg5 = std::string()) {
+	return setFX(kbd, LedKeyboard::NativeEffectStorage::user, arg2, arg3, arg4, arg5);
+}
 
 int setStartupMode(LedKeyboard &kbd, std::string arg2) {
 	LedKeyboard::StartupMode startupMode;
@@ -303,6 +313,10 @@ int main(int argc, char **argv) {
 			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
 		else if (argc > (argIndex + 3) && arg == "-fx")
 			return setFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
+		else if (argc > (argIndex + 4) && arg == "-fx-store")
+			return storeFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3], argv[argIndex + 4]);
+		else if (argc > (argIndex + 3) && arg == "-fx-store")
+			return storeFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
 		else if (argc > (argIndex + 1) && arg == "--startup-mode") return setStartupMode(kbd, argv[argIndex + 1]);
 		else { help::usage(argv[0]); return 1; }
 	}
