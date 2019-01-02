@@ -568,7 +568,8 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 			for (uint8_t rIndex=0x01; rIndex <= 0x05; rIndex++) if (! setRegion(rIndex, color)) return false;
 			return true;
 		case KeyboardModel::g413:
-			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, std::chrono::seconds(0), color);
+			setNativeEffect(NativeEffect::color, NativeEffectPart::keys, std::chrono::seconds(0), color,
+					NativeEffectStorage::none);
 			return true;
 		case KeyboardModel::g410:
     case KeyboardModel::g513:
@@ -697,7 +698,9 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 }
 
 
-bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, std::chrono::duration<uint16_t, std::milli> period, Color color) {
+bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
+				  std::chrono::duration<uint16_t, std::milli> period, Color color,
+				  NativeEffectStorage storage) {
 	uint8_t protocolByte = 0;
 	NativeEffectGroup effectGroup = static_cast<NativeEffectGroup>(static_cast<uint16_t>(effect) >> 8);
 
@@ -722,8 +725,8 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, st
 				break;
 		}
 		return (
-			setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, period, color) &&
-			setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, period, color));
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::keys, period, color, storage) &&
+			setNativeEffect(effect, LedKeyboard::NativeEffectPart::logo, period, color, storage));
 	}
 
 	switch (currentDevice.model) {
@@ -747,7 +750,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, st
 	}
 
 	if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
-		return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}));
+		return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}), storage);
 	}
 
 	byte_buffer_t data = {
@@ -763,7 +766,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part, st
 		0x64, // unused?
 		// period of wave effect (ms)
 		static_cast<uint8_t>(period.count() >> 8), // LSB is shared with cycle effect above
-		0, // change to 1 to store this effect as the user effect (issue #157)
+		static_cast<uint8_t>(storage),
 		0, // unused?
 		0, // unused?
 		0, // unused?

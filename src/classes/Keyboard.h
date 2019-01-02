@@ -54,6 +54,9 @@ class LedKeyboard {
 			gpro
 		};
 		enum class StartupMode : uint8_t {
+			 // TODO: On the G Pro, the value 1 selects the
+			 // user-stored lighting effect, which is not
+			 // necessarily wave.
 			wave = 0x01,
 			color
 		};
@@ -76,6 +79,11 @@ class LedKeyboard {
 			all = 0xff,
 			keys = 0x00,
 			logo
+		};
+		enum class NativeEffectStorage : uint8_t {
+			none = 0x00,
+			// "user-stored lighting" can be recalled with backlight+7
+			user,
 		};
 		enum class KeyGroup : uint8_t {
 			logo = 0x00,
@@ -173,7 +181,8 @@ class LedKeyboard {
 		bool setStartupMode(StartupMode startupMode);
 
 		bool setNativeEffect(NativeEffect effect, NativeEffectPart part,
-				     std::chrono::duration<uint16_t, std::milli> period, Color color);
+				     std::chrono::duration<uint16_t, std::milli> period, Color color,
+				     NativeEffectStorage storage);
 		
 		
 	private:
