@@ -569,9 +569,10 @@ address new problems or concerns.
 
   Each version is given a distinguishing version number.  If the
 Program specifies that a certain numbered version of the GNU General
-Public License applies to it, you have the
+Public License "or any later version" applies to it, you have the
 option of following the terms and conditions either of that numbered
-version.  If the Program does not specify a version number of the
+version or of any later version published by the Free Software
+Foundation.  If the Program does not specify a version number of the
 GNU General Public License, you may choose any version ever published
 by the Free Software Foundation.
 
@@ -635,7 +636,8 @@ the "copyright" line and a pointer to where the full notice is found.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License.
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
