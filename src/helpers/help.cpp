@@ -99,7 +99,7 @@ namespace help {
 		cout<<"  -dv\t\t\t\t\tDevice vendor ID, such as 046d for Logitech. Can be omitted to match any vendor ID"<<endl;
 		cout<<"  -dp\t\t\t\t\tDevice product ID, such as c337 for Logitech G810. Can be omitted to match any product ID"<<endl;
 		cout<<"  -ds\t\t\t\t\tDevice serial number, Can be omitted to match the first device found"<<endl;
-		cout<<"  -tuk\t\t\t\t\tTest unsuported keyboard with one of supported protocol (1-3) -dv and -dp are required"<<endl;
+		cout<<"  -tuk\t\t\t\t\tTest unsupported keyboard with one of supported protocol (1-3) -dv and -dp are required"<<endl;
 		cout<<endl;
 		cout<<"Values:"<<endl;
 		if((features | KeyboardFeatures::rgb) == features)
@@ -350,7 +350,7 @@ namespace help {
 			cout<<"echo -e \"k w ff0000\\nk a ff0000\\nk s ff0000\\nk d ff0000\\nc\" | g810-led -pp # Set multiple keys"<<endl;
 			cout<<endl;
 		}
-		cout<<"Testing an unsuported keyboard :"<<endl;
+		cout<<"Testing an unsupported keyboard :"<<endl;
 		cout<<"lsusb"<<endl;
 		cout<<"#Sample result of lsusb : ID 046d:c331 Logitech, Inc. (dv=046d and dp=c331)"<<endl;
 		cout<<cmdName<<" -dv 046d -dp c331 -tuk 1 -a 000000"<<endl;
