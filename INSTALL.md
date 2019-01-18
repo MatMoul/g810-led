@@ -23,7 +23,7 @@ Fedora (copr) :<br/>
 `sudo dnf copr enable lkiesow/g810-led` # Enable Copr repository<br/>
 `sudo dnf install g810-led`<br/>
 Gentoo :<br/>
-`emerge app-misc/g810-led`
+`emerge app-misc/g810-led`<br/>
 Debian (unstable, and 10 or later), Ubuntu 19.04 or later :<br/>
 `apt install g810-led`
 
