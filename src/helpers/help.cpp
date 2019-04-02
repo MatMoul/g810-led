@@ -80,6 +80,8 @@ namespace help {
 			cout<<"  -fx-store ...\t\t\t\tSet an on-board effect as user-stored lighting"<<endl;
 		cout<<"               \t\t\t\tUse --help-effects for more detail"<<endl;
 		cout<<endl;
+		cout<<"  -p {profile}\t\t\t\tSet a profile from a file (use --help-samples for more detail)"<<endl;
+		cout<<endl;
 		cout<<"  < {profile}\t\t\t\tSet a profile from a file (use --help-samples for more detail)"<<endl;
 		cout<<"  |\t\t\t\t\tSet a profile from stdin (for scripting) (use --help-samples for more detail)"<<endl;
 		cout<<endl;
