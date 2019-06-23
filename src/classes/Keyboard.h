@@ -45,17 +45,17 @@ class LedKeyboard {
 	public:
 		
 		std::vector<std::vector<uint16_t>> SupportedKeyboards = {
-			{ 0x46d, 0xc336, (u_int16_t)KeyboardModel::g213 },
-			{ 0x46d, 0xc330, (u_int16_t)KeyboardModel::g410 },
-			{ 0x46d, 0xc33a, (u_int16_t)KeyboardModel::g413 },
-			{ 0x46d, 0xc33c, (u_int16_t)KeyboardModel::g513 },
-			{ 0x46d, 0xc333, (u_int16_t)KeyboardModel::g610 },
-			{ 0x46d, 0xc338, (u_int16_t)KeyboardModel::g610 },
-			{ 0x46d, 0xc331, (u_int16_t)KeyboardModel::g810 },
-			{ 0x46d, 0xc337, (u_int16_t)KeyboardModel::g810 },
-			{ 0x46d, 0xc32b, (u_int16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc335, (u_int16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc339, (u_int16_t)KeyboardModel::gpro }
+			{ 0x46d, 0xc336, (uint16_t)KeyboardModel::g213 },
+			{ 0x46d, 0xc330, (uint16_t)KeyboardModel::g410 },
+			{ 0x46d, 0xc33a, (uint16_t)KeyboardModel::g413 },
+			{ 0x46d, 0xc33c, (uint16_t)KeyboardModel::g513 },
+			{ 0x46d, 0xc333, (uint16_t)KeyboardModel::g610 },
+			{ 0x46d, 0xc338, (uint16_t)KeyboardModel::g610 },
+			{ 0x46d, 0xc331, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc337, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc32b, (uint16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc335, (uint16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc339, (uint16_t)KeyboardModel::gpro }
 		};
 		
 		enum class KeyboardModel : uint8_t {
