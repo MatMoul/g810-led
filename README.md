@@ -37,7 +37,7 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G910
 `g810-led --help-samples`</br>
 
 ## Samples :</br>
-`g810-led -p /etc/g810/profile # Load a profile`</br>
+`g810-led -p /etc/g810-led/profile # Load a profile`</br>
 `g810-led -k logo ff0000 # Set color of a key`</br>
 `g810-led -a 00ff00 # Set color of all keys`</br>
 `g810-led -g fkeys ff00ff # Set color of a group of keys`</br>
