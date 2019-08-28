@@ -21,8 +21,8 @@ MINOR=3
 MICRO=7
 
 CXXFLAGS+=-std=gnu++11 -DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
-APPSRCS=src/main.cpp src/helpers/*.cpp src/helpers/*.h
-LIBSRCS=src/classes/*.cpp src/classes/*.h
+APPSRCS=src/main.cpp src/helpers/*.cpp
+LIBSRCS=src/classes/*.cpp
 
 .PHONY: all bin debug clean setup install uninstall lib install-lib install-dev
 
