@@ -17,7 +17,7 @@ hidapi is recommended but if you encounter a problem on your system, switch to l
 
 ## Installation using repos :</br>
 ArchLinux (aur) :</br>
-`yaourt -S g810-led-git` # with yaourt</br>
+`yay -S g810-led-git` # with yay</br>
 `pacaur -S g810-led-git` # with pacaur</br>
 
 Fedora (copr) :<br/>
