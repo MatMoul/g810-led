@@ -19,13 +19,19 @@ hidapi is recommended but if you encounter a problem on your system, switch to l
 ArchLinux (aur) :</br>
 `yaourt -S g810-led-git` # with yaourt</br>
 `pacaur -S g810-led-git` # with pacaur</br>
+
 Fedora (copr) :<br/>
 `sudo dnf copr enable lkiesow/g810-led` # Enable Copr repository<br/>
 `sudo dnf install g810-led`<br/>
+
 Gentoo :<br/>
 `emerge app-misc/g810-led`<br/>
+
 Debian (unstable, and 10 or later), Ubuntu 19.04 or later :<br/>
 `apt install g810-led`
+
+Solus :<br/>
+`sudo eopkg install g810-led`<br/>
 
 ## Installation of dependencies :</br>
 ArchLinux :</br>
