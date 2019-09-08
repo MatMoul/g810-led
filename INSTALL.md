@@ -19,6 +19,7 @@ hidapi is recommended but if you encounter a problem on your system, switch to l
 ArchLinux (aur) :</br>
 `yay -S g810-led-git` # with yay</br>
 `pacaur -S g810-led-git` # with pacaur</br>
+`trizen -S g810-leg-git` # with trizen</br>
 
 Fedora (copr) :<br/>
 `sudo dnf copr enable lkiesow/g810-led` # Enable Copr repository<br/>
