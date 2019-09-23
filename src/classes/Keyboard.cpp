@@ -717,7 +717,7 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				  std::chrono::duration<uint16_t, std::milli> period, Color color,
 				  NativeEffectStorage storage) {
-	uint8_t protocolByte = 0;
+	uint8_t protocolBytes[2] = {0x00, 0x00};
 	NativeEffectGroup effectGroup = static_cast<NativeEffectGroup>(static_cast<uint16_t>(effect) >> 8);
 
 	// NativeEffectPart::all is not in the device protocol, but an alias for both keys and logo, plus indicators
@@ -748,7 +748,8 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
 		case KeyboardModel::g413:
-			protocolByte = 0x0c;
+			protocolBytes[0] = 0x0c;
+			protocolBytes[1] = 0x3c;
 			if (part == NativeEffectPart::logo) return true; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
@@ -756,10 +757,12 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
-			protocolByte = 0x0d;
+			protocolBytes[0] = 0x0d;
+			protocolBytes[1] = 0x3c;
 			break;
 		case KeyboardModel::g910:
-			protocolByte = 0x10;
+			protocolBytes[0] = 0x10;
+			protocolBytes[1] = 0x3c;
 			break;
 		default:
 			return false;
@@ -770,7 +773,7 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 	}
 
 	byte_buffer_t data = {
-		0x11, 0xff, protocolByte, 0x3c,
+		0x11, 0xff, protocolBytes[0], protocolBytes[1],
 		(uint8_t)part, static_cast<uint8_t>(effectGroup),
 		// color of static-color and breathing effects
 		color.red, color.green, color.blue,
