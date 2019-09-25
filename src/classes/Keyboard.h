@@ -53,6 +53,7 @@ class LedKeyboard {
 			{ 0x46d, 0xc338, (uint16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc331, (uint16_t)KeyboardModel::g810 },
 			{ 0x46d, 0xc337, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc33f, (uint16_t)KeyboardModel::g815 },
 			{ 0x46d, 0xc32b, (uint16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc335, (uint16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc339, (uint16_t)KeyboardModel::gpro }
@@ -63,9 +64,10 @@ class LedKeyboard {
 			g213,
 			g410,
 			g413,
-      g513,
+			g513,
 			g610,
 			g810,
+			g815,
 			g910,
 			gpro
 		};

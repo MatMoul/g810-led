@@ -374,9 +374,10 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g413:
 			return true; // Keyboard is non-transactional
 		case KeyboardModel::g410:
-    case KeyboardModel::g513:
+		case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815:
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0c, 0x5a };
 			break;
@@ -541,7 +542,12 @@ bool LedKeyboard::setGroupKeys(KeyGroup keyGroup, LedKeyboard::Color color) {
 			keyArray = keyGroupLogo;
 			break;
 		case KeyGroup::indicators:
-			keyArray = keyGroupIndicators;
+			switch (currentDevice.model) {
+				case KeyboardModel::g815:
+					return true;
+				default:
+					keyArray = keyGroupIndicators;
+			}
 			break;
 		case KeyGroup::gkeys:
 			keyArray = keyGroupGKeys;
@@ -753,12 +759,16 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 			if (part == NativeEffectPart::logo) return true; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
-    case KeyboardModel::g513:
+		case KeyboardModel::g513:
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
 			protocolBytes[0] = 0x0d;
 			protocolBytes[1] = 0x3c;
+			break;
+		case KeyboardModel::g815:
+			protocolBytes[0] = 0x0f;
+			protocolBytes[1] = 0x1c;
 			break;
 		case KeyboardModel::g910:
 			protocolBytes[0] = 0x10;
@@ -766,10 +776,6 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 			break;
 		default:
 			return false;
-	}
-
-	if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
-		return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}), storage);
 	}
 
 	byte_buffer_t data = {
@@ -790,7 +796,54 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 		0, // unused?
 		0, // unused?
 	};
-	return sendDataInternal(data);
+
+	byte_buffer_t setupData;
+	bool retval;
+	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			setupData = { 0x11, 0xff, 0x0f, 0x5c, 0x01, 0x03, 0x03 };
+			setupData.resize(20, 0x00);
+			retval = sendDataInternal(setupData);
+
+			data[16] = 0x01;
+
+			switch (part) {
+				case NativeEffectPart::keys:
+					data[4] = 0x01;
+					break;
+				case NativeEffectPart::logo:
+					data[4] = 0x00;
+					switch (effect) {
+						case NativeEffect::breathing:
+							data[5]=0x03;
+							break;
+						case NativeEffect::cwave:
+						case NativeEffect::vwave:
+						case NativeEffect::hwave:
+							data[5]=0x02;
+							data[13]=0x64;
+							break;
+						case NativeEffect::waves:
+						case NativeEffect::cycle:
+							data[5]=0x02;
+							break;
+						default:
+							data[5]=0x01;
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+		default: //Many devices may not support logo coloring for wave?
+			if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
+				return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}), storage);
+			}
+			break;
+	}
+	retval = sendDataInternal(data);
+	return retval;
 }
 
 
