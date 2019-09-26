@@ -79,19 +79,23 @@ class LedKeyboard {
 			color
 		};
 		enum class NativeEffectGroup : uint8_t {
-			color = 0x01,
+			off,
+			color,
 			breathing,
 			cycle,
-			waves
+			waves,
+			ripple
 		};
 		enum class NativeEffect : uint16_t {
+			off,
 			color = static_cast<uint16_t>(NativeEffectGroup::color) << 8,
 			breathing = static_cast<uint16_t>(NativeEffectGroup::breathing) << 8,
 			cycle = static_cast<uint16_t>(NativeEffectGroup::cycle) << 8,
 			waves = static_cast<uint16_t>(NativeEffectGroup::waves) << 8,
 			hwave,
 			vwave,
-			cwave
+			cwave,
+			ripple = static_cast<uint16_t>(NativeEffectGroup::ripple) << 8
 		};
 		enum class NativeEffectPart : uint8_t {
 			all = 0xff,

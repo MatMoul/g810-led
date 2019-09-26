@@ -739,11 +739,14 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				break;
 			case NativeEffectGroup::cycle:
 			case NativeEffectGroup::waves:
+			case NativeEffectGroup::ripple:
 				if (! setGroupKeys(
 					LedKeyboard::KeyGroup::indicators,
 					LedKeyboard::Color({0xff, 0xff, 0xff}))
 				) return false;
 				if (! commit()) return false;
+				break;
+			default:
 				break;
 		}
 		return (
@@ -810,6 +813,19 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 			switch (part) {
 				case NativeEffectPart::keys:
 					data[4] = 0x01;
+
+					//Seems to conflict with a star-like effect on G410 and G810
+					switch (effect) {
+						case NativeEffect::ripple:
+							//Adjust periodicity
+							data[9]=0x00;
+							data[10]=period.count() >> 8 & 0xff;;
+							data[11]=period.count() & 0xff;
+							data[12]=0x00;
+							break;
+						default:
+							break;
+					}
 					break;
 				case NativeEffectPart::logo:
 					data[4] = 0x00;
@@ -826,6 +842,10 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 						case NativeEffect::waves:
 						case NativeEffect::cycle:
 							data[5]=0x02;
+							break;
+						case NativeEffect::ripple:
+						case NativeEffect::off:
+							data[5]=0x00;
 							break;
 						default:
 							data[5]=0x01;
