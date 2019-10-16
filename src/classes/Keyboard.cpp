@@ -871,7 +871,6 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (data.size() > 0) {
 		#if defined(hidapi)
 			if (! open(currentDevice.vendorID, currentDevice.productID, currentDevice.serialNumber)) return false;
-			data.insert(data.begin(), 0x00);
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
 				return false;
