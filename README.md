@@ -21,6 +21,10 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G910
 ## Install :</br>
 * [INSTALL.md](https://github.com/MatMoul/g810-led/blob/master/INSTALL.md)
 
+## Profiles :<br>
+You can load predefined configurations on startup! 
+* [PROFILES.md](https://github.com/MatMoul/g810-led/blob/master/PROFILES.md)
+
 ## Help :</br>
 `g213-led --help`</br>
 `g410-led --help`</br>

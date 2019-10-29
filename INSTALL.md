@@ -66,10 +66,3 @@ Same as install, but your profile and reboot files are preserved.</br>
 
 ## Uninstall :</br>
 `sudo make uninstall`</br>
-
-## Boot profiles :</br>
-On boot, the keyboard is set with the udev file /etc/udev/rules.d/g810-led.rules</br>
-This file launches the profile stored in /etc/g810-led/profile</br>
-To prevent your keyboard flashing 3 times when you reboot use the systemd unit (g810-led-reboot).</br>
-
-Samples can be found in /etc/g810-led/samples.</br>
