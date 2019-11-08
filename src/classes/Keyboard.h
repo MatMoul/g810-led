@@ -45,10 +45,21 @@ class LedKeyboard {
 	public:
 		
 		std::vector<std::vector<uint16_t>> SupportedKeyboards = {
+			// in case they use the same protocol, this is for the
+			//		logitech g600 gaming mouse
+			
+			// { 0x46d, 0xc24a, (uint16_t)KeyboardModel::g610 },
+			
+			
 			{ 0x46d, 0xc336, (uint16_t)KeyboardModel::g213 },
 			{ 0x46d, 0xc330, (uint16_t)KeyboardModel::g410 },
 			{ 0x46d, 0xc33a, (uint16_t)KeyboardModel::g413 },
 			{ 0x46d, 0xc33c, (uint16_t)KeyboardModel::g513 },
+			
+			// this is the one I added for the
+			//		Logitech G512 SE
+			// tested WORKING in Ubuntu 19.10 with hidapi-hidraw
+			{ 0x46d, 0xc342, (uint16_t)KeyboardModel::g513 },
 			{ 0x46d, 0xc333, (uint16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc338, (uint16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc331, (uint16_t)KeyboardModel::g810 },

@@ -7,6 +7,7 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G910
 - **G410 Atlas Spectrum**</br>
 - **G413 Carbon**</br>
 - **G512 Carbon**</br>
+- ** *NEW!* G512 SE**</br>
 - **G513 Carbon**</br>
 - **G610 Orion Brown**</br>
 - **G610 Orion Red**</br>
