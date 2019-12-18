@@ -878,10 +878,6 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (data.size() > 0) {
 		#if defined(hidapi)
 
-            //std::cout<<"model: "<<currentDevice.model<<std::endl;
-            //std::cout<<"vendorId: "<<currentDevice.vendorID<<std::endl;
-            //std::cout<<"productID: "<<currentDevice.productID<<std::endl;
-
 			if (! open(currentDevice.vendorID, currentDevice.productID, currentDevice.serialNumber)) return false;
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
 
