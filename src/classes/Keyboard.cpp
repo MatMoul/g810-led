@@ -443,7 +443,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				break;
 			case LedKeyboard::KeyAddressGroup::gkeys:
 				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g815: : // TODO - not working
+					case LedKeyboard::KeyboardModel::g815: // TODO - not working
 					case LedKeyboard::KeyboardModel::g910:
 						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
 						break;
