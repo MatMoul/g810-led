@@ -35,6 +35,7 @@ namespace help {
 		else if(cmdName == "g513-led") return KeyboardFeatures::g513;
 		else if(cmdName == "g610-led") return KeyboardFeatures::g610;
 		else if(cmdName == "g810-led") return KeyboardFeatures::g810;
+		else if(cmdName == "g815-led") return KeyboardFeatures::g815;
 		else if(cmdName == "g910-led") return KeyboardFeatures::g910;
 		else if(cmdName == "gpro-led") return KeyboardFeatures::gpro;
 		return KeyboardFeatures::all;

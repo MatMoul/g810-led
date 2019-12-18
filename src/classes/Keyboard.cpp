@@ -414,6 +414,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815: // TODO - not working
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
 							SortedKeys[0].push_back(keyValues[i]);
@@ -432,6 +433,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815: // TODO - not working
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
 						break;
@@ -441,6 +443,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				break;
 			case LedKeyboard::KeyAddressGroup::gkeys:
 				switch (currentDevice.model) {
+					case LedKeyboard::KeyboardModel::g815: : // TODO - not working
 					case LedKeyboard::KeyboardModel::g910:
 						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
 						break;
@@ -453,6 +456,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					case LedKeyboard::KeyboardModel::g513:
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::g910:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
@@ -594,9 +598,10 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 					NativeEffectStorage::none);
 			return true;
 		case KeyboardModel::g410:
-    case KeyboardModel::g513:
+        case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815:
 		case KeyboardModel::g910:
 		case KeyboardModel::gpro:
 			for (uint8_t i = 0; i < keyGroupLogo.size(); i++) keyValues.push_back({keyGroupLogo[i], color});
@@ -666,6 +671,7 @@ bool LedKeyboard::setMNKey(uint8_t value) {
 bool LedKeyboard::setGKeysMode(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815: // TODO - not working
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -705,6 +711,7 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 		case KeyboardModel::g410:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815: // TODO - not working
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0d, 0x5a, 0x00, 0x01 };
 			break;
@@ -870,8 +877,14 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (data.size() > 0) {
 		#if defined(hidapi)
+
+            //std::cout<<"model: "<<currentDevice.model<<std::endl;
+            //std::cout<<"vendorId: "<<currentDevice.vendorID<<std::endl;
+            //std::cout<<"productID: "<<currentDevice.productID<<std::endl;
+
 			if (! open(currentDevice.vendorID, currentDevice.productID, currentDevice.serialNumber)) return false;
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
+
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
 				return false;
 			}
@@ -927,6 +940,7 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 			break;
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815: // TODO - not working
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
 					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };

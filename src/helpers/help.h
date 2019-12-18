@@ -50,6 +50,7 @@ namespace help {
 		g513 = rgb | commit | numpad | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g610 = intensity | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
+		g815 = rgb | commit | logo1 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx,
 		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		gpro = rgb | commit | logo1 | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting
 	};
