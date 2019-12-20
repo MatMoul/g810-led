@@ -121,18 +121,28 @@ class LedKeyboard {
 		};
 		enum class Key : uint16_t { // 127 items
 			
-			logo = static_cast<uint8_t>(KeyAddressGroup::logo) << 8 | 0x01,
+			//logo = static_cast<uint8_t>(KeyAddressGroup::logo) << 8 | 0x01,
+            logo = static_cast<uint8_t>(KeyAddressGroup::logo) << 8 | 0xd2, // hack for G815
 			logo2,
 			
-			backlight = static_cast<uint8_t>(KeyAddressGroup::indicators) << 8| 0x01,
+			backlight = static_cast<uint8_t>(KeyAddressGroup::indicators) << 8| 0x99, // hack for G815
 			game, caps, scroll, num, 
 			
-			next = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xb5,
-			prev, stop,
-			play = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xcd,
-			mute = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xe2,
-			
-			g1 = static_cast<uint8_t>(KeyAddressGroup::gkeys) << 8 | 0x01,
+			//next = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xb5,
+			//prev, stop,
+			//play = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xcd,
+			//mute = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0xe2,
+
+            //next = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9d, // hack for G815
+            //prev = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9e, // hack for G815
+            //stop = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9f, // hack for G815
+            //play = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9b, // hack for G815
+            //mute = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9c, // hack for G815
+			play = static_cast<uint8_t>(KeyAddressGroup::multimedia) << 8 | 0x9b, // hack for G815
+			mute, next, prev, stop,
+
+			//g1 = static_cast<uint8_t>(KeyAddressGroup::gkeys) << 8 | 0x01,
+			g1 = static_cast<uint8_t>(KeyAddressGroup::gkeys) << 8 | 0xb4, // hack for G815
 			g2, g3, g4, g5, g6, g7, g8, g9,
 			
 			a = static_cast<uint8_t>(KeyAddressGroup::keys) << 8 | 0x04,

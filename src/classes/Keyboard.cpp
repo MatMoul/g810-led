@@ -377,9 +377,11 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
-		case KeyboardModel::g815:
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0c, 0x5a };
+			break;
+		case KeyboardModel::g815:
+			data = { 0x11, 0xff, 0x10, 0x7f };
 			break;
 		case KeyboardModel::g910:
 			data = { 0x11, 0xff, 0x0f, 0x5d };
@@ -414,7 +416,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
-					case LedKeyboard::KeyboardModel::g815: // TODO - not working
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
 							SortedKeys[0].push_back(keyValues[i]);
@@ -433,7 +435,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
-					case LedKeyboard::KeyboardModel::g815: // TODO - not working
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
 						break;
@@ -443,7 +445,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				break;
 			case LedKeyboard::KeyAddressGroup::gkeys:
 				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g815: // TODO - not working
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::g910:
 						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
 						break;
@@ -490,15 +492,36 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 						data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::logo);
 						break;
 					case 1:
-						data_size = 64;
+                        switch (currentDevice.model) {
+                            case LedKeyboard::KeyboardModel::g815:
+        						data_size = 20;
+                                break;
+                            default:
+        						data_size = 64;
+                                break;
+                        }
 						data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::indicators);
 						break;
 					case 2:
-						data_size = 64;
+                        switch (currentDevice.model) {
+                            case LedKeyboard::KeyboardModel::g815:
+        						data_size = 20;
+                                break;
+                            default:
+        						data_size = 64;
+                                break;
+                        }
 						data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::multimedia);
 						break;
 					case 3:
-						data_size = 64;
+                        switch (currentDevice.model) {
+                            case LedKeyboard::KeyboardModel::g815:
+        						data_size = 20;
+                                break;
+                            default:
+        						data_size = 64;
+                                break;
+                        }
 						data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::gkeys);
 						break;
 					case 4:
@@ -625,6 +648,7 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 bool LedKeyboard::setMRKey(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815: // TODO - not working
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -645,6 +669,7 @@ bool LedKeyboard::setMRKey(uint8_t value) {
 bool LedKeyboard::setMNKey(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815: // TODO - not working
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -936,7 +961,6 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 			break;
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
-		case KeyboardModel::g815: // TODO - not working
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
 					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
@@ -950,6 +974,19 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x01, 0x00, 0x0e };
 			}
 			break;
+		case KeyboardModel::g815:
+			switch (keyAddressGroup) {
+				case LedKeyboard::KeyAddressGroup::logo:
+					return { 0x11, 0xff, 0x10, 0x1b };
+				case LedKeyboard::KeyAddressGroup::indicators:
+					return { 0x11, 0xff, 0x10, 0x1f };
+				case LedKeyboard::KeyAddressGroup::gkeys:
+					return { 0x11, 0xff, 0x10, 0x1f };
+				case LedKeyboard::KeyAddressGroup::multimedia:
+					return { 0x11, 0xff, 0x10, 0x1f };
+				case LedKeyboard::KeyAddressGroup::keys:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x01, 0x00, 0x0e };
+			}
 		case KeyboardModel::g910:
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
