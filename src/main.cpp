@@ -171,6 +171,14 @@ int setStartupMode(LedKeyboard &kbd, std::string arg2) {
 	return 1;
 }
 
+int setOnBoardMode(LedKeyboard &kbd, std::string arg2) {
+	LedKeyboard::OnBoardMode onBoardMode;
+	if (! utils::parseOnBoardMode(arg2, onBoardMode)) return 1;
+	if (! kbd.open()) return 1;
+	if (kbd.setOnBoardMode(onBoardMode)) return 0;
+	return 1;
+}
+
 
 int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 	std::string line;
@@ -219,6 +227,8 @@ int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 				if (setGKeysMode(kbd, args[1]) == 1) retval = 1;
 			} else if (args[0] == "sm" && args.size() > 1) {
 				if (setStartupMode(kbd, args[1]) == 1) retval = 1;
+			} else if (args[0] == "obm" && args.size() > 1) {
+				if (setOnBoardMode(kbd, args[1]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 4) {
 				if (setFX(kbd, args[1], args[2], args[3], args[4]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 3) {
@@ -336,6 +346,7 @@ int main(int argc, char **argv) {
 		else if (argc > (argIndex + 3) && arg == "-fx-store")
 			return storeFX(kbd, argv[argIndex + 1], argv[argIndex + 2], argv[argIndex + 3]);
 		else if (argc > (argIndex + 1) && arg == "--startup-mode") return setStartupMode(kbd, argv[argIndex + 1]);
+		else if (argc > (argIndex + 1) && arg == "--on-board-mode") return setOnBoardMode(kbd, argv[argIndex + 1]);
 		else { help::usage(argv[0]); return 1; }
 	}
 

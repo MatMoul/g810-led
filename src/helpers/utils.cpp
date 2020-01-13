@@ -27,12 +27,19 @@ namespace utils {
 	std::string getCmdName(std::string cmd) {
 		return cmd.substr(cmd.find_last_of("/\\") + 1);
 	}
-	
-	
-	
+
+
+
 	bool parseStartupMode(std::string val, LedKeyboard::StartupMode &startupMode) {
 		if (val == "wave") startupMode = LedKeyboard::StartupMode::wave;
 		else if (val == "color") startupMode = LedKeyboard::StartupMode::color;
+		else return false;
+		return true;
+	}
+
+	bool parseOnBoardMode(std::string val, LedKeyboard::OnBoardMode &onBoardMode) {
+		if (val == "software") onBoardMode = LedKeyboard::OnBoardMode ::software;
+		else if (val == "board") onBoardMode = LedKeyboard::OnBoardMode::board;
 		else return false;
 		return true;
 	}

@@ -39,10 +39,11 @@ namespace help {
 		poweronfx = 8192,
 		// "user-stored lighting" can be recalled with backlight+7 on the G Pro
 		userstoredlighting = 16384,
+		onboardmode = 32768,
 		// fx features
 		
 		all = rgb | intensity | commit | logo1 | logo2 | numpad | multimedia | gkeys |
-		      setall | setgroup | setkey | setregion | setindicators | poweronfx | userstoredlighting,
+		      setall | setgroup | setkey | setregion | setindicators | poweronfx | userstoredlighting | onboardmode,
 		
 		g213 = rgb | logo1 | numpad | multimedia | setall | setregion | setindicators | poweronfx | userstoredlighting,
 		g410 = rgb | commit | setall | setgroup | setkey | poweronfx | userstoredlighting,
@@ -50,7 +51,7 @@ namespace help {
 		g513 = rgb | commit | numpad | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g610 = intensity | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
-		g815 = rgb | commit | logo1 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx,
+		g815 = rgb | commit | logo1 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | onboardmode,
 		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		gpro = rgb | commit | logo1 | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting
 	};

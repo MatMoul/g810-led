@@ -90,6 +90,10 @@ namespace help {
 			cout<<"  --startup-mode {startup mode}\t\tSet startup mode"<<endl;
 			cout<<endl;
 		}
+		if((features | KeyboardFeatures::onboardmode) == features) {
+			cout<<"  --on-board-mode {on board mode}\t\tSet on-board mode"<<endl;
+			cout<<endl;
+		}
 		cout<<"  --list-keyboards \t\t\tList connected keyboards"<<endl;
 		cout<<"  --print-device\t\t\tPrint device information for the keyboard"<<endl;
 		cout<<endl;
@@ -120,6 +124,7 @@ namespace help {
 		if((features | KeyboardFeatures::setgroup) == features)
 			cout<<"  group values :\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
 		cout<<"  startup mode :\t\t\twave, color"<<endl;
+		cout<<"  on-board mode :\t\t\tboard, software"<<endl;
 		cout<<endl;
 	}
 	
@@ -323,6 +328,9 @@ namespace help {
 		cout<<cmdName<<" -fx cwave keys 0a             # Set center wave effect"<<endl;
 		if((features | KeyboardFeatures::poweronfx) == features)
 			cout<<cmdName<<" --startup-mode color          # Set keyboard power on effect"<<endl;
+		cout<<endl;
+		if((features | KeyboardFeatures::onboardmode) == features)
+			cout<<cmdName<<" --on-board-mode color          # Set keyboard power on effect"<<endl;
 		cout<<endl;
 		if((features | KeyboardFeatures::commit) == features) {
 			cout<<"Samples with no commit :"<<endl;

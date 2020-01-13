@@ -755,9 +755,6 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0d, 0x5a, 0x00, 0x01 };
 			break;
-		case KeyboardModel::g815:
-			data = { 0x11, 0xff, 0x11, 0x1b, 0x02 };
-			break;
 		case KeyboardModel::g910:
 			data = { 0x11, 0xff, 0x10, 0x5e, 0x00, 0x01 };
 			break;
@@ -769,6 +766,30 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 	return sendDataInternal(data);
 }
 
+bool LedKeyboard::setOnBoardMode(OnBoardMode onBoardMode) {
+	byte_buffer_t data;
+	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			switch (onBoardMode) {
+				case LedKeyboard::OnBoardMode::board:
+					data = { 0x11, 0xff, 0x11, 0x1a, 0x01 };
+					data.resize(20, 0x00);
+					return sendDataInternal(data);
+				case LedKeyboard::OnBoardMode::software:
+					data = { 0x11, 0xff, 0x11, 0x1b, 0x02 };
+					data.resize(20, 0x00);
+					return sendDataInternal(data);
+				default:
+					break;
+			}
+			break;
+		default:
+			return false;
+	}
+	data.push_back((unsigned char)onBoardMode);
+	data.resize(20, 0x00);
+	return sendDataInternal(data);
+}
 
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				  std::chrono::duration<uint16_t, std::milli> period, Color color,

@@ -24,8 +24,9 @@
 namespace utils {
 	
 	std::string getCmdName(std::string cmd);
-	
+
 	bool parseStartupMode(std::string val, LedKeyboard::StartupMode &startupMode);
+	bool parseOnBoardMode(std::string val, LedKeyboard::OnBoardMode &onBoardMode);
 	bool parseNativeEffect(std::string val, LedKeyboard::NativeEffect &nativeEffect);
 	bool parseNativeEffectPart(std::string val, LedKeyboard::NativeEffectPart &nativeEffectPart);
 	bool parseKey(std::string val, LedKeyboard::Key &key);
