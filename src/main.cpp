@@ -217,6 +217,8 @@ int parseProfile(LedKeyboard &kbd, std::istream &stream) {
 				if (setMNKey(kbd, args[1]) == 1) retval = 1;
 			} else if (args[0] == "gkm" && args.size() > 1) {
 				if (setGKeysMode(kbd, args[1]) == 1) retval = 1;
+			} else if (args[0] == "sm" && args.size() > 1) {
+				if (setStartupMode(kbd, args[1]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 4) {
 				if (setFX(kbd, args[1], args[2], args[3], args[4]) == 1) retval = 1;
 			} else if (args[0] == "fx" && args.size() > 3) {
