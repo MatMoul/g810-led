@@ -91,7 +91,7 @@ namespace help {
 			cout<<endl;
 		}
 		if((features | KeyboardFeatures::onboardmode) == features) {
-			cout<<"  --on-board-mode {on board mode}\t\tSet on-board mode"<<endl;
+			cout<<"  --on-board-mode {on-board mode}\t\tSet on-board mode"<<endl;
 			cout<<endl;
 		}
 		cout<<"  --list-keyboards \t\t\tList connected keyboards"<<endl;
