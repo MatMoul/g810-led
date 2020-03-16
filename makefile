@@ -1,3 +1,4 @@
+CXX?=g++
 UNAME := $(shell uname)
 
 CXXFLAGS?=-Wall -O2
