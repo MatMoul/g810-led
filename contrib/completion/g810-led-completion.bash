@@ -4,7 +4,7 @@
 # #######
 g810_device_options="-dv -dp -ds -tuk"
 g810_tuk_option="-tuk"
-g810_tuk_options="1 2 3"
+g810_tuk_options="1 2 3"  # yet not used
 g810_options="$g810_device_options g810_tuk_option"
 
 # COMMANDS
@@ -55,9 +55,6 @@ _g810-led_completions()
     done
     if [[ $contains -eq 1 && $exactmatch -eq 1 ]]; then return; fi;
 
-    # long commands with parameter
-    # ############################
-
     # --> startup mode
     if [[ $startup_mode_command == "${COMP_WORDS[i]}" ]]
     then
@@ -92,7 +89,6 @@ _g810-led_completions()
     fi
 
     # commands with keygroups
-    # #######################
     if [[ " $key_group_commands " =~ " ${COMP_WORDS[i]} " ]]
     then
 	((i++))
