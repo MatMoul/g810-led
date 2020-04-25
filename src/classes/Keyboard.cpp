@@ -770,7 +770,7 @@ bool LedKeyboard::setOnBoardMode(OnBoardMode onBoardMode) {
 	byte_buffer_t data;
 	switch (currentDevice.model) {
 		case KeyboardModel::g815:
-			data = { 0x11, 0xff, 0x11, 0x1a, onBoardMode };
+			data = { 0x11, 0xff, 0x11, 0x1a, static_cast<uint8_t>(onBoardMode) };
 			data.resize(20, 0x00);
 			return sendDataInternal(data);
 		default:
