@@ -377,9 +377,11 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
-		case KeyboardModel::g815:
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0c, 0x5a };
+			break;
+		case KeyboardModel::g815:
+			data = { 0x11, 0xff, 0x10, 0x7f };
 			break;
 		case KeyboardModel::g910:
 			data = { 0x11, 0xff, 0x0f, 0x5d };
@@ -414,6 +416,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
 							SortedKeys[0].push_back(keyValues[i]);
@@ -432,6 +435,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				switch (currentDevice.model) {
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
 						break;
@@ -441,6 +445,7 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 				break;
 			case LedKeyboard::KeyAddressGroup::gkeys:
 				switch (currentDevice.model) {
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::g910:
 						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
 						break;
@@ -453,14 +458,15 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 					case LedKeyboard::KeyboardModel::g513:
 					case LedKeyboard::KeyboardModel::g610:
 					case LedKeyboard::KeyboardModel::g810:
+					case LedKeyboard::KeyboardModel::g815:
 					case LedKeyboard::KeyboardModel::g910:
 					case LedKeyboard::KeyboardModel::gpro:
 						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
 						break;
 					case LedKeyboard::KeyboardModel::g410:
 						if (SortedKeys[4].size() <= 120)
-							if (keyValues[i].key < LedKeyboard::Key::num_lock || 
-							    keyValues[i].key > LedKeyboard::Key::num_dot)
+							if (keyValues[i].key < LedKeyboard::Key::num_lock ||
+								keyValues[i].key > LedKeyboard::Key::num_dot)
 								SortedKeys[4].push_back(keyValues[i]);
 						break;
 					default:
@@ -594,9 +600,10 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 					NativeEffectStorage::none);
 			return true;
 		case KeyboardModel::g410:
-    case KeyboardModel::g513:
+		case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815:
 		case KeyboardModel::g910:
 		case KeyboardModel::gpro:
 			for (uint8_t i = 0; i < keyGroupLogo.size(); i++) keyValues.push_back({keyGroupLogo[i], color});
@@ -620,6 +627,17 @@ bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
 bool LedKeyboard::setMRKey(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			switch (value) {
+				case 0x00:
+				case 0x01:
+					data = { 0x11, 0xff, 0x0c, 0x0c, value };
+					data.resize(20, 0x00);
+					return sendDataInternal(data);
+				default:
+					break;
+			}
+			break;
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -640,6 +658,24 @@ bool LedKeyboard::setMRKey(uint8_t value) {
 bool LedKeyboard::setMNKey(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			switch (value) {
+				case 0x01:
+                    data = { 0x11, 0xff, 0x0b, 0x1c, 0x01 };
+                    data.resize(20, 0x00);
+                    return sendDataInternal(data);
+                case 0x02:
+                    data = { 0x11, 0xff, 0x0b, 0x1c, 0x02 };
+                    data.resize(20, 0x00);
+                    return sendDataInternal(data);
+                case 0x03:
+                    data = { 0x11, 0xff, 0x0b, 0x1c, 0x04 };
+                    data.resize(20, 0x00);
+                    return sendDataInternal(data);
+				default:
+					break;
+			}
+			break;
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -666,6 +702,17 @@ bool LedKeyboard::setMNKey(uint8_t value) {
 bool LedKeyboard::setGKeysMode(uint8_t value) {
 	LedKeyboard::byte_buffer_t data;
 	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			switch (value) {
+				case 0x00:
+				case 0x01:
+					data = { 0x11, 0xff, 0x0a, 0x2b, value };
+					data.resize(20, 0x00);
+					return sendDataInternal(data);
+				default:
+					break;
+			}
+			break;
 		case KeyboardModel::g910:
 			switch (value) {
 				case 0x00:
@@ -719,6 +766,17 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 	return sendDataInternal(data);
 }
 
+bool LedKeyboard::setOnBoardMode(OnBoardMode onBoardMode) {
+	byte_buffer_t data;
+	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			data = { 0x11, 0xff, 0x11, 0x1a, onBoardMode };
+			data.resize(20, 0x00);
+			return sendDataInternal(data);
+		default:
+			return false;
+	}
+}
 
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				  std::chrono::duration<uint16_t, std::milli> period, Color color,
@@ -927,6 +985,20 @@ LedKeyboard::byte_buffer_t LedKeyboard::getKeyGroupAddress(LedKeyboard::KeyAddre
 			break;
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+			switch (keyAddressGroup) {
+				case LedKeyboard::KeyAddressGroup::logo:
+					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
+				case LedKeyboard::KeyAddressGroup::indicators:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x40, 0x00, 0x05 };
+				case LedKeyboard::KeyAddressGroup::gkeys:
+					return {};
+				case LedKeyboard::KeyAddressGroup::multimedia:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x02, 0x00, 0x05 };
+				case LedKeyboard::KeyAddressGroup::keys:
+					return { 0x12, 0xff, 0x0c, 0x3a, 0x00, 0x01, 0x00, 0x0e };
+			}
+			break;
+		case KeyboardModel::g815:
 			switch (keyAddressGroup) {
 				case LedKeyboard::KeyAddressGroup::logo:
 					return { 0x11, 0xff, 0x0c, 0x3a, 0x00, 0x10, 0x00, 0x01 };
