@@ -47,6 +47,7 @@ namespace help {
 		g213 = rgb | logo1 | numpad | multimedia | setall | setregion | setindicators | poweronfx | userstoredlighting,
 		g410 = rgb | commit | setall | setgroup | setkey | poweronfx | userstoredlighting,
 		g413 = intensity | setall | userstoredlighting,
+		g512 = rgb | commit | numpad | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g513 = rgb | commit | numpad | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g610 = intensity | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
