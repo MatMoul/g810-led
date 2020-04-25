@@ -374,10 +374,11 @@ bool LedKeyboard::commit() {
 		case KeyboardModel::g413:
 			return true; // Keyboard is non-transactional
 		case KeyboardModel::g410:
-    case KeyboardModel::g512:
-    case KeyboardModel::g513:
+		case KeyboardModel::g512:
+		case KeyboardModel::g513:
 		case KeyboardModel::g610:
 		case KeyboardModel::g810:
+		case KeyboardModel::g815:
 		case KeyboardModel::gpro:
 			data = { 0x11, 0xff, 0x0c, 0x5a };
 			break;
@@ -543,7 +544,12 @@ bool LedKeyboard::setGroupKeys(KeyGroup keyGroup, LedKeyboard::Color color) {
 			keyArray = keyGroupLogo;
 			break;
 		case KeyGroup::indicators:
-			keyArray = keyGroupIndicators;
+			switch (currentDevice.model) {
+				case KeyboardModel::g815:
+					return true;
+				default:
+					keyArray = keyGroupIndicators;
+			}
 			break;
 		case KeyGroup::gkeys:
 			keyArray = keyGroupGKeys;
@@ -720,7 +726,7 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				  std::chrono::duration<uint16_t, std::milli> period, Color color,
 				  NativeEffectStorage storage) {
-	uint8_t protocolByte = 0;
+	uint8_t protocolBytes[2] = {0x00, 0x00};
 	NativeEffectGroup effectGroup = static_cast<NativeEffectGroup>(static_cast<uint16_t>(effect) >> 8);
 
 	// NativeEffectPart::all is not in the device protocol, but an alias for both keys and logo, plus indicators
@@ -736,11 +742,14 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				break;
 			case NativeEffectGroup::cycle:
 			case NativeEffectGroup::waves:
+			case NativeEffectGroup::ripple:
 				if (! setGroupKeys(
 					LedKeyboard::KeyGroup::indicators,
 					LedKeyboard::Color({0xff, 0xff, 0xff}))
 				) return false;
 				if (! commit()) return false;
+				break;
+			default:
 				break;
 		}
 		return (
@@ -751,30 +760,33 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
 		case KeyboardModel::g413:
-			protocolByte = 0x0c;
+			protocolBytes[0] = 0x0c;
+			protocolBytes[1] = 0x3c;
 			if (part == NativeEffectPart::logo) return true; //Does not have logo component
 			break;
 		case KeyboardModel::g410:
-    case KeyboardModel::g512:
-    case KeyboardModel::g513:
+		case KeyboardModel::g512:
+		case KeyboardModel::g513:
 		case KeyboardModel::g610: // Unconfirmed
 		case KeyboardModel::g810:
 		case KeyboardModel::gpro:
-			protocolByte = 0x0d;
+			protocolBytes[0] = 0x0d;
+			protocolBytes[1] = 0x3c;
+			break;
+		case KeyboardModel::g815:
+			protocolBytes[0] = 0x0f;
+			protocolBytes[1] = 0x1c;
 			break;
 		case KeyboardModel::g910:
-			protocolByte = 0x10;
+			protocolBytes[0] = 0x10;
+			protocolBytes[1] = 0x3c;
 			break;
 		default:
 			return false;
 	}
 
-	if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
-		return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}), storage);
-	}
-
 	byte_buffer_t data = {
-		0x11, 0xff, protocolByte, 0x3c,
+		0x11, 0xff, protocolBytes[0], protocolBytes[1],
 		(uint8_t)part, static_cast<uint8_t>(effectGroup),
 		// color of static-color and breathing effects
 		color.red, color.green, color.blue,
@@ -791,7 +803,71 @@ bool LedKeyboard::setNativeEffect(NativeEffect effect, NativeEffectPart part,
 		0, // unused?
 		0, // unused?
 	};
-	return sendDataInternal(data);
+
+	byte_buffer_t setupData;
+	bool retval;
+	switch (currentDevice.model) {
+		case KeyboardModel::g815:
+			setupData = { 0x11, 0xff, 0x0f, 0x5c, 0x01, 0x03, 0x03 };
+			setupData.resize(20, 0x00);
+			retval = sendDataInternal(setupData);
+
+			data[16] = 0x01;
+
+			switch (part) {
+				case NativeEffectPart::keys:
+					data[4] = 0x01;
+
+					//Seems to conflict with a star-like effect on G410 and G810
+					switch (effect) {
+						case NativeEffect::ripple:
+							//Adjust periodicity
+							data[9]=0x00;
+							data[10]=period.count() >> 8 & 0xff;;
+							data[11]=period.count() & 0xff;
+							data[12]=0x00;
+							break;
+						default:
+							break;
+					}
+					break;
+				case NativeEffectPart::logo:
+					data[4] = 0x00;
+					switch (effect) {
+						case NativeEffect::breathing:
+							data[5]=0x03;
+							break;
+						case NativeEffect::cwave:
+						case NativeEffect::vwave:
+						case NativeEffect::hwave:
+							data[5]=0x02;
+							data[13]=0x64;
+							break;
+						case NativeEffect::waves:
+						case NativeEffect::cycle:
+							data[5]=0x02;
+							break;
+						case NativeEffect::ripple:
+						case NativeEffect::off:
+							data[5]=0x00;
+							break;
+						default:
+							data[5]=0x01;
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+		default: //Many devices may not support logo coloring for wave?
+			if ((effectGroup == NativeEffectGroup::waves) && (part == NativeEffectPart::logo)) {
+				return setNativeEffect(NativeEffect::color, part, std::chrono::seconds(0), Color({0x00, 0xff, 0xff}), storage);
+			}
+			break;
+	}
+	retval = sendDataInternal(data);
+	return retval;
 }
 
 
@@ -799,7 +875,6 @@ bool LedKeyboard::sendDataInternal(byte_buffer_t &data) {
 	if (data.size() > 0) {
 		#if defined(hidapi)
 			if (! open(currentDevice.vendorID, currentDevice.productID, currentDevice.serialNumber)) return false;
-			data.insert(data.begin(), 0x00);
 			if (hid_write(m_hidHandle, const_cast<unsigned char*>(data.data()), data.size()) < 0) {
 				std::cout<<"Error: Can not write to hidraw, try with the libusb version"<<std::endl;
 				return false;

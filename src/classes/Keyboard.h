@@ -54,6 +54,7 @@ class LedKeyboard {
 			{ 0x46d, 0xc338, (uint16_t)KeyboardModel::g610 },
 			{ 0x46d, 0xc331, (uint16_t)KeyboardModel::g810 },
 			{ 0x46d, 0xc337, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc33f, (uint16_t)KeyboardModel::g815 },
 			{ 0x46d, 0xc32b, (uint16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc335, (uint16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc339, (uint16_t)KeyboardModel::gpro }
@@ -68,6 +69,7 @@ class LedKeyboard {
 			g513,
 			g610,
 			g810,
+			g815,
 			g910,
 			gpro
 		};
@@ -79,19 +81,23 @@ class LedKeyboard {
 			color
 		};
 		enum class NativeEffectGroup : uint8_t {
-			color = 0x01,
+			off,
+			color,
 			breathing,
 			cycle,
-			waves
+			waves,
+			ripple
 		};
 		enum class NativeEffect : uint16_t {
+			off,
 			color = static_cast<uint16_t>(NativeEffectGroup::color) << 8,
 			breathing = static_cast<uint16_t>(NativeEffectGroup::breathing) << 8,
 			cycle = static_cast<uint16_t>(NativeEffectGroup::cycle) << 8,
 			waves = static_cast<uint16_t>(NativeEffectGroup::waves) << 8,
 			hwave,
 			vwave,
-			cwave
+			cwave,
+			ripple = static_cast<uint16_t>(NativeEffectGroup::ripple) << 8
 		};
 		enum class NativeEffectPart : uint8_t {
 			all = 0xff,
