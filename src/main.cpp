@@ -129,6 +129,9 @@ int setFX(LedKeyboard &kbd, LedKeyboard::NativeEffectStorage storage,
 	if (! utils::parseNativeEffectPart(arg3, effectPart)) return 1;
 
 	switch (effect) {
+		case LedKeyboard::NativeEffect::off:
+		case LedKeyboard::NativeEffect::ripple:
+			break;
 		case LedKeyboard::NativeEffect::color:
 			if (! utils::parseColor(arg4, color)) return 1;
 			break;
