@@ -80,6 +80,10 @@ class LedKeyboard {
 			wave = 0x01,
 			color
 		};
+		enum class OnBoardMode : uint8_t {
+			board = 0x01,
+			software
+		};
 		enum class NativeEffectGroup : uint8_t {
 			off,
 			color,
@@ -203,6 +207,7 @@ class LedKeyboard {
 		
 		bool setRegion(uint8_t region, Color color);
 		bool setStartupMode(StartupMode startupMode);
+		bool setOnBoardMode(OnBoardMode onBoardMode);
 
 		bool setNativeEffect(NativeEffect effect, NativeEffectPart part,
 				     std::chrono::duration<uint16_t, std::milli> period, Color color,
