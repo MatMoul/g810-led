@@ -19,6 +19,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <vector>
+#include <map>
 
 #if defined(hidapi)
 	#include <locale>
@@ -402,172 +403,167 @@ bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 	
 	bool retval = true;
 	
-	vector<vector<KeyValue>> SortedKeys = {
-		{}, // Logo AddressGroup
-		{}, // Indicators AddressGroup
-		{}, // Multimedia AddressGroup
-		{}, // GKeys AddressGroup
-		{} // Keys AddressGroup
-	};
-	
-	for (uint8_t i = 0; i < keyValues.size(); i++) {
-		switch(static_cast<LedKeyboard::KeyAddressGroup>(static_cast<uint16_t>(keyValues[i].key) >> 8 )) {
-			case LedKeyboard::KeyAddressGroup::logo:
-				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g610:
-					case LedKeyboard::KeyboardModel::g810:
-					case LedKeyboard::KeyboardModel::g815:
-					case LedKeyboard::KeyboardModel::gpro:
-						if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
-							SortedKeys[0].push_back(keyValues[i]);
-						break;
-					case LedKeyboard::KeyboardModel::g910:
-						if (SortedKeys[0].size() <= 2) SortedKeys[0].push_back(keyValues[i]);
-						break;
-					default:
-						break;
-				}
-				break;
-			case LedKeyboard::KeyAddressGroup::indicators:
-				if (SortedKeys[1].size() <= 5) SortedKeys[1].push_back(keyValues[i]);
-				break;
-			case LedKeyboard::KeyAddressGroup::multimedia:
-				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g610:
-					case LedKeyboard::KeyboardModel::g810:
-					case LedKeyboard::KeyboardModel::gpro:
-						if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
-						break;
-					case LedKeyboard::KeyboardModel::g815:
-						if (SortedKeys[2].size() <= 4) SortedKeys[2].push_back(keyValues[i]);
-						break;
-					default:
-						break;
-				}
-				break;
-			case LedKeyboard::KeyAddressGroup::gkeys:
-				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g815:
-						if (SortedKeys[3].size() <= 4) SortedKeys[3].push_back(keyValues[i]);
-						break;
-					case LedKeyboard::KeyboardModel::g910:
-						if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
-						break;
-					default:
-						break;
-				}
-				break;
-			case LedKeyboard::KeyAddressGroup::keys:
-				switch (currentDevice.model) {
-					case LedKeyboard::KeyboardModel::g513:
-					case LedKeyboard::KeyboardModel::g610:
-					case LedKeyboard::KeyboardModel::g810:
-					case LedKeyboard::KeyboardModel::g815:
-					case LedKeyboard::KeyboardModel::g910:
-					case LedKeyboard::KeyboardModel::gpro:
-						if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
-						break;
-					case LedKeyboard::KeyboardModel::g410:
-						if (SortedKeys[4].size() <= 120)
-							if (keyValues[i].key < LedKeyboard::Key::num_lock ||
-								keyValues[i].key > LedKeyboard::Key::num_dot)
-								SortedKeys[4].push_back(keyValues[i]);
-						break;
-					default:
-						break;
-				}
-				break;
-		}
-	}
+	vector<vector<KeyValue>> SortedKeys;
+	map<int32_t, vector<KeyValue>> KeyByColors;
+	map<int32_t, vector<KeyValue>>::iterator KeyByColorsIterator;
+	const uint8_t maxKeyPerColor = 13;
 	
 	switch (currentDevice.model) {
 		case KeyboardModel::g815:
-			for (uint8_t kag = 0; kag < 5; kag++) {
-				if (SortedKeys[kag].size() > 0) {
+			for (uint8_t i = 0; i < keyValues.size(); i++) {
+				uint32_t colorkey = static_cast<uint32_t>(keyValues[i].color.red | keyValues[i].color.green << 8 | keyValues[i].color.blue << 16 );
+				if (KeyByColors.count(colorkey) == 0) KeyByColors.insert(pair<uint32_t, vector<KeyValue>>(colorkey, {}));
+				KeyByColors[colorkey].push_back(keyValues[i]);
+			}
+			
+			for (auto& x: KeyByColors) {
+				if (x.second.size() > 0) {
 					uint8_t gi = 0;
-					while (gi < SortedKeys[kag].size()) {
+					while (gi < x.second.size()) {
 						size_t data_size = 20;
-						byte_buffer_t data = {};
-						uint8_t keyaddoffset = 0; // Temporary solution
-						uint8_t keyremoveoffset = 0; // Temporary solution
-						switch (kag) {
-							case 0:
-								data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::logo);
-								keyaddoffset = 0xd1;
-								break;
-							case 1:
-								data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::indicators);
-								keyaddoffset = 0x98;
-								break;
-							case 2:
-								data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::multimedia);
-								break;
-							case 3:
-								data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::gkeys);
-								keyaddoffset = 0xb3;
-								break;
-							case 4:
-								data = getKeyGroupAddress(LedKeyboard::KeyAddressGroup::keys);
-								keyremoveoffset = 0x03;
-								break;
-						}
-						
-						//const uint8_t maxKeyCount = (data_size - 8) / 4;
-						//const uint8_t maxKeyCount = 4;
-						const uint8_t maxKeyCount = 1; // Temporary solution
-						
-						if (data.size() > 0) {
-							
-							for (uint8_t i = 0; i < maxKeyCount; i++) {
-								if (gi + i < SortedKeys[kag].size()) {
-									switch (SortedKeys[kag][gi+i].key) { // Temporary solution
-										case Key::play:
-											data.push_back(0x9b);
-											break;
-										case Key::mute:
-											data.push_back(0x9c);
-											break;
-										case Key::next:
-											data.push_back(0x9d);
-											break;
-										case Key::prev:
-											data.push_back(0x9e);
-											break;
-										case Key::ctrl_left:
-										case Key::shift_left:
-										case Key::alt_left:
-										case Key::win_left:
-										case Key::ctrl_right:
-										case Key::shift_right:
-										case Key::alt_right:
-										case Key::win_right:
-											data.push_back(static_cast<uint8_t>(
-												static_cast<uint16_t>(SortedKeys[kag][gi+i].key) & 0x00ff) - 0x78);
-											break;
-										default:
-											data.push_back(static_cast<uint8_t>(
-												static_cast<uint16_t>(SortedKeys[kag][gi+i].key) & 0x00ff) + keyaddoffset - keyremoveoffset);
-									}
-									data.push_back(SortedKeys[kag][gi+i].color.red);
-									data.push_back(SortedKeys[kag][gi+i].color.green);
-									data.push_back(SortedKeys[kag][gi+i].color.blue);
+						byte_buffer_t data = { 0x11, 0xff, 0x10, 0x6c };
+						data.push_back(x.second[0].color.red);
+						data.push_back(x.second[0].color.green);
+						data.push_back(x.second[0].color.blue);
+						for (uint8_t i = 0; i < maxKeyPerColor; i++) {
+							if (gi + i < x.second.size()) {
+								switch (x.second[gi+i].key) {
+									case Key::logo2:
+									case Key::game:
+									case Key::caps:
+									case Key::scroll:
+									case Key::num:
+									case Key::stop:
+									case Key::g6:
+									case Key::g7:
+									case Key::g8:
+									case Key::g9:
+										break;
+									case Key::play:
+										data.push_back(0x9b);
+										break;
+									case Key::mute:
+										data.push_back(0x9c);
+										break;
+									case Key::next:
+										data.push_back(0x9d);
+										break;
+									case Key::prev:
+										data.push_back(0x9e);
+										break;
+									case Key::ctrl_left:
+									case Key::shift_left:
+									case Key::alt_left:
+									case Key::win_left:
+									case Key::ctrl_right:
+									case Key::shift_right:
+									case Key::alt_right:
+									case Key::win_right:
+										data.push_back((static_cast<uint8_t>(x.second[gi+i].key) & 0x00ff) - 0x78);
+										break;
+									default:
+										switch (static_cast<KeyAddressGroup>((static_cast<uint16_t>(x.second[gi+i].key) & 0xff00) / 0xff)) {
+											case KeyAddressGroup::logo:
+												data.push_back((static_cast<uint8_t>(x.second[gi+i].key) & 0x00ff) + 0xd1);
+												break;
+											case KeyAddressGroup::indicators:
+												data.push_back((static_cast<uint8_t>(x.second[gi+i].key) & 0x00ff) + 0x98);
+												break;
+											case KeyAddressGroup::gkeys:
+												data.push_back((static_cast<uint8_t>(x.second[gi+i].key) & 0x00ff) + 0xb3);
+												break;
+											case KeyAddressGroup::keys:
+												data.push_back((static_cast<uint8_t>(x.second[gi+i].key) & 0x00ff) - 0x03);
+												break;
+											default:
+												break;
+										}
 								}
 							}
-							
-							if (data.size() < data_size) data.push_back(0xff);
-							data.resize(data_size, 0x00);
-							
-							if (retval) retval = sendDataInternal(data);
-							else sendDataInternal(data);
-							
 						}
 						
-						gi = gi + maxKeyCount;
+						if (data.size() < data_size) data.push_back(0xff);
+						data.resize(data_size, 0x00);
+						if (retval) retval = sendDataInternal(data);
+						else sendDataInternal(data);
+						
+						gi = gi + maxKeyPerColor;
 					}
 				}
 			}
+			
 			break;
 		default:
+			SortedKeys = {
+				{}, // Logo AddressGroup
+				{}, // Indicators AddressGroup
+				{}, // Multimedia AddressGroup
+				{}, // GKeys AddressGroup
+				{} // Keys AddressGroup
+			};
+			
+			for (uint8_t i = 0; i < keyValues.size(); i++) {
+				switch(static_cast<LedKeyboard::KeyAddressGroup>(static_cast<uint16_t>(keyValues[i].key) >> 8 )) {
+					case LedKeyboard::KeyAddressGroup::logo:
+						switch (currentDevice.model) {
+							case LedKeyboard::KeyboardModel::g610:
+							case LedKeyboard::KeyboardModel::g810:
+							case LedKeyboard::KeyboardModel::gpro:
+								if (SortedKeys[0].size() <= 1 && keyValues[i].key == LedKeyboard::Key::logo)
+									SortedKeys[0].push_back(keyValues[i]);
+								break;
+							case LedKeyboard::KeyboardModel::g910:
+								if (SortedKeys[0].size() <= 2) SortedKeys[0].push_back(keyValues[i]);
+								break;
+							default:
+								break;
+						}
+						break;
+					case LedKeyboard::KeyAddressGroup::indicators:
+						if (SortedKeys[1].size() <= 5) SortedKeys[1].push_back(keyValues[i]);
+						break;
+					case LedKeyboard::KeyAddressGroup::multimedia:
+						switch (currentDevice.model) {
+							case LedKeyboard::KeyboardModel::g610:
+							case LedKeyboard::KeyboardModel::g810:
+							case LedKeyboard::KeyboardModel::gpro:
+								if (SortedKeys[2].size() <= 5) SortedKeys[2].push_back(keyValues[i]);
+								break;
+							default:
+								break;
+						}
+						break;
+					case LedKeyboard::KeyAddressGroup::gkeys:
+						switch (currentDevice.model) {
+							case LedKeyboard::KeyboardModel::g910:
+								if (SortedKeys[3].size() <= 9) SortedKeys[3].push_back(keyValues[i]);
+								break;
+							default:
+								break;
+						}
+						break;
+					case LedKeyboard::KeyAddressGroup::keys:
+						switch (currentDevice.model) {
+							case LedKeyboard::KeyboardModel::g513:
+							case LedKeyboard::KeyboardModel::g610:
+							case LedKeyboard::KeyboardModel::g810:
+							case LedKeyboard::KeyboardModel::g910:
+							case LedKeyboard::KeyboardModel::gpro:
+								if (SortedKeys[4].size() <= 120) SortedKeys[4].push_back(keyValues[i]);
+								break;
+							case LedKeyboard::KeyboardModel::g410:
+								if (SortedKeys[4].size() <= 120)
+									if (keyValues[i].key < LedKeyboard::Key::num_lock ||
+										keyValues[i].key > LedKeyboard::Key::num_dot)
+										SortedKeys[4].push_back(keyValues[i]);
+								break;
+							default:
+								break;
+						}
+						break;
+				}
+			}
+			
 			for (uint8_t kag = 0; kag < 5; kag++) {
 				
 				if (SortedKeys[kag].size() > 0) {
