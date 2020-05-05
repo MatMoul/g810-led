@@ -11,7 +11,7 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G815
 - **G610 Orion Brown**</br>
 - **G610 Orion Red**</br>
 - **G810 Orion Spectrum**</br>
-- **G815 Lightsync**</br>
+- **G815 LIGHTSYNC**</br>
 - **G910 Orion Spark**</br>
 - **G910 Orion Spectrum**</br>
 - **GPRO**</br>
@@ -34,6 +34,7 @@ You can load predefined configurations on startup!
 `g513-led --help`</br>
 `g610-led --help`</br>
 `g810-led --help`</br>
+`g815-led --help`</br>
 `g910-led --help`</br>
 `gpro-led --help`</br>
 
@@ -81,12 +82,14 @@ Start by retrieving the VendorID and the ProductID of your keyboard using lsusb.
 `lsusb`</br>
 Sample return :<br>
 `Bus 001 Device 001: ID 046d:c331 Logitech, Inc.`</br>
-In this sample VendorID is 046d and ProductID is c331. Now test your keyboard with all supported protocol :</br>
+In this sample VendorID is 046d and ProductID is c331. Now test your keyboard with all supported protocol (for 2019 keyboard start with -tuk 4):</br>
 `g810-led -dv 046d -dp c331 -tuk 1 -a 000000`</br>
 If your keyboard set all key to off you have found the protocol (1), if not continue.</br>
 `g810-led -dv 046d -dp c331 -tuk 2 -a 000000`</br>
 If your keyboard set all key to off you have found the protocol (2), if not continue.</br>
 `g810-led -dv 046d -dp c331 -tuk 3 -a 000000`</br>
+If your keyboard set all key to off you have found the protocol (2), if not continue.</br>
+`g810-led -dv 046d -dp c331 -tuk 4 -a 000000`</br>
 If your keyboard set all key to off you have found the protocol (3), if not, need new dump.</br>
 
 ## Building and linking against the libg810-led library :</br>
