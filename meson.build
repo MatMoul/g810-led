@@ -20,12 +20,12 @@ project(
   default_options : ['cpp_std=gnu++11'],
 )
 
+extra_cpp_args = []
 if get_option('usb') == 'hidapi'
   dep_usb = dependency('hidapi-hidraw')
-  add_project_arguments('-Dhidapi', language : 'cpp')
+  extra_cpp_args = ['-Dhidapi']
 else
   dep_usb = dependency('libusb-1.0')
-  add_project_arguments('-Dlibusb', language : 'cpp')
 endif
 
 add_project_arguments(
@@ -40,9 +40,17 @@ libg810_led = library(
   [
     'src/classes/Keyboard.cpp',
   ],
+  cpp_args : extra_cpp_args,
   version : meson.project_version(),
   dependencies : [dep_usb],
   install : true,
+)
+
+pkg = import('pkgconfig')
+pkg.generate(
+  libg810_led,
+  extra_cflags : extra_cpp_args,
+  description : 'library to control various logitech keyboard backlights',
 )
 
 g810_ld = executable(
