@@ -1,0 +1,5 @@
+# Sample profile to enable software-based G-Keys
+# for example, using a G815 with sidewinderd - https://github.com/tolga9009/sidewinderd
+
+obm software
+gkm 1
