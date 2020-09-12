@@ -152,6 +152,8 @@ class LedKeyboard {
 			num_minus, num_plus, num_enter,
 			num_1, num_2, num_3, num_4, num_5, num_6, num_7, num_8, num_9, num_0,
 			num_dot, intl_backslash, menu,
+
+			abnt_slash = static_cast<uint8_t>(KeyAddressGroup::keys) << 8 | 0x87,
 			
 			ctrl_left = static_cast<uint8_t>(KeyAddressGroup::keys) << 8 | 0xe0,
 			shift_left, alt_left, win_left,
@@ -248,7 +250,7 @@ class LedKeyboard {
 			Key::n1, Key::n2, Key::n3, Key::n4, Key::n5, Key::n6, Key::n7, Key::n8, Key::n9, Key::n0,
 			Key::enter, Key::backspace, Key::tab, Key::space, Key::minus, Key::equal,
 			Key::open_bracket, Key::close_bracket, Key::backslash, Key::dollar, Key::semicolon, Key::quote, Key::tilde,
-			Key::comma, Key::period, Key::slash, Key::caps_lock, Key::intl_backslash
+			Key::comma, Key::period, Key::slash, Key::caps_lock, Key::intl_backslash, Key::abnt_slash
 		};
 		
 		bool m_isOpen = false;

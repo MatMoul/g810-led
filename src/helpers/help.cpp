@@ -262,6 +262,7 @@ namespace help {
 			cout<<"    comma"<<endl;
 			cout<<"    period"<<endl;
 			cout<<"    slash"<<endl;
+			cout<<"    abnt_slash"<<endl;
 		}
 	}
 	
