@@ -323,7 +323,17 @@ int main(int argc, char **argv) {
 
 		//Initialize the device for use
 		if (!kbd.open(vendorID, productID, serial)) {
-			std::cout << "Matching or compatible device not found !" << std::endl;
+			switch (errno)
+			{
+				case ENODEV:
+					std::cout << "Matching or compatible device not found" << std::endl;
+					break;
+				case EACCES:
+					std::cout << "Access denied: Check device access permissions or run as a privileged user (root/sudo)" << std::endl;
+					break;
+				default:
+					std::cout << "Unknown error: errno=" << errno << std::endl;
+			}
 			return 2;
 		}
 		

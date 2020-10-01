@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include <cerrno>
 
 #if defined(hidapi)
 	#include <locale>
@@ -200,6 +201,8 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 		if (! dev) {
 			currentDevice.model = KeyboardModel::unknown;
+			errno = ENODEV;
+
 			hid_exit();
 			return false;
 		}
@@ -209,6 +212,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 		if(m_hidHandle == 0) {
 			hid_exit();
+			errno = EACCES;
 			return false;
 		}
 
@@ -294,6 +298,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 		if (currentDevice.model == KeyboardModel::unknown) {
 			libusb_exit(m_ctx);
+			errno = ENODEV;
 			m_ctx = NULL;
 			return false;
 		}
@@ -303,6 +308,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 		if(m_hidHandle == NULL) {
 			libusb_exit(m_ctx);
+			errno = EACCES;
 			m_ctx = NULL;
 			return false;
 		}
@@ -310,6 +316,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 		if(libusb_kernel_driver_active(m_hidHandle, 1) == 1) {
 			if(libusb_detach_kernel_driver(m_hidHandle, 1) != 0) {
 				libusb_exit(m_ctx);
+				errno = EACCES;
 				m_ctx = NULL;
 				return false;
 			}
@@ -322,6 +329,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 				m_isKernellDetached = false;
 			}
 			libusb_exit(m_ctx);
+			errno = EACCES;
 			m_ctx = NULL;
 			return false;
 		}
