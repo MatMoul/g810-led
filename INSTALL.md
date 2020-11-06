@@ -29,7 +29,7 @@ Gentoo :<br/>
 `emerge app-misc/g810-led`<br/>
 
 Debian (unstable, and 10 or later), Ubuntu 19.04 or later :<br/>
-`apt install g810-led`
+`sudo apt install g810-led`
 
 Solus :<br/>
 `sudo eopkg install g810-led`<br/>
