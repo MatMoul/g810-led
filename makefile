@@ -1,3 +1,7 @@
+ifndef OS
+OS:=$(shell uname)
+endif
+
 CXX?=g++
 CXXFLAGS?=-Wall -O2
 LIB?=hidapi
@@ -6,7 +10,11 @@ ifeq ($(LIB),libusb)
 	LIBS=-lusb-1.0
 else
 	CPPFLAGS=-Dhidapi
-	LIBS=-lhidapi-hidraw
+	ifeq ($(OS),Darwin)
+		LIBS=-lhidapi
+	else
+		LIBS=-lhidapi-hidraw
+	endif
 endif
 SYSTEMDDIR?=/usr/lib/systemd
 
@@ -24,6 +32,12 @@ CXXFLAGS+=-std=gnu++11 -DVERSION=\"$(MAJOR).$(MINOR).$(MICRO)\"
 APPSRCS=src/main.cpp src/helpers/*.cpp
 LIBSRCS=src/classes/*.cpp
 
+ifeq ($(OS),Darwin)
+SONAME_OPT=-install_name
+else
+SONAME_OPT=-soname
+endif
+
 .PHONY: all bin debug clean setup install uninstall lib install-lib install-dev
 
 all: lib/lib$(PROGN).so bin/$(PROGN)
@@ -39,7 +53,7 @@ debug: bin/$(PROGN)
 
 lib/lib$(PROGN).so: $(LIBSRCS)
 	@mkdir -p lib
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared -Wl,$(SONAME_OPT),lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
 	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) lib/lib$(PROGN).so
 
 bin-linked: lib/lib$(PROGN).so
