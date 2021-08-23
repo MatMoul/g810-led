@@ -306,6 +306,9 @@ int main(int argc, char **argv) {
 				case 4:
 					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g815 } };
 					break;
+				case 5:
+					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g915 } };
+					break;
 				default:
 					break;
 			}

@@ -54,6 +54,7 @@ namespace help {
 		g810 = rgb | commit | logo1 | numpad | multimedia | setall | setgroup | setkey | setindicators | poweronfx,
 		g815 = rgb | commit | logo1 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | onboardmode,
 		g910 = rgb | commit | logo1 | logo2 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting,
+		g915 = rgb | commit | logo1 | numpad | multimedia | gkeys | setall | setgroup | setkey | setindicators | onboardmode,
 		gpro = rgb | commit | logo1 | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting
 	};
 	inline KeyboardFeatures operator|(KeyboardFeatures a, KeyboardFeatures b);

@@ -57,6 +57,7 @@ class LedKeyboard {
 			{ 0x46d, 0xc33f, (uint16_t)KeyboardModel::g815 },
 			{ 0x46d, 0xc32b, (uint16_t)KeyboardModel::g910 },
 			{ 0x46d, 0xc335, (uint16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc541, (uint16_t)KeyboardModel::g915 },
 			{ 0x46d, 0xc339, (uint16_t)KeyboardModel::gpro }
 		};
 		
@@ -71,6 +72,7 @@ class LedKeyboard {
 			g810,
 			g815,
 			g910,
+			g915,
 			gpro
 		};
 		enum class StartupMode : uint8_t {
