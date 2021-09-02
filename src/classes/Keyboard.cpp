@@ -163,7 +163,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 		while (dev) {
 			for (int i=0; i<(int)SupportedKeyboards.size(); i++) {
-				if (dev->vendor_id == SupportedKeyboards[i][0] && dev->product_id == SupportedKeyboards[i][1]) {
+				if (dev->vendor_id == SupportedKeyboards[i][0] && dev->product_id == SupportedKeyboards[i][1] && dev->interface_number == SupportedKeyboards[i][2]) {
 					if (!serial.empty() && dev->serial_number != NULL && wideSerial.compare(dev->serial_number) != 0) break; //Serial didn't match
 
 					if (dev->serial_number != NULL) {
@@ -188,7 +188,8 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 					currentDevice.vendorID = dev->vendor_id;
 					currentDevice.productID = dev->product_id;
-					currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
+					currentDevice.path = dev->path;
+					currentDevice.model = (KeyboardModel)SupportedKeyboards[i][3];
 					break;
 				}
 			}
@@ -204,8 +205,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 			return false;
 		}
 
-		if (wideSerial.empty()) m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, NULL);
-		else m_hidHandle = hid_open(currentDevice.vendorID, currentDevice.productID, wideSerial.c_str());
+		m_hidHandle = hid_open_path(currentDevice.path.c_str());
 
 		if(m_hidHandle == 0) {
 			hid_exit();
@@ -248,7 +248,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 									currentDevice.serialNumber = serial;
 									currentDevice.vendorID = desc.idVendor;
 									currentDevice.productID = desc.idProduct;
-									currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
+									currentDevice.model = (KeyboardModel)SupportedKeyboards[i][3];
 
 									dev = device;
 									libusb_close(m_hidHandle);
@@ -276,7 +276,7 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 							}
 							currentDevice.vendorID = desc.idVendor;
 							currentDevice.productID = desc.idProduct;
-							currentDevice.model = (KeyboardModel)SupportedKeyboards[i][2];
+							currentDevice.model = (KeyboardModel)SupportedKeyboards[i][3];
 							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iManufacturer, buf, 256) >= 1) currentDevice.manufacturer = string((char*)buf);
 							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iProduct, buf, 256) >= 1) currentDevice.product = string((char*)buf);
 							if (libusb_get_string_descriptor_ascii(m_hidHandle, desc.iSerialNumber, buf, 256) >= 1) currentDevice.serialNumber = string((char*)buf);

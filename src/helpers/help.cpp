@@ -108,7 +108,8 @@ namespace help {
 		cout<<"  -dv\t\t\t\t\tDevice vendor ID, such as 046d for Logitech. Can be omitted to match any vendor ID"<<endl;
 		cout<<"  -dp\t\t\t\t\tDevice product ID, such as c337 for Logitech G810. Can be omitted to match any product ID"<<endl;
 		cout<<"  -ds\t\t\t\t\tDevice serial number, Can be omitted to match the first device found"<<endl;
-		cout<<"  -tuk\t\t\t\t\tTest unsupported keyboard with one of supported protocol (1-3) -dv and -dp are required"<<endl;
+		cout<<"  -di\t\t\t\t\tDevice interface number. Can be used with -tuk argument to specify non-default device interface number"<<endl;
+		cout<<"  -tuk\t\t\t\t\tTest unsupported keyboard with one of supported protocol (1-5) -dv and -dp are required"<<endl;
 		cout<<endl;
 		cout<<"Values:"<<endl;
 		if((features | KeyboardFeatures::rgb) == features)

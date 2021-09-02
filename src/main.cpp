@@ -271,6 +271,7 @@ int main(int argc, char **argv) {
 	std::string serial;
 	uint16_t vendorID = 0x0;
 	uint16_t productID = 0x0;
+	uint8_t interfaceNumber = 0xff;
 
 	int argIndex = 1;
 	while (argIndex < argc)
@@ -286,32 +287,49 @@ int main(int argc, char **argv) {
 			if (! utils::parseUInt16(argv[argIndex + 1], vendorID)) return 1;
 			argIndex += 2;
 			continue;
-		} else if (argc > (argIndex + 1) && arg == "-dp"){
-			if (! utils::parseUInt16(argv[argIndex + 1], productID)) return 1;
+		} else if (argc > (argIndex + 1) && arg == "-dp") {
+			if (!utils::parseUInt16(argv[argIndex + 1], productID)) return 1;
+			argIndex += 2;
+			continue;
+		} else if (argc > (argIndex + 1) && arg == "-di") {
+			if (!utils::parseUInt8(argv[argIndex + 1], interfaceNumber)) return 1;
 			argIndex += 2;
 			continue;
 		} else if (argc > (argIndex + 1) && arg == "-tuk"){
 			uint8_t kbdProtocol = 0;
 			if (! utils::parseUInt8(argv[argIndex + 1], kbdProtocol)) return 1;
+			uint8_t ifNum;
+			LedKeyboard::KeyboardModel model = LedKeyboard::KeyboardModel::unknown;
 			switch(kbdProtocol) {
 				case 1:
-					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g810 } };
+					ifNum = 1;
+					model = LedKeyboard::KeyboardModel::g810;
 					break;
 				case 2:
-					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g910 } };
+					ifNum = 1;
+					model = LedKeyboard::KeyboardModel::g910;
 					break;
 				case 3:
-					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g213 } };
+					ifNum = 1;
+					model = LedKeyboard::KeyboardModel::g213;
 					break;
 				case 4:
-					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g815 } };
+					ifNum = 1;
+					model = LedKeyboard::KeyboardModel::g815;
 					break;
 				case 5:
-					kbd.SupportedKeyboards = { { vendorID, productID, (uint16_t)LedKeyboard::KeyboardModel::g915 } };
+					ifNum = 2;
+					model = LedKeyboard::KeyboardModel::g915;
 					break;
 				default:
 					break;
 			}
+
+			if (model != LedKeyboard::KeyboardModel::unknown) {
+				if (interfaceNumber != 0xff) ifNum = interfaceNumber;
+				kbd.SupportedKeyboards = { { vendorID, productID, ifNum, (uint16_t)model } };
+			}
+
 			argIndex += 2;
 			continue;
 		}

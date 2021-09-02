@@ -45,20 +45,20 @@ class LedKeyboard {
 	public:
 		
 		std::vector<std::vector<uint16_t>> SupportedKeyboards = {
-			{ 0x46d, 0xc336, (uint16_t)KeyboardModel::g213 },
-			{ 0x46d, 0xc330, (uint16_t)KeyboardModel::g410 },
-			{ 0x46d, 0xc33a, (uint16_t)KeyboardModel::g413 },
-			{ 0x46d, 0xc342, (uint16_t)KeyboardModel::g512 },
-			{ 0x46d, 0xc33c, (uint16_t)KeyboardModel::g513 },
-			{ 0x46d, 0xc333, (uint16_t)KeyboardModel::g610 },
-			{ 0x46d, 0xc338, (uint16_t)KeyboardModel::g610 },
-			{ 0x46d, 0xc331, (uint16_t)KeyboardModel::g810 },
-			{ 0x46d, 0xc337, (uint16_t)KeyboardModel::g810 },
-			{ 0x46d, 0xc33f, (uint16_t)KeyboardModel::g815 },
-			{ 0x46d, 0xc32b, (uint16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc335, (uint16_t)KeyboardModel::g910 },
-			{ 0x46d, 0xc541, (uint16_t)KeyboardModel::g915 },
-			{ 0x46d, 0xc339, (uint16_t)KeyboardModel::gpro }
+			{ 0x46d, 0xc336, 1, (uint16_t)KeyboardModel::g213 },
+			{ 0x46d, 0xc330, 1, (uint16_t)KeyboardModel::g410 },
+			{ 0x46d, 0xc33a, 1, (uint16_t)KeyboardModel::g413 },
+			{ 0x46d, 0xc342, 1, (uint16_t)KeyboardModel::g512 },
+			{ 0x46d, 0xc33c, 1, (uint16_t)KeyboardModel::g513 },
+			{ 0x46d, 0xc333, 1, (uint16_t)KeyboardModel::g610 },
+			{ 0x46d, 0xc338, 1, (uint16_t)KeyboardModel::g610 },
+			{ 0x46d, 0xc331, 1, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc337, 1, (uint16_t)KeyboardModel::g810 },
+			{ 0x46d, 0xc33f, 1, (uint16_t)KeyboardModel::g815 },
+			{ 0x46d, 0xc32b, 1, (uint16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc335, 1, (uint16_t)KeyboardModel::g910 },
+			{ 0x46d, 0xc541, 2, (uint16_t)KeyboardModel::g915 },
+			{ 0x46d, 0xc339, 1, (uint16_t)KeyboardModel::gpro }
 		};
 		
 		enum class KeyboardModel : uint8_t {
@@ -167,6 +167,7 @@ class LedKeyboard {
 			std::string manufacturer = "";
 			std::string product = "";
 			std::string serialNumber = "";
+			std::string path = "";
 			KeyboardModel model;
 		} DeviceInfo;
 		
