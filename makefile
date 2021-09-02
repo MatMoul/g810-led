@@ -66,6 +66,7 @@ setup:
 	@test -s $(DESTDIR)/usr/bin/g610-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g610-led
 	@test -s $(DESTDIR)/usr/bin/g815-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g815-led
 	@test -s $(DESTDIR)/usr/bin/g910-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g910-led
+	@test -s $(DESTDIR)/usr/bin/g915-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/g915-led
 	@test -s $(DESTDIR)/usr/bin/gpro-led || ln -s /usr/bin/$(PROGN) $(DESTDIR)/usr/bin/gpro-led
 	@cp sample_profiles/* $(DESTDIR)/etc/$(PROGN)/samples
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
@@ -114,6 +115,7 @@ uninstall:
 	@rm /usr/bin/g610-led
 	@rm /usr/bin/g815-led
 	@rm /usr/bin/g910-led
+	@rm /usr/bin/g915-led
 	@rm /usr/bin/gpro-led
 	@rm /usr/bin/$(PROGN)
 	

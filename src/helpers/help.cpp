@@ -38,6 +38,7 @@ namespace help {
 		else if(cmdName == "g810-led") return KeyboardFeatures::g810;
 		else if(cmdName == "g815-led") return KeyboardFeatures::g815;
 		else if(cmdName == "g910-led") return KeyboardFeatures::g910;
+		else if(cmdName == "g915-led") return KeyboardFeatures::g915;
 		else if(cmdName == "gpro-led") return KeyboardFeatures::gpro;
 		return KeyboardFeatures::all;
 	}
@@ -107,7 +108,8 @@ namespace help {
 		cout<<"  -dv\t\t\t\t\tDevice vendor ID, such as 046d for Logitech. Can be omitted to match any vendor ID"<<endl;
 		cout<<"  -dp\t\t\t\t\tDevice product ID, such as c337 for Logitech G810. Can be omitted to match any product ID"<<endl;
 		cout<<"  -ds\t\t\t\t\tDevice serial number, Can be omitted to match the first device found"<<endl;
-		cout<<"  -tuk\t\t\t\t\tTest unsupported keyboard with one of supported protocol (1-3) -dv and -dp are required"<<endl;
+		cout<<"  -di\t\t\t\t\tDevice interface number. Can be used with -tuk argument to specify non-default device interface number"<<endl;
+		cout<<"  -tuk\t\t\t\t\tTest unsupported keyboard with one of supported protocol (1-5) -dv and -dp are required"<<endl;
 		cout<<endl;
 		cout<<"Values:"<<endl;
 		if((features | KeyboardFeatures::rgb) == features)
@@ -124,8 +126,10 @@ namespace help {
 			cout<<"  key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
 		if((features | KeyboardFeatures::setgroup) == features)
 			cout<<"  group values :\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
-		cout<<"  startup mode :\t\t\twave, color"<<endl;
-		cout<<"  on-board mode :\t\t\tboard, software"<<endl;
+		if ((features | KeyboardFeatures::poweronfx) == features)
+			cout<<"  startup mode :\t\t\twave, color"<<endl;
+		if ((features | KeyboardFeatures::onboardmode) == features)
+			cout<<"  on-board mode :\t\t\tboard, software"<<endl;
 		cout<<endl;
 	}
 	
