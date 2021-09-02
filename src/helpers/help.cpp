@@ -126,8 +126,10 @@ namespace help {
 			cout<<"  key values :\t\t\t\tabc... 123... and other (use --help-keys for more detail)"<<endl;
 		if((features | KeyboardFeatures::setgroup) == features)
 			cout<<"  group values :\t\t\tlogo, indicators, fkeys, ... (use --help-keys for more detail)"<<endl;
-		cout<<"  startup mode :\t\t\twave, color"<<endl;
-		cout<<"  on-board mode :\t\t\tboard, software"<<endl;
+		if ((features | KeyboardFeatures::poweronfx) == features)
+			cout<<"  startup mode :\t\t\twave, color"<<endl;
+		if ((features | KeyboardFeatures::onboardmode) == features)
+			cout<<"  on-board mode :\t\t\tboard, software"<<endl;
 		cout<<endl;
 	}
 	
