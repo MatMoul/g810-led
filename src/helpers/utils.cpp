@@ -198,6 +198,11 @@ namespace utils {
 		else if (val == "g7") key = LedKeyboard::Key::g7;
 		else if (val == "g8") key = LedKeyboard::Key::g8;
 		else if (val == "g9") key = LedKeyboard::Key::g9;
+		else if (val == "jpbackslash") key = LedKeyboard::Key::jpbackslash;
+		else if (val == "katakana") key = LedKeyboard::Key::katakana;
+		else if (val == "yen") key = LedKeyboard::Key::yen;
+		else if (val == "henkan") key = LedKeyboard::Key::henkan;
+		else if (val == "muhenkan") key = LedKeyboard::Key::muhenkan;
 		else return false;
 		return true;
 	}
