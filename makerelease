@@ -34,12 +34,13 @@ esac
 version=$1
 
 sed -i "/string version = /c\\\tstring version = \"$version\";" src/helpers/help.cpp
+sed -i -E "s/(^\s*version :).*/\1 '$version',/" meson.build
 IFS='.' read -ra VPART <<< "$version"
 sed -i "/MAJOR=/cMAJOR=${VPART[0]}" makefile
 sed -i "/MINOR=/cMINOR=${VPART[1]}" makefile
 sed -i "/MICRO=/cMICRO=${VPART[2]}" makefile
 
-git commit -m "Version $version" makefile src/*
+git commit -m "Version $version" makefile meson.build src/*
 git push
 
 git checkout master
