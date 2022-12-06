@@ -1,0 +1,67 @@
+a 404080
+g keys ff8000
+k shiftl ff8000
+k shiftr ff8000
+
+k 3 00ff00
+k w 00ff00
+k s 00ff00
+k x 00ff00
+
+k 4 ff0080
+k e ff0080
+k d ff0080
+k c ff0080
+
+k f 0000ff
+k 5 8080ff
+k r 8080ff
+k v 8080ff
+k 6 8080ff
+k t 8080ff
+k g 8080ff
+k b 8080ff
+
+k j 408080
+k 7 80ffff
+k y 80ffff
+k h 80ffff
+k n 80ffff
+k 8 80ffff
+k u 80ffff
+k m 80ffff
+
+k 9 ff0080
+k i ff0080
+k k ff0080
+k comma ff0080
+
+k 0 00ff00
+k o 00ff00
+k l 00ff00
+k period 00ff00
+
+k space ff0000
+
+k num0 ff0000
+k num1 80ffff
+k num4 80ffff
+k num7 80ffff
+
+k num2 ff0080
+k num5 ff0080
+k num8 ff0080
+k numslash ff0080
+
+k num9 00ff00
+k num6 00ff00
+k num3 00ff00
+k num* 00ff00
+k num_period 00ff00
+
+k num_minus ff8000
+k numenter ff8000
+k num_plus ff8000
+
+
+c 
