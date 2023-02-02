@@ -1,4 +1,6 @@
 CXX?=g++
+UNAME := $(shell uname)
+
 CXXFLAGS?=-Wall -O2
 LIB?=hidapi
 ifeq ($(LIB),libusb)
@@ -6,9 +8,20 @@ ifeq ($(LIB),libusb)
 	LIBS=-lusb-1.0
 else
 	CPPFLAGS=-Dhidapi
-	LIBS=-lhidapi-hidraw
+	ifeq ($(UNAME),Darwin)
+		LIBS = -lhidapi
+	else
+		LIBS = -lhidapi-hidraw
+	endif
 endif
 SYSTEMDDIR?=/usr/lib/systemd
+$(warning CXX is $(CXX))
+# Handle CLANG-specific link syntax
+ifeq ($(UNAME),Darwin)
+	LINK_FLAGS = -Wl,-install_name,lib$(PROGN).so
+else
+	LINK_FLAGS = -Wl,-soname,lib$(PROGN).so
+endif
 
 PREFIX?=$(DESTDIR)/usr
 libdir?=$(PREFIX)/lib
@@ -33,13 +46,13 @@ bin: bin/$(PROGN)
 bin/$(PROGN): $(APPSRCS) $(LIBSRCS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LIBS)
-	
+
 debug: CXXFLAGS += -g -Wextra -pedantic
 debug: bin/$(PROGN)
 
 lib/lib$(PROGN).so: $(LIBSRCS)
 	@mkdir -p lib
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared -Wl,-soname,lib$(PROGN).so -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -fPIC -shared $(LINKFLAGS) -o lib/lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) $^ $(LIBS)
 	@ln -sf lib$(PROGN).so.$(MAJOR).$(MINOR).$(MICRO) lib/lib$(PROGN).so
 
 bin-linked: lib/lib$(PROGN).so
@@ -105,7 +118,7 @@ uninstall:
 		rm $(SYSTEMDDIR)/system/$(PROGN)-reboot.service && \
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
-	
+
 	@rm /usr/bin/g213-led
 	@rm /usr/bin/g410-led
 	@rm /usr/bin/g413-led
@@ -116,6 +129,6 @@ uninstall:
 	@rm /usr/bin/g910-led
 	@rm /usr/bin/gpro-led
 	@rm /usr/bin/$(PROGN)
-	
+
 	@rm /etc/udev/rules.d/$(PROGN).rules
 	@udevadm control --reload-rules
