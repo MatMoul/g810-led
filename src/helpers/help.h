@@ -17,6 +17,7 @@
 #ifndef HELP_HELPER
 #define HELP_HELPER
 
+#include <cstdint>
 #include <iostream>
 
 namespace help {
