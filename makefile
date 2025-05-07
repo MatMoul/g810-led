@@ -71,7 +71,8 @@ setup:
 	@cp udev/$(PROGN).rules $(DESTDIR)/etc/udev/rules.d
 	@test -s /usr/bin/systemd-run && \
 		install -m 755 -d $(DESTDIR)$(SYSTEMDDIR)/system && \
-		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system
+		cp systemd/$(PROGN)-reboot.service $(DESTDIR)$(SYSTEMDDIR)/system && \
+		cp systemd/$(PROGN)-numlock-color.service $(DESTDIR)$(SYSTEMDDIR)/system
 
 install-lib: lib
 	@install -m 755 -d $(libdir)
@@ -103,6 +104,7 @@ uninstall:
 	@test -s /usr/bin/systemd-run && \
 		systemctl disable $(PROGN)-reboot && \
 		rm $(SYSTEMDDIR)/system/$(PROGN)-reboot.service && \
+		rm $(SYSTEMDDIR)/system/$(PROGN)-numlock-color.service && \
 		systemctl daemon-reload && \
 		rm -R /etc/$(PROGN)
 	

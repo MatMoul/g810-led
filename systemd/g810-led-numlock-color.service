@@ -1,0 +1,25 @@
+[Unit]
+Description=Update RGB for Num-Lock state
+
+[Service]
+Restart=always
+Environment=NUM_ON_COLOR=FF0000
+Environment=NUM_OFF_COLOR=00FFFF
+
+ExecStart=/bin/bash -c '\
+  LAST_STATE=""; \
+  while true; do \
+    STATE=$(cat /sys/class/leds/*::numlock/brightness | head -n1 ) ; \
+    if [ "$STATE" != "$LAST_STATE" ]; then \
+      if [ "$STATE" -eq 1 ]; then \
+        g810-led -k numlock "$NUM_ON_COLOR" ; \
+      else \
+        g810-led -k numlock "$NUM_OFF_COLOR" ; \
+      fi; \
+      LAST_STATE="$STATE"; \
+    fi; \
+    sleep 0.2; \
+  done;'
+
+[Install]
+WantedBy=multi-user.target
