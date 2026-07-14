@@ -1,6 +1,6 @@
 # g810-led</br>
 
-Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G815, G910 and GPRO Keyboards.</br>
+macOS and Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G815, G910 and GPRO Keyboards.</br>
 
 ## Compatible keyboards :</br>
 - **G213 Prodigy**</br>
@@ -21,6 +21,17 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G815
 
 ## Install :</br>
 * [INSTALL.md](https://github.com/MatMoul/g810-led/blob/master/INSTALL.md)
+
+### macOS permissions :
+
+To use `g810-led` without `sudo`, grant your terminal application permission to access keyboard input:
+
+1. Open **System Settings → Privacy & Security → Input Monitoring**.
+2. Enable the terminal you use—Terminal, iTerm, Warp, etc.
+3. Fully quit and reopen the terminal.
+4. Reconnect the keyboard.
+
+After granting permission, run `g810-led` as your normal user.
 
 ## Profiles :<br>
 You can load predefined configurations on startup! 
