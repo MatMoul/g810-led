@@ -25,6 +25,9 @@
 #if defined(hidapi)
 	#include <locale>
 	#include "hidapi/hidapi.h"
+	#if defined(__APPLE__)
+		#include "hidapi/hidapi_darwin.h"
+	#endif
 #elif defined(libusb)
 	#include "libusb-1.0/libusb.h"
 #endif
@@ -150,6 +153,9 @@ bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 
 	#if defined(hidapi)
 		if (hid_init() < 0) return false;
+		#if defined(__APPLE__)
+			hid_darwin_set_open_exclusive(0);
+		#endif
 
 		struct hid_device_info *devs, *dev;
 		devs = hid_enumerate(vendorID, productID);

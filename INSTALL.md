@@ -35,6 +35,9 @@ Solus :<br/>
 `sudo eopkg install g810-led`<br/>
 
 ## Installation of dependencies :</br>
+macOS (Homebrew) :</br>
+`brew install hidapi`</br>
+`brew install libusb` # optional alternative backend</br>
 ArchLinux :</br>
 `sudo pacman -S git gcc make hidapi` # for hidapi</br>
 `sudo pacman -S git gcc make libusb` # for libusb</br>
@@ -51,6 +54,13 @@ Gentoo :<br/>
 ## Installation :</br>
 `git clone https://github.com/MatMoul/g810-led.git`</br>
 `cd g810-led`</br>
+
+macOS :</br>
+`xcode-select --install` # only if the Command Line Tools are not already installed</br>
+`make bin`</br>
+`sudo make install`</br>
+
+Linux :</br>
 `make bin` # for hidapi</br>
 `make bin LIB=libusb` # for libusb</br>
 `sudo make install`</br>
