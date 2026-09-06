@@ -18,9 +18,10 @@
 #define HELP_HELPER
 
 #include <iostream>
+#include <cstdint>
 
 namespace help {
-	
+
 	enum class KeyboardFeatures : uint16_t {
 		none = 0,
 		rgb = 1,
@@ -41,10 +42,10 @@ namespace help {
 		userstoredlighting = 16384,
 		onboardmode = 32768,
 		// fx features
-		
+
 		all = rgb | intensity | commit | logo1 | logo2 | numpad | multimedia | gkeys |
 		      setall | setgroup | setkey | setregion | setindicators | poweronfx | userstoredlighting | onboardmode,
-		
+
 		g213 = rgb | logo1 | numpad | multimedia | setall | setregion | setindicators | poweronfx | userstoredlighting,
 		g410 = rgb | commit | setall | setgroup | setkey | poweronfx | userstoredlighting,
 		g413 = intensity | setall | userstoredlighting,
@@ -57,14 +58,14 @@ namespace help {
 		gpro = rgb | commit | logo1 | setall | setgroup | setkey | setindicators | poweronfx | userstoredlighting
 	};
 	inline KeyboardFeatures operator|(KeyboardFeatures a, KeyboardFeatures b);
-	
+
 	KeyboardFeatures getKeyboardFeatures(std::string cmdName);
-	
+
 	void usage(char *arg0);
 	void keys(char *arg0);
 	void effects(char *arg0);
 	void samples(char *arg0);
-	
+
 }
 
 #ifndef VERSION
