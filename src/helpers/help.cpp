@@ -52,6 +52,8 @@ namespace help {
 		cout<<endl;
 		cout<<"Usage: "<<cmdName<<" [OPTIONS...] [command] (command arguments)"<<endl;
 		cout<<"Commands:"<<endl;
+        cout<<"  G515 TKL (046d:c358): -a, -k, -g, profiles and --on-board-mode board/software"<<endl;
+        cout<<"  G515: native effects and onboard profile storage are not implemented."<<endl;
 		if((features | KeyboardFeatures::setall) == features)
 			cout<<"  -a {color}\t\t\t\tSet all keys color"<<endl;
 		if((features | KeyboardFeatures::setgroup) == features)
