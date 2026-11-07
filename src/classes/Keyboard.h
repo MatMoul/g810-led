@@ -18,6 +18,8 @@
 #define KEYBOARD_CLASS
 
 #include <chrono>
+#include <stdint.h>
+#include <utility>
 #include <iostream>
 #include <vector>
 
@@ -71,7 +73,8 @@ class LedKeyboard {
 			g810,
 			g815,
 			g910,
-			gpro
+			gpro,
+			g515
 		};
 		enum class StartupMode : uint8_t {
 			 // TODO: On the G Pro, the value 1 selects the
@@ -257,14 +260,24 @@ class LedKeyboard {
 		DeviceInfo currentDevice;
 		
 		#if defined(hidapi)
-			hid_device *m_hidHandle;
+			hid_device *m_hidHandle = nullptr;
 		#elif defined(libusb)
 			bool m_isKernellDetached = false;
-			libusb_device_handle *m_hidHandle;
+			libusb_device_handle *m_hidHandle = nullptr;
 			libusb_context *m_ctx = NULL;
 		#endif
 		
 		
+        // G515: direct HID++ transport on the vendor interface.
+        int g515Fd = -1;
+        uint8_t g515Sequence = 0, g515RGB = 0, g515Keys = 0;
+        bool g515Claimed = false;
+        static std::vector<std::pair<std::string, DeviceInfo>> findG515();
+        bool openG515(const std::string &path, const DeviceInfo &info);
+        bool g515Request(uint8_t feature, uint8_t function,
+                         const byte_buffer_t &params, byte_buffer_t *reply = nullptr);
+        bool claimG515();
+        bool setG515Keys(const KeyValueArray &values);
 		bool sendDataInternal(byte_buffer_t &data);
 		byte_buffer_t getKeyGroupAddress(KeyAddressGroup keyAddressGroup);
 		
