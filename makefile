@@ -119,3 +119,10 @@ uninstall:
 	
 	@rm /etc/udev/rules.d/$(PROGN).rules
 	@udevadm control --reload-rules
+
+# Protocol regression test; uses a socket pair, not a physical keyboard.
+.PHONY: test-g515
+test-g515:
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -UNDEBUG $(LDFLAGS) tests/g515.cpp $(LIBSRCS) -o bin/test-g515 $(LIBS) -pthread
+	./bin/test-g515
