@@ -8,6 +8,7 @@ Linux led controller for Logitech G213, G410, G413, G512, G513, G610, G810, G815
 - **G413 Carbon**</br>
 - **G512 Carbon**</br>
 - **G513 Carbon**</br>
+- **G515 TKL** (wired USB, `046d:c358`; static lighting)</br>
 - **G610 Orion Brown**</br>
 - **G610 Orion Red**</br>
 - **G810 Orion Spectrum**</br>
@@ -105,3 +106,30 @@ To build the g810-led application as a dynamically-linked variant, run the targe
 ## Dumps :
 Dumps of keyboards are now stored in a separate project to preserve a small download size of this project.
 You can find them here : [https://github.com/MatMoul/g810-led-resources](https://github.com/MatMoul/g810-led-resources)
+
+## G515 TKL (wired USB)
+
+The G515 TKL with USB ID `046d:c358` supports static colours, individual keys,
+ordinary key groups and text profiles. It uses the HID++ vendor interface
+(interface 2), with feature discovery for RGB Effects (`0x8071`) and Per-Key
+Lighting V2 (`0x8081`). Its Linux hidraw node is located automatically; the
+G515 transport uses hidraw directly with either build backend.
+
+```sh
+sudo g810-led -dv 046d -dp c358 -a ff0000
+sudo g810-led -dv 046d -dp c358 -k w 00ff00
+sudo g810-led -dv 046d -dp c358 -g arrows 00ffff
+sudo g810-led -dv 046d -dp c358 --on-board-mode board
+```
+
+The last command releases software lighting control back to the keyboard.
+Closing the program otherwise leaves software lighting active. These commands
+do not save an onboard profile. Native animated effects, onboard profile
+storage, logo/indicator/media/G-key groups, wireless receivers and other G515
+product IDs are not supported by this implementation. Use root or an existing
+appropriate hidraw access rule; this change does not add a G515 udev rule.
+
+The direct USB implementation was tested on a G515 TKL: setting all keys red,
+setting W green, and returning to keyboard-controlled lighting. The protocol
+regression test can be run without hardware using `make test-g515 LIB=libusb`
+(or the default hidapi build).

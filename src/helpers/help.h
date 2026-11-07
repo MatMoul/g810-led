@@ -18,6 +18,7 @@
 #define HELP_HELPER
 
 #include <iostream>
+#include <stdint.h>
 
 namespace help {
 	

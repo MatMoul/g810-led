@@ -130,6 +130,7 @@ vector<LedKeyboard::DeviceInfo> LedKeyboard::listKeyboards() {
 		m_ctx = NULL;
 	#endif
 	
+	for (const auto &device : findG515()) deviceList.push_back(device.second);
 	return deviceList;
 }
 
@@ -147,6 +148,12 @@ bool LedKeyboard::open() {
 bool LedKeyboard::open(uint16_t vendorID, uint16_t productID, string serial) {
 	if (m_isOpen && ! close()) return false;
 	currentDevice.model = KeyboardModel::unknown;
+    if ((vendorID == 0 || vendorID == 0x046d) && (productID == 0 || productID == 0xc358)) {
+        for (const auto &device : findG515()) {
+            if (serial.empty() || serial == device.second.serialNumber)
+                return openG515(device.first, device.second);
+        }
+    }
 
 	#if defined(hidapi)
 		if (hid_init() < 0) return false;
@@ -348,6 +355,13 @@ LedKeyboard::DeviceInfo LedKeyboard::getCurrentDevice() {
 bool LedKeyboard::close() {
 	if (! m_isOpen) return true;
 	m_isOpen = false;
+    if (g515Fd >= 0) {
+        // Leave the selected lighting active after this CLI process exits.
+        const int fd = g515Fd;
+        g515Fd = -1;
+        g515Claimed = false;
+        return ::close(fd) == 0;
+    }
 	
 	#if defined(hidapi)
 		hid_close(m_hidHandle);
@@ -377,6 +391,9 @@ LedKeyboard::KeyboardModel LedKeyboard::getKeyboardModel() {
 }
 
 bool LedKeyboard::commit() {
+    if (currentDevice.model == KeyboardModel::g515) {
+        return claimG515() && g515Request(g515Keys, 7, {0});
+    }
 	byte_buffer_t data;
 	switch (currentDevice.model) {
 		case KeyboardModel::g213:
@@ -409,6 +426,7 @@ bool LedKeyboard::setKey(LedKeyboard::KeyValue keyValue) {
 
 bool LedKeyboard::setKeys(KeyValueArray keyValues) {
 	if (keyValues.empty()) return false;
+    if (currentDevice.model == KeyboardModel::g515) return setG515Keys(keyValues);
 	
 	bool retval = true;
 	
@@ -684,6 +702,9 @@ bool LedKeyboard::setGroupKeys(KeyGroup keyGroup, LedKeyboard::Color color) {
 }
 
 bool LedKeyboard::setAllKeys(LedKeyboard::Color color) {
+    if (currentDevice.model == KeyboardModel::g515) {
+        return claimG515() && g515Request(g515Keys, 5, {1, 0xfe, color.red, color.green, color.blue});
+    }
 	KeyValueArray keyValues;
 
 	switch (currentDevice.model) {
@@ -863,6 +884,12 @@ bool LedKeyboard::setStartupMode(StartupMode startupMode) {
 }
 
 bool LedKeyboard::setOnBoardMode(OnBoardMode onBoardMode) {
+    if (currentDevice.model == KeyboardModel::g515) {
+        if (onBoardMode == OnBoardMode::software) return claimG515();
+        if (!g515Request(g515RGB, 5, {1, 0, 0})) return false;
+        g515Claimed = false;
+        return true;
+    }
 	byte_buffer_t data;
 	switch (currentDevice.model) {
 		case KeyboardModel::g815:
